@@ -5,17 +5,17 @@ import { motion } from "framer-motion";
 
 const services = [
   {
-    icon: <Car className="h-8 w-8" />,
+    icon: <div className="flex justify-center"><Car className="h-8 w-8" /></div>,
     title: "דיטיילינג מלא",
     description: "טיפול מקיף הכולל ניקוי, פוליש וציפוי הגנה לרכב",
   },
   {
-    icon: <Home className="h-8 w-8" />,
+    icon: <div className="flex justify-center"><Home className="h-8 w-8" /></div>,
     title: "שירות עד הבית",
     description: "אנחנו מגיעים אליך עם כל הציוד הנדרש",
   },
   {
-    icon: <Star className="h-8 w-8" />,
+    icon: <div className="flex justify-center"><Star className="h-8 w-8" /></div>,
     title: "מוצרי דיטיילינג",
     description: "מבחר מוצרים מקצועיים לטיפול ברכב",
   },

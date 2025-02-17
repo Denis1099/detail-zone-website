@@ -4,6 +4,7 @@ import { Hero } from "@/components/sections/Hero";
 import { Services } from "@/components/sections/Services";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { CTAForm } from "@/components/sections/CTAForm";
+import { Footer } from "@/components/Footer";
 
 const Index = () => {
   return (
@@ -13,6 +14,7 @@ const Index = () => {
       <Services />
       <Testimonials />
       <CTAForm />
+      <Footer />
     </div>
   );
 };
