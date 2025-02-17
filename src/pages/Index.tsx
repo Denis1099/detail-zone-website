@@ -3,28 +3,23 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { PhoneCall, Car, Home, Star, ChevronLeft } from "lucide-react";
 import { motion } from "framer-motion";
+import { Navbar } from "@/components/Navbar";
 
 const Index = () => {
   return (
     <div className="min-h-screen">
+      <Navbar />
+      
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-black/60 z-10" />
-        <video
+        <img 
+          src="https://images.unsplash.com/photo-1601362840469-51e4d8d58785?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80"
+          alt="Car Detailing"
           className="absolute inset-0 w-full h-full object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline
-          poster="https://images.unsplash.com/photo-1500375592092-40eb2168fd21"
-        >
-          <source
-            src="https://player.vimeo.com/external/439548061.sd.mp4?s=9dd5e496d42d2024030724bc52006d3b6de0b007&profile_id=164&oauth2_token_id=57447761"
-            type="video/mp4"
-          />
-        </video>
+        />
         
-        <div className="container relative z-20 mx-auto px-4">
+        <div className="container relative z-20 mx-auto px-4 mt-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
