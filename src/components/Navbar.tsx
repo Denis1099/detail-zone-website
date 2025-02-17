@@ -24,8 +24,8 @@ export const Navbar = () => {
           </div>
 
           {/* Center logo */}
-          <Link to="/" className="text-2xl font-bold text-primary order-2">
-            <img src="/lovable-uploads/8ecd6f4d-adfd-4b53-9698-6d0980f307fb.png" alt="Detail Zone" className="h-8" />
+          <Link to="/" className="text-xl font-bold text-primary order-2">
+            Logo
           </Link>
 
           {/* Left side CTA */}
