@@ -1,11 +1,8 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { PhoneCall, Car, Home, Star, ChevronLeft } from "lucide-react";
 import { motion } from "framer-motion";
-
-<lov-add-dependency>framer-motion@latest</lov-add-dependency>
 
 const Index = () => {
   return (
@@ -90,7 +87,7 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <span className="text-primary text-sm font-medium mb-4 inline-block">
-              ממליצים עלינו
+              ממליצ��ם עלינו
             </span>
             <h2 className="text-3xl md:text-4xl font-bold">
               מה הלקוחות אומרים
