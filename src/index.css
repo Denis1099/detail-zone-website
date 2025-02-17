@@ -58,3 +58,17 @@
     text-shadow: 0 0 20px rgba(27,174,189,0.5);
   }
 }
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-100% - 3rem));
+  }
+}
+
+/* Update card content alignment */
+.glass-card {
+  @apply text-center;
+}

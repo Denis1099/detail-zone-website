@@ -1,72 +1,50 @@
 
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Facebook, Instagram, Twitter, Linkedin, Youtube } from "lucide-react";
+import { Facebook, Instagram } from "lucide-react";
 
 export const Footer = () => {
   return (
-    <footer className="bg-card border-t border-white/10">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12">
-          {/* Logo Column */}
+    <footer className="bg-black text-white py-16">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          {/* Logo and Social Links */}
           <div className="text-right">
-            <Link to="/" className="text-xl font-bold text-primary">
-              Logo
-            </Link>
+            <img src="/lovable-uploads/a4581448-321b-42c7-9671-83ef98cec59e.png" alt="AIT Logo" className="h-16 mb-6" />
+            <div className="flex justify-end space-x-4 space-x-reverse">
+              <a href="#" className="hover:text-primary">
+                <Facebook className="h-6 w-6" />
+              </a>
+              <a href="#" className="hover:text-primary">
+                <Instagram className="h-6 w-6" />
+              </a>
+            </div>
           </div>
 
-          {/* Quick Links */}
+          {/* Contact Info */}
           <div className="text-right">
-            <h3 className="font-bold mb-4">קישורים מהירים</h3>
+            <h3 className="text-lg font-bold mb-4">צור קשר</h3>
+            <div className="space-y-2">
+              <p className="flex items-center justify-end">077-4447021</p>
+              <p>יעקב פיכמן 11 פתח תקווה</p>
+              <Link to="/contact" className="text-primary hover:underline">
+                מידע נוסף ותיאום תור
+              </Link>
+            </div>
+          </div>
+
+          {/* Navigation Links */}
+          <div className="text-right">
+            <h3 className="text-lg font-bold mb-4">ניווט באתר</h3>
             <ul className="space-y-2">
-              <li><Link to="/" className="hover:text-primary">בית</Link></li>
-              <li><Link to="/services" className="hover:text-primary">שירותים</Link></li>
-              <li><Link to="/shop" className="hover:text-primary">חנות</Link></li>
-              <li><Link to="/blog" className="hover:text-primary">בלוג</Link></li>
+              <li><Link to="/" className="hover:text-primary">דף הבית</Link></li>
+              <li><Link to="/about" className="hover:text-primary">אודותינו</Link></li>
+              <li><Link to="/services" className="hover:text-primary">השירותים שלנו</Link></li>
+              <li><Link to="/projects" className="hover:text-primary">פרויקטים</Link></li>
+              <li><Link to="/faq" className="hover:text-primary">שאלות נפוצות</Link></li>
+              <li><Link to="/blog" className="hover:text-primary">סרטונים</Link></li>
               <li><Link to="/contact" className="hover:text-primary">צור קשר</Link></li>
             </ul>
-          </div>
-
-          {/* Follow Us */}
-          <div className="text-right">
-            <h3 className="font-bold mb-4">עקבו אחרינו</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="hover:text-primary flex items-center justify-end gap-2">פייסבוק <Facebook className="h-4 w-4" /></a></li>
-              <li><a href="#" className="hover:text-primary flex items-center justify-end gap-2">אינסטגרם <Instagram className="h-4 w-4" /></a></li>
-              <li><a href="#" className="hover:text-primary flex items-center justify-end gap-2">טוויטר <Twitter className="h-4 w-4" /></a></li>
-              <li><a href="#" className="hover:text-primary flex items-center justify-end gap-2">לינקדאין <Linkedin className="h-4 w-4" /></a></li>
-              <li><a href="#" className="hover:text-primary flex items-center justify-end gap-2">יוטיוב <Youtube className="h-4 w-4" /></a></li>
-            </ul>
-          </div>
-
-          {/* Subscribe */}
-          <div className="text-right">
-            <h3 className="font-bold mb-4">הישארו מעודכנים</h3>
-            <p className="text-sm text-gray-400 mb-4">
-              הצטרפו לניוזלטר שלנו לעדכונים על שירותים ומבצעים מיוחדים
-            </p>
-            <form className="space-y-2">
-              <Input 
-                type="email" 
-                placeholder="הזינו את האימייל שלכם"
-                className="text-right"
-              />
-              <Button className="w-full">הרשמה לעדכונים</Button>
-            </form>
-          </div>
-        </div>
-
-        <div className="mt-12 pt-8 border-t border-white/10">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="text-sm text-gray-400 order-2 md:order-1">
-              © 2024 Detail Zone. כל הזכויות שמורות.
-            </div>
-            <div className="flex items-center gap-4 order-1 md:order-2">
-              <Link to="/privacy" className="text-sm hover:text-primary">מדיניות פרטיות</Link>
-              <Link to="/terms" className="text-sm hover:text-primary">תנאי שימוש</Link>
-              <Link to="/cookies" className="text-sm hover:text-primary">מדיניות עוגיות</Link>
-            </div>
           </div>
         </div>
       </div>
