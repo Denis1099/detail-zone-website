@@ -2,7 +2,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Facebook, Instagram, Twitter, Linkedin, Youtube } from "lucide-react";
+import { Facebook, Instagram, Youtube } from "lucide-react";
 
 export const Footer = () => {
   return (
@@ -31,13 +31,11 @@ export const Footer = () => {
           {/* Follow Us */}
           <div className="text-right">
             <h3 className="font-bold mb-4">עקבו אחרינו</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="hover:text-primary flex items-center justify-end gap-2">פייסבוק <Facebook className="h-4 w-4" /></a></li>
-              <li><a href="#" className="hover:text-primary flex items-center justify-end gap-2">אינסטגרם <Instagram className="h-4 w-4" /></a></li>
-              <li><a href="#" className="hover:text-primary flex items-center justify-end gap-2">טוויטר <Twitter className="h-4 w-4" /></a></li>
-              <li><a href="#" className="hover:text-primary flex items-center justify-end gap-2">לינקדאין <Linkedin className="h-4 w-4" /></a></li>
-              <li><a href="#" className="hover:text-primary flex items-center justify-end gap-2">יוטיוב <Youtube className="h-4 w-4" /></a></li>
-            </ul>
+            <div className="flex justify-end gap-4">
+              <a href="#" className="hover:text-primary"><Facebook className="h-6 w-6" /></a>
+              <a href="#" className="hover:text-primary"><Instagram className="h-6 w-6" /></a>
+              <a href="#" className="hover:text-primary"><Youtube className="h-6 w-6" /></a>
+            </div>
           </div>
 
           {/* Subscribe */}
