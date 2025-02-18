@@ -8,11 +8,9 @@ export const Portfolio = () => {
   const [sliderWidth, setSliderWidth] = useState(0);
   
   const images = [
-    "/lovable-uploads/1da101aa-bac2-4df1-82e8-8d4fea1c28c3.png",
-    "/lovable-uploads/77b55dc6-a81e-4ec0-b301-885308d24652.png"
+    "/lovable-uploads/77b55dc6-a81e-4ec0-b301-885308d24652.png",
+    "/lovable-uploads/1da101aa-bac2-4df1-82e8-8d4fea1c28c3.png"
   ];
-
-  const background = useTransform(x, [-sliderWidth, 0], ["100%", "0%"]);
 
   return (
     <section className="py-20 bg-gradient-to-b from-card to-background">
@@ -38,18 +36,22 @@ export const Portfolio = () => {
                 backgroundImage: `url(${images[1]})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
-                clipPath: useTransform(x, [-sliderWidth, 0], 
-                  ["polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)", 
-                   "polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)"]
+                clipPath: useTransform(x, [0, sliderWidth], 
+                  ["polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)",
+                   "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)"]
                 )
               }}
             />
             
             <motion.div 
               className="absolute top-0 bottom-0 w-1 bg-white cursor-ew-resize"
-              style={{ x }}
+              style={{ 
+                x: useTransform(x, [0, sliderWidth], [sliderWidth, 0]),
+                left: 'auto',
+                right: 0
+              }}
               drag="x"
-              dragConstraints={{ left: -sliderWidth, right: 0 }}
+              dragConstraints={{ left: 0, right: sliderWidth }}
               dragElastic={0}
             >
               <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full flex items-center justify-center">
