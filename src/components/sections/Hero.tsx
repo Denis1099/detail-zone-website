@@ -15,7 +15,7 @@ export const Hero = () => {
   className="absolute inset-0 w-full h-full object-cover"
   poster="https://images.unsplash.com/photo-1601362840469-51e4d8d58785?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80"
 >
-  <source src="/your-video-filename.mp4" type="video/mp4" />
+  <source src="/hero.mp4" type="video/mp4" />
   {/* Fallback image in case video fails to load */}
   Your browser does not support the video tag.
 </video>
