@@ -7,11 +7,19 @@ export const Hero = () => {
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 bg-black/60 z-10" />
-      <img 
-        src="https://images.unsplash.com/photo-1601362840469-51e4d8d58785?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80"
-        alt="Car Detailing"
-        className="absolute inset-0 w-full h-full object-cover"
-      />
+      <video
+  autoPlay
+  muted
+  loop
+  playsInline
+  className="absolute inset-0 w-full h-full object-cover"
+  poster="https://images.unsplash.com/photo-1601362840469-51e4d8d58785?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80"
+>
+  <source src="/your-video-filename.mp4" type="video/mp4" />
+  {/* Fallback image in case video fails to load */}
+  Your browser does not support the video tag.
+</video>
+
       
       <div className="container relative z-20 mx-auto px-4 mt-16">
         <motion.div
