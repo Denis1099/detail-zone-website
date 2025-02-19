@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,17 +7,13 @@ export const Footer = () => {
   return (
     <footer className="bg-card border-t border-white/10">
       <div className="container mx-auto px-4 py-12">
-        {/* Logo Section */}
         <div className="flex justify-center mb-12">
           <Link to="/" className="inline-block">
-            <svg width="205" height="30" viewBox="0 0 205 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3.14844 7.94141L0.441406 6.85156V3.79297L8.7207 3.61719H12.1484C15.793 3.61719 18.6113 4.67773 20.6035 6.79883C22.5957 8.9082 23.5918 11.9668 23.5918 15.9746C23.5918 18.6348 23.0996 20.9492 22.1152 22.918C21.1309 24.8867 19.7363 26.3926 17.9316 27.4355C16.1387 28.4785 14.0293 29 11.6035 29H0.441406V25.9414L3.14844 24.8516V7.94141ZM11.709 24.6758C13.584 24.6758 15.0254 24.0254 16.0332 22.7246C17.041 21.4121 17.5449 19.2207 17.5449 16.1504C17.5449 13.2207 17.0762 11.123 16.1387 9.85742C15.2012 8.58008 13.8066 7.94141 11.9551 7.94141H8.7207V24.6758H11.709Z" fill="white"/>
-            </svg>
+            <img src="/Logo.svg" alt="Detail Zone Logo" className="h-8" />
           </Link>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-          {/* Quick Links */}
           <div className="text-right">
             <h3 className="font-bold mb-4">קישורים מהירים</h3>
             <ul className="space-y-2">
@@ -30,7 +25,6 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* Follow Us */}
           <div className="text-right">
             <h3 className="font-bold mb-4">עקבו אחרינו</h3>
             <div className="flex justify-end gap-6">
@@ -46,7 +40,6 @@ export const Footer = () => {
             </div>
           </div>
 
-          {/* Subscribe */}
           <div className="text-right">
             <h3 className="font-bold mb-4">הישארו מעודכנים</h3>
             <p className="text-sm text-gray-400 mb-4">

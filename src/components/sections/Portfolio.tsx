@@ -1,4 +1,3 @@
-
 import { Card } from "@/components/ui/card";
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import { useState } from "react";
@@ -8,8 +7,8 @@ export const Portfolio = () => {
   const [sliderWidth, setSliderWidth] = useState(0);
   
   const images = [
-    "/lovable-uploads/1da101aa-bac2-4df1-82e8-8d4fea1c28c3.png",
-    "/lovable-uploads/77b55dc6-a81e-4ec0-b301-885308d24652.png"
+    "https://images.unsplash.com/photo-1496307653780-42ee777d4833",
+    "https://images.unsplash.com/photo-1439337153520-7082a56a81f4"
   ];
 
   const background = useTransform(x, [-sliderWidth, 0], ["100%", "0%"]);

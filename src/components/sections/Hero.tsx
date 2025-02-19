@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { PhoneCall } from "lucide-react";
 import { motion } from "framer-motion";
@@ -7,25 +8,19 @@ export const Hero = () => {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    // Check if screen is mobile on initial load
     const checkIfMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
     
-    // Run on initial load
     checkIfMobile();
-    
-    // Add event listener for window resize
     window.addEventListener("resize", checkIfMobile);
-    
-    // Clean up event listener
     return () => window.removeEventListener("resize", checkIfMobile);
   }, []);
 
-  const videoSrc = isMobile ? "/hero-mobile-video.mp4" : "/hero-desktop-video.mp4";
+  const videoSrc = isMobile ? "/public/hero-mobile-video.mp4" : "/public/hero-desktop-video.mp4";
   const posterSrc = isMobile 
-    ? "https://images.unsplash.com/photo-mobile-poster.jpg" 
-    : "https://images.unsplash.com/photo-1601362840469-51e4d8d58785?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80";
+    ? "https://images.unsplash.com/photo-1496307653780-42ee777d4833" 
+    : "https://images.unsplash.com/photo-1496307653780-42ee777d4833";
 
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden">

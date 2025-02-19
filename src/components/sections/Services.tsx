@@ -1,23 +1,48 @@
 
 import { Card } from "@/components/ui/card";
-import { Car, Home, Star } from "lucide-react";
+import { Car, Shield, Droplet, CircleDot, PaintBucket, Brush, DollarSign, Wrench } from "lucide-react";
 import { motion } from "framer-motion";
 
 const services = [
   {
+    icon: <div className="flex justify-center"><Shield className="h-8 w-8" /></div>,
+    title: "ציפוי ננו לכל חלקי הרכב",
+    description: "הגנה מתקדמת לשמירה על מראה חדש",
+  },
+  {
     icon: <div className="flex justify-center"><Car className="h-8 w-8" /></div>,
-    title: "דיטיילינג מלא",
-    description: "טיפול מקיף הכולל ניקוי, פוליש וציפוי הגנה לרכב",
+    title: "דיטיילינג וחידוש פנים הרכב",
+    description: "ניקוי וחידוש מקצועי של פנים הרכב",
   },
   {
-    icon: <div className="flex justify-center"><Home className="h-8 w-8" /></div>,
-    title: "שירות עד הבית",
-    description: "אנחנו מגיעים אליך עם כל הציוד הנדרש",
+    icon: <div className="flex justify-center"><Droplet className="h-8 w-8" /></div>,
+    title: "ציפוי ננו לעור",
+    description: "הגנה מיוחדת לריפודי עור",
   },
   {
-    icon: <div className="flex justify-center"><Star className="h-8 w-8" /></div>,
-    title: "מוצרי דיטיילינג",
-    description: "מבחר מוצרים מקצועיים לטיפול ברכב",
+    icon: <div className="flex justify-center"><CircleDot className="h-8 w-8" /></div>,
+    title: "ציפוי ננו לג׳אנטים",
+    description: "הגנה והברקה לג'אנטים",
+  },
+  {
+    icon: <div className="flex justify-center"><Shield className="h-8 w-8" /></div>,
+    title: "עיטוף ppf להגנה משריטות",
+    description: "הגנה מקסימלית מפני שריטות ופגיעות",
+  },
+  {
+    icon: <div className="flex justify-center"><PaintBucket className="h-8 w-8" /></div>,
+    title: "חידוש צבע, פוליש רב שלבי",
+    description: "השבת הברק המקורי לצבע הרכב",
+  },
+  {
+    icon: <div className="flex justify-center"><DollarSign className="h-8 w-8" /></div>,
+    title: "חידוש רכב לפני מכירה",
+    description: "שדרוג מראה הרכב למכירה מהירה",
+  },
+  {
+    icon: <div className="flex justify-center"><Brush className="h-8 w-8" /></div>,
+    title: "תיקוני צבע",
+    description: "תיקונים מקצועיים לפגיעות בצבע",
   },
 ];
 
@@ -34,7 +59,7 @@ export const Services = () => {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {services.map((service, index) => (
             <motion.div
               key={service.title}
@@ -45,8 +70,8 @@ export const Services = () => {
             >
               <Card className="glass-card p-6 h-full hover:scale-105 transition-transform duration-300">
                 <div className="text-primary mb-4">{service.icon}</div>
-                <h3 className="text-xl font-semibold mb-3">{service.title}</h3>
-                <p className="text-gray-400">{service.description}</p>
+                <h3 className="text-xl font-semibold mb-3 text-right">{service.title}</h3>
+                <p className="text-gray-400 text-right">{service.description}</p>
               </Card>
             </motion.div>
           ))}
