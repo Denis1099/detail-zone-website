@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 
 export const Hero = () => {
   const [isMobile, setIsMobile] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -21,31 +22,35 @@ export const Hero = () => {
   const posterSrc = "https://images.unsplash.com/photo-1496307653780-42ee777d4833";
 
   return (
-    <section className="relative h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative h-[100svh] flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 bg-black/60 z-10" />
       <video
+        key={videoSrc} // Force video reload when source changes
         autoPlay
         muted
         loop
         playsInline
-        className="absolute inset-0 w-full h-full object-cover"
+        onLoadedData={() => setVideoLoaded(true)}
+        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
+          videoLoaded ? 'opacity-100' : 'opacity-0'
+        }`}
         poster={posterSrc}
       >
         <source src={videoSrc} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
 
-      <div className="container relative z-20 mx-auto px-4 mt-16">
+      <div className="container relative z-20 mx-auto px-4 mt-16 md:mt-0">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-center"
+          className="text-center max-w-4xl mx-auto"
         >
-          <span className="text-primary font-medium mb-4 inline-block">
+          <span className="text-primary font-medium mb-4 inline-block px-4 py-1 rounded-full bg-primary/10 backdrop-blur-sm">
             הדיטיילינג המקצועי בדרום
           </span>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 text-glow">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-glow">
             שירותי דיטיילינג
             <br />
             ברמה אחרת
