@@ -17,10 +17,8 @@ export const Hero = () => {
     return () => window.removeEventListener("resize", checkIfMobile);
   }, []);
 
-  const videoSrc = isMobile ? "/public/hero-mobile-video.mp4" : "/public/hero-desktop-video.mp4";
-  const posterSrc = isMobile 
-    ? "https://images.unsplash.com/photo-1496307653780-42ee777d4833" 
-    : "https://images.unsplash.com/photo-1496307653780-42ee777d4833";
+  const videoSrc = isMobile ? "/hero-mobile-video.mp4" : "/hero-desktop-video.mp4";
+  const posterSrc = "https://images.unsplash.com/photo-1496307653780-42ee777d4833";
 
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden">

@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,7 +10,7 @@ export const Footer = () => {
       <div className="container mx-auto px-4 py-12">
         <div className="flex justify-center mb-12">
           <Link to="/" className="inline-block">
-            <img src="/Logo.svg" alt="Detail Zone Logo" className="h-8" />
+            <img src="/Logo.svg" alt="Detail Zone Logo" className="h-12" />
           </Link>
         </div>
 

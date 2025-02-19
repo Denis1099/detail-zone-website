@@ -23,7 +23,7 @@ export const Navbar = () => {
           </div>
 
           <Link to="/" className="order-2">
-            <img src="/Logo.svg" alt="Detail Zone Logo" className="h-8" />
+            <img src="/Logo.svg" alt="Detail Zone Logo" className="h-12" />
           </Link>
 
           <div className="order-3">
