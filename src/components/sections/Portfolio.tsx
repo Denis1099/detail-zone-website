@@ -1,4 +1,3 @@
-
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import { useState } from "react";
 
@@ -32,11 +31,17 @@ const beforeAfterPairs = [
 const BeforeAfterSlider = ({ before, after}) => {
   const x = useMotionValue(0);
   const [sliderWidth, setSliderWidth] = useState(0);
-  const background = useTransform(x, [-sliderWidth, 0], ["100%", "0%"]);
+  
+  // For RTL support, we need to flip the direction of the clip path
+  const clipPathTransform = useTransform(x, [0, -sliderWidth], 
+    ["polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%)", 
+     "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)"]
+  );
 
   return (
     <div className="relative aspect-video rounded-lg overflow-hidden shadow-xl" 
          onMouseDown={(e) => setSliderWidth(e.currentTarget.offsetWidth)}>
+      {/* Before image (visible by default) */}
       <motion.div 
         className="absolute inset-0 w-full h-full"
         style={{
@@ -45,21 +50,21 @@ const BeforeAfterSlider = ({ before, after}) => {
           backgroundPosition: 'center'
         }}
       />
+      
+      {/* After image (revealed by slider) */}
       <motion.div 
         className="absolute inset-0 w-full h-full"
         style={{
           backgroundImage: `url(${after})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          clipPath: useTransform(x, [-sliderWidth, 0], 
-            ["polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)", 
-             "polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)"]
-          )
+          clipPath: clipPathTransform
         }}
       />
       
+      {/* Slider handle */}
       <motion.div 
-        className="absolute top-0 bottom-0 w-1 bg-white cursor-ew-resize"
+        className="absolute top-0 bottom-0 right-0 w-1 bg-white cursor-ew-resize" // Changed from left to right for RTL
         style={{ x }}
         drag="x"
         dragConstraints={{ left: -sliderWidth, right: 0 }}
