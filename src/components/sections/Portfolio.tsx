@@ -1,3 +1,4 @@
+
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import { useState, useEffect } from "react";
 
@@ -31,31 +32,20 @@ const beforeAfterPairs = [
 const BeforeAfterSlider = ({ before, after }) => {
   const [sliderWidth, setSliderWidth] = useState(0);
   const [containerRef, setContainerRef] = useState(null);
-  const [initialSliderPosition, setInitialSliderPosition] = useState(null);
-  
-  // Motion value for the slider position
   const x = useMotionValue(0);
   
+  // Create transform values outside of any conditions
+  const clipPathPercentage = useTransform(x, [0, sliderWidth], [100, 0]);
+
   useEffect(() => {
     if (containerRef) {
       const width = containerRef.offsetWidth;
       setSliderWidth(width);
       
-      // Initialize slider at 50% for first render
-      if (initialSliderPosition === null) {
-        const middlePosition = width / 2;
-        x.set(middlePosition);
-        setInitialSliderPosition(middlePosition);
-      }
+      // Set initial position to middle
+      x.set(width / 2);
     }
-  }, [containerRef, initialSliderPosition, x]);
-  
-  // Transform slider position to clip percentage (reversed for RTL)
-  const clipPathPercentage = useTransform(
-    x,
-    [0, sliderWidth],
-    [100, 0]
-  );
+  }, [containerRef, x]);
 
   return (
     <div 
@@ -73,35 +63,28 @@ const BeforeAfterSlider = ({ before, after }) => {
       />
       
       {/* After image (revealed by slider) */}
-      {sliderWidth > 0 && (
-        <motion.div 
-          className="absolute inset-0 w-full h-full"
-          style={{
-            backgroundImage: `url(${after})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            clipPath: useTransform(
-              clipPathPercentage,
-              (percentage) => `inset(0 ${percentage}% 0 0)`
-            )
-          }}
-        />
-      )}
+      <motion.div 
+        className="absolute inset-0 w-full h-full"
+        style={{
+          backgroundImage: `url(${after})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          clipPath: `inset(0 ${clipPathPercentage.get()}% 0 0)`
+        }}
+      />
       
       {/* Slider handle */}
-      {sliderWidth > 0 && (
-        <motion.div 
-          className="absolute top-0 bottom-0 w-1 bg-white cursor-ew-resize z-10"
-          style={{ x }}
-          drag="x"
-          dragConstraints={{ left: 0, right: sliderWidth }}
-          dragElastic={0}
-        >
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md">
-            <div className="text-black">⟷</div>
-          </div>
-        </motion.div>
-      )}
+      <motion.div 
+        className="absolute top-0 bottom-0 w-1 bg-white cursor-ew-resize z-10"
+        style={{ x }}
+        drag="x"
+        dragConstraints={{ left: 0, right: sliderWidth }}
+        dragElastic={0}
+      >
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full flex items-center justify-center">
+          <div className="text-black">⟷</div>
+        </div>
+      </motion.div>
       
       <div className="absolute bottom-4 left-4 bg-black/70 px-3 py-1 rounded-full text-white text-xs">
         לפני ואחרי
