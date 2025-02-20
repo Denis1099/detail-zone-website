@@ -4,23 +4,32 @@ import { useState } from "react";
 
 const beforeAfterPairs = [
   {
-    title: "חידוש פנים הרכב",
-    before: "https://images.unsplash.com/photo-1496307653780-42ee777d4833",
-    after: "https://images.unsplash.com/photo-1439337153520-7082a56a81f4"
+    before: "/lovable-uploads/mercedes-jeep-before.webp",
+    after: "/lovable-uploads/mercedes-jeep-after.webp"
   },
   {
-    title: "פוליש ווקס",
-    before: "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2",
-    after: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7"
+    before: "/lovable-uploads/skoda-back-before.webp",
+    after: "/lovable-uploads/skoda-back-after.webp"
   },
   {
-    title: "ציפוי קרמי",
-    before: "https://images.unsplash.com/photo-1542362567-b07e54358753",
-    after: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341"
+    before: "/lovable-uploads/rover-before.webp",
+    after: "lovable-uploads/rover-after.webp"
+  },
+  {
+    before: "/lovable-uploads/infinity-before.webp",
+    after: "/lovable-uploads/infinity-after.webp"
+  },
+  {
+    before: "/lovable-uploads/infinity-back-before.webp",
+    after: "lovable-uploads/infinity-back-after.webp"
+  },
+  {
+    before: "/lovable-uploads/byd-before.webp",
+    after: "lovable-uploads/byd-after.webp"
   }
 ];
 
-const BeforeAfterSlider = ({ before, after, title }) => {
+const BeforeAfterSlider = ({ before, after}) => {
   const x = useMotionValue(0);
   const [sliderWidth, setSliderWidth] = useState(0);
   const background = useTransform(x, [-sliderWidth, 0], ["100%", "0%"]);
@@ -62,7 +71,6 @@ const BeforeAfterSlider = ({ before, after, title }) => {
       </motion.div>
       
       <div className="absolute top-4 right-4 bg-black/70 px-3 py-1 rounded-full">
-        <span className="text-sm text-white">{title}</span>
       </div>
     </div>
   );
