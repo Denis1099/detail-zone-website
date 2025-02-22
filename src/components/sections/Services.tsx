@@ -42,7 +42,7 @@ export const Services = () => {
             <motion.div
               className="flex gap-6"
               animate={{
-                x: `-${currentIndex * (100 / displayCount)}%`
+                x: `${currentIndex * (100 / displayCount)}%`
               }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
@@ -90,7 +90,7 @@ export const Services = () => {
             <Button
               variant="outline"
               size="icon"
-              onClick={prevSlide}
+              onClick={nextSlide}
               disabled={currentIndex === 0}
               className="rounded-full"
             >
@@ -99,7 +99,7 @@ export const Services = () => {
             <Button
               variant="outline"
               size="icon"
-              onClick={nextSlide}
+              onClick={prevSlide}
               disabled={currentIndex >= maxIndex}
               className="rounded-full"
             >
