@@ -1,5 +1,5 @@
 import { motion, useMotionValue, useTransform } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const beforeAfterPairs = [
   {
@@ -12,7 +12,7 @@ const beforeAfterPairs = [
   },
   {
     before: "/lovable-uploads/rover-before.webp",
-    after: "lovable-uploads/rover-after.webp"
+    after: "/lovable-uploads/rover-after.webp" // Added missing slash
   },
   {
     before: "/lovable-uploads/infinity-before.webp",
@@ -20,17 +20,25 @@ const beforeAfterPairs = [
   },
   {
     before: "/lovable-uploads/infinity-back-before.webp",
-    after: "lovable-uploads/infinity-back-after.webp"
+    after: "/lovable-uploads/infinity-back-after.webp" // Added missing slash
   },
   {
     before: "/lovable-uploads/byd-before.webp",
-    after: "lovable-uploads/byd-after.webp"
+    after: "/lovable-uploads/byd-after.webp" // Added missing slash
   }
 ];
 
 const BeforeAfterSlider = ({ before, after}) => {
+  const containerRef = useRef(null);
   const x = useMotionValue(0);
   const [sliderWidth, setSliderWidth] = useState(0);
+  
+  // Initialize sliderWidth on component mount
+  useEffect(() => {
+    if (containerRef.current) {
+      setSliderWidth(containerRef.current.offsetWidth);
+    }
+  }, []);
   
   // For RTL support, we need to flip the direction of the clip path
   const clipPathTransform = useTransform(x, [0, -sliderWidth], 
@@ -39,8 +47,11 @@ const BeforeAfterSlider = ({ before, after}) => {
   );
 
   return (
-    <div className="relative aspect-video rounded-lg overflow-hidden shadow-xl" 
-         onMouseDown={(e) => setSliderWidth(e.currentTarget.offsetWidth)}>
+    <div 
+      ref={containerRef}
+      className="relative aspect-video rounded-lg overflow-hidden shadow-xl" 
+      onMouseDown={(e) => setSliderWidth(e.currentTarget.offsetWidth)}
+    >
       {/* Before image (visible by default) */}
       <motion.div 
         className="absolute inset-0 w-full h-full"
