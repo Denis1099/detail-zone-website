@@ -10,7 +10,7 @@ export const Services = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const itemsPerPage = {
     desktop: 3,
-    mobile: 2
+    mobile: 1
   };
 
   const isMobile = window.innerWidth < 768;
@@ -56,7 +56,7 @@ export const Services = () => {
                 <div
                   key={service.id}
                   className="w-full md:w-1/3"
-                  style={{ width: `${100 / (services.length * 3)}%` }}
+                  style={{ width: `${100 / (services.length * (isMobile ? 1 : 3))}%` }}
                 >
                   <div className="mx-2">
                     <div className="bg-white rounded-2xl overflow-hidden shadow-xl h-full">
@@ -95,13 +95,13 @@ export const Services = () => {
             </motion.div>
           </div>
 
-          <div className="flex justify-end gap-2 mt-8">
+          <div className="flex justify-center gap-2 mt-8">
             <Button
               variant="outline"
               size="icon"
               onClick={nextSlide}
               disabled={currentIndex === 0}
-              className="rounded-full"
+              className="rounded-full bg-white hover:bg-white/90 text-black"
             >
               <ChevronRight className="h-4 w-4" />
             </Button>
@@ -110,7 +110,7 @@ export const Services = () => {
               size="icon"
               onClick={prevSlide}
               disabled={currentIndex >= maxIndex}
-              className="rounded-full"
+              className="rounded-full bg-white hover:bg-white/90 text-black"
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
