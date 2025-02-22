@@ -55,11 +55,11 @@ export const Services = () => {
               {services.map((service) => (
                 <div
                   key={service.id}
-                  className="w-full"
-                  style={{ width: `${100 / services.length}%` }}
+                  className="w-full md:w-1/3"
+                  style={{ width: `${100 / (services.length * 3)}%` }}
                 >
                   <div className="mx-2">
-                    <div className="bg-white rounded-2xl overflow-hidden shadow-xl">
+                    <div className="bg-white rounded-2xl overflow-hidden shadow-xl h-full">
                       <div className="relative">
                         <img
                           src={service.image}
