@@ -1,52 +1,30 @@
 
-import { Card } from "@/components/ui/card";
-import { Car, Shield, Droplet, CircleDot, PaintBucket, Brush, DollarSign, Wrench } from "lucide-react";
+import { useState } from "react";
 import { motion } from "framer-motion";
-
-const services = [
-  {
-    icon: <div className="flex justify-center"><Shield className="h-8 w-8" /></div>,
-    title: "ציפוי ננו לכל חלקי הרכב",
-    description: "הגנה מתקדמת לשמירה על מראה חדש",
-  },
-  {
-    icon: <div className="flex justify-center"><Car className="h-8 w-8" /></div>,
-    title: "דיטיילינג וחידוש פנים הרכב",
-    description: "ניקוי וחידוש מקצועי של פנים הרכב",
-  },
-  {
-    icon: <div className="flex justify-center"><Droplet className="h-8 w-8" /></div>,
-    title: "ציפוי ננו לעור",
-    description: "הגנה מיוחדת לריפודי עור",
-  },
-  {
-    icon: <div className="flex justify-center"><CircleDot className="h-8 w-8" /></div>,
-    title: "ציפוי ננו לג׳אנטים",
-    description: "הגנה והברקה לג'אנטים",
-  },
-  {
-    icon: <div className="flex justify-center"><Shield className="h-8 w-8" /></div>,
-    title: "עיטוף ppf להגנה משריטות",
-    description: "הגנה מקסימלית מפני שריטות ופגיעות",
-  },
-  {
-    icon: <div className="flex justify-center"><PaintBucket className="h-8 w-8" /></div>,
-    title: "חידוש צבע, פוליש רב שלבי",
-    description: "השבת הברק המקורי לצבע הרכב",
-  },
-  {
-    icon: <div className="flex justify-center"><DollarSign className="h-8 w-8" /></div>,
-    title: "חידוש רכב לפני מכירה",
-    description: "שדרוג מראה הרכב למכירה מהירה",
-  },
-  {
-    icon: <div className="flex justify-center"><Brush className="h-8 w-8" /></div>,
-    title: "תיקוני צבע",
-    description: "תיקונים מקצועיים לפגיעות בצבע",
-  },
-];
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight, ArrowUpRight } from "lucide-react";
+import { services } from "@/data/services";
+import { Link } from "react-router-dom";
 
 export const Services = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const itemsPerPage = {
+    desktop: 3,
+    mobile: 2
+  };
+
+  const isMobile = window.innerWidth < 768;
+  const displayCount = isMobile ? itemsPerPage.mobile : itemsPerPage.desktop;
+  const maxIndex = services.length - displayCount;
+
+  const nextSlide = () => {
+    setCurrentIndex(prev => Math.min(prev + 1, maxIndex));
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex(prev => Math.max(prev - 1, 0));
+  };
+
   return (
     <section className="py-20 bg-gradient-to-b from-background to-card">
       <div className="container mx-auto px-4">
@@ -59,22 +37,75 @@ export const Services = () => {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {services.map((service, index) => (
+        <div className="relative">
+          <div className="overflow-hidden">
             <motion.div
-              key={service.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
+              className="flex gap-6"
+              animate={{
+                x: `-${currentIndex * (100 / displayCount)}%`
+              }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
-              <Card className="glass-card p-6 h-full hover:scale-105 transition-transform duration-300">
-                <div className="text-primary mb-4">{service.icon}</div>
-                <h3 className="text-xl font-semibold mb-3 text-center">{service.title}</h3>
-                <p className="text-gray-400 text-center">{service.description}</p>
-              </Card>
+              {services.map((service) => (
+                <div
+                  key={service.id}
+                  className="w-full md:w-1/2 lg:w-1/3 flex-shrink-0"
+                >
+                  <div className="bg-white rounded-2xl overflow-hidden shadow-xl">
+                    <div className="relative">
+                      <img
+                        src={service.image}
+                        alt={service.title}
+                        className="w-full aspect-video object-cover"
+                      />
+                      <span className="absolute top-4 left-4 bg-black/80 text-white w-10 h-10 rounded-full flex items-center justify-center text-lg font-semibold">
+                        {String(service.id).padStart(2, '0')}
+                      </span>
+                    </div>
+                    <div className="p-6">
+                      <div className="flex justify-between items-start mb-4">
+                        <div>
+                          <h3 className="text-xl font-bold text-gray-900 mb-2">
+                            {service.title}
+                          </h3>
+                          <p className="text-gray-600">
+                            {service.description}
+                          </p>
+                        </div>
+                      </div>
+                      <Button asChild className="w-full" variant="outline">
+                        <Link to={`/services/${service.slug}`} className="flex items-center justify-center gap-2">
+                          פרטים נוספים
+                          <ArrowUpRight className="h-4 w-4" />
+                        </Link>
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </motion.div>
-          ))}
+          </div>
+
+          <div className="flex justify-end gap-2 mt-8">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={prevSlide}
+              disabled={currentIndex === 0}
+              className="rounded-full"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={nextSlide}
+              disabled={currentIndex >= maxIndex}
+              className="rounded-full"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </div>
     </section>
