@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, ArrowUpRight } from "lucide-react";
@@ -8,14 +8,23 @@ import { Link } from "react-router-dom";
 
 export const Services = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const itemsPerPage = {
     desktop: 3,
     mobile: 1
   };
 
-  const isMobile = window.innerWidth < 768;
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const displayCount = isMobile ? itemsPerPage.mobile : itemsPerPage.desktop;
-  const maxIndex = services.length - displayCount;
+  const maxIndex = Math.max(0, services.length - displayCount);
 
   const nextSlide = () => {
     setCurrentIndex(prev => Math.max(prev - 1, 0));
@@ -38,9 +47,7 @@ export const Services = () => {
         </div>
 
         <div className="relative">
-          {/* Overflow container */}
           <div className="overflow-hidden">
-            {/* Full-width container for all slides */}
             <motion.div
               className="flex gap-4"
               style={{
@@ -58,8 +65,8 @@ export const Services = () => {
                   className="w-full md:w-1/3"
                   style={{ width: `${100 / (services.length * (isMobile ? 1 : 3))}%` }}
                 >
-                  <div className="mx-2">
-                    <div className="bg-white rounded-2xl overflow-hidden shadow-xl h-full">
+                  <div className="mx-2 h-full">
+                    <div className="bg-white rounded-2xl overflow-hidden shadow-xl h-full flex flex-col">
                       <div className="relative">
                         <img
                           src={service.image}
@@ -70,18 +77,16 @@ export const Services = () => {
                           {String(service.id).padStart(2, '0')}
                         </span>
                       </div>
-                      <div className="p-6">
-                        <div className="flex justify-between items-start mb-4">
-                          <div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-2">
-                              {service.title}
-                            </h3>
-                            <p className="text-gray-600">
-                              {service.description}
-                            </p>
-                          </div>
+                      <div className="p-6 flex flex-col flex-grow">
+                        <div className="flex-grow">
+                          <h3 className="text-xl font-bold text-gray-900 mb-2">
+                            {service.title}
+                          </h3>
+                          <p className="text-gray-600">
+                            {service.description}
+                          </p>
                         </div>
-                        <Button asChild className="w-full" variant="outline">
+                        <Button asChild className="w-full mt-4" variant="outline">
                           <Link to={`/services/${service.slug}`} className="flex items-center justify-center gap-2">
                             פרטים נוספים
                             <ArrowUpRight className="h-4 w-4" />
