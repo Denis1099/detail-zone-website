@@ -18,11 +18,11 @@ export const Services = () => {
   const maxIndex = services.length - displayCount;
 
   const nextSlide = () => {
-    setCurrentIndex(prev => Math.max(prev - 1, 0));
+    setCurrentIndex(prev => Math.min(prev + 1, maxIndex));
   };
 
   const prevSlide = () => {
-    setCurrentIndex(prev => Math.min(prev + 1, maxIndex));
+    setCurrentIndex(prev => Math.max(prev - 1, 0));
   };
 
   return (
@@ -40,12 +40,13 @@ export const Services = () => {
         <div className="relative">
           <div className="overflow-hidden">
             <motion.div
-              className="flex gap-4 px-1"
-              animate={{
-                x: `${currentIndex * -33.33}%`
-              }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            >
+  className="flex gap-4 px-1"
+  animate={{
+    x: `${-currentIndex * 100}%`
+  }}
+  transition={{ type: "spring", stiffness: 300, damping: 30 }}
+>
+
               {services.map((service) => (
                 <div
                   key={service.id}
