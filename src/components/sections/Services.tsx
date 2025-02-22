@@ -42,7 +42,7 @@ export const Services = () => {
             <motion.div
               className="flex gap-6"
               animate={{
-                x: `${currentIndex * (100 / displayCount)}%`
+                x: `${-currentIndex * (100 / displayCount)}%`
               }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
@@ -86,24 +86,25 @@ export const Services = () => {
             </motion.div>
           </div>
 
-          <div className="flex justify-end gap-2 mt-8">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={nextSlide}
-              disabled={currentIndex === 0}
-              className="rounded-full"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
+          {/* Navigation Arrows */}
+          <div className="absolute top-1/2 -translate-y-1/2 left-0 right-0 flex justify-center gap-4 px-4">
             <Button
               variant="outline"
               size="icon"
               onClick={prevSlide}
-              disabled={currentIndex >= maxIndex}
-              className="rounded-full"
+              disabled={currentIndex === 0}
+              className="rounded-full bg-white hover:bg-white z-10"
             >
               <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={nextSlide}
+              disabled={currentIndex >= maxIndex}
+              className="rounded-full bg-white hover:bg-white z-10"
+            >
+              <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
         </div>
