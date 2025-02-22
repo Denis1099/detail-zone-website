@@ -10,7 +10,7 @@ export const Services = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const itemsPerPage = {
     desktop: 3,
-    mobile: 2
+    mobile: 1
   };
 
   const isMobile = window.innerWidth < 768;
@@ -38,28 +38,28 @@ export const Services = () => {
         </div>
 
         <div className="relative">
-          {/* Overflow container */}
           <div className="overflow-hidden">
-            {/* Full-width container for all slides */}
             <motion.div
-              className="flex gap-4"
+              className="flex gap-6"
               style={{
-                width: `${services.length * 100}%`,
-                transform: `translateX(${currentIndex * (100 / services.length)}%)`
+                width: `${(services.length / displayCount) * 100}%`
               }}
               animate={{
-                x: `${currentIndex * (100 / services.length)}%`
+                x: `${currentIndex * -(100 / (services.length / displayCount))}%`
               }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
               {services.map((service) => (
                 <div
                   key={service.id}
-                  className="w-full"
-                  style={{ width: `${100 / services.length}%` }}
+                  className="w-full md:w-1/3"
+                  style={{ 
+                    flexShrink: 0,
+                    flexBasis: `${100 / services.length * displayCount}%`
+                  }}
                 >
-                  <div className="mx-2">
-                    <div className="bg-white rounded-2xl overflow-hidden shadow-xl">
+                  <div className="mx-3">
+                    <div className="bg-white rounded-2xl overflow-hidden shadow-xl h-full">
                       <div className="relative">
                         <img
                           src={service.image}
