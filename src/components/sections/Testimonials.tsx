@@ -44,7 +44,7 @@ export const Testimonials = () => {
               viewport={{ once: true }}
             >
               <Card className="glass-card p-6">
-                <div className="flex items-center mb-4">
+                <div className="flex items-center justify-center mb-4">
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
@@ -56,8 +56,8 @@ export const Testimonials = () => {
                     />
                   ))}
                 </div>
-                <p className="text-gray-300 mb-4">{testimonial.text}</p>
-                <div className="font-medium">{testimonial.name}</div>
+                <p className="text-gray-300 mb-4 text-center">{testimonial.text}</p>
+                <div className="font-medium text-center">{testimonial.name}</div>
               </Card>
             </motion.div>
           ))}

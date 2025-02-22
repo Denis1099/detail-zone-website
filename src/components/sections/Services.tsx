@@ -70,8 +70,8 @@ export const Services = () => {
             >
               <Card className="glass-card p-6 h-full hover:scale-105 transition-transform duration-300">
                 <div className="text-primary mb-4">{service.icon}</div>
-                <h3 className="text-xl font-semibold mb-3 text-right">{service.title}</h3>
-                <p className="text-gray-400 text-right">{service.description}</p>
+                <h3 className="text-xl font-semibold mb-3 text-center">{service.title}</h3>
+                <p className="text-gray-400 text-center">{service.description}</p>
               </Card>
             </motion.div>
           ))}

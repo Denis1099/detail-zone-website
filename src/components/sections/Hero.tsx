@@ -1,6 +1,5 @@
-
 import { Button } from "@/components/ui/button";
-import { PhoneCall } from "lucide-react";
+import { PhoneCall, ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 
@@ -23,9 +22,11 @@ export const Hero = () => {
 
   return (
     <section className="relative h-[100svh] flex items-center justify-center overflow-hidden">
-      <div className="absolute inset-0 bg-black/60 z-10" />
+      {/* Enhanced overlay with gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/80 z-10" />
+      
       <video
-        key={videoSrc} // Force video reload when source changes
+        key={videoSrc}
         autoPlay
         muted
         loop
@@ -47,23 +48,59 @@ export const Hero = () => {
           transition={{ duration: 0.8 }}
           className="text-center max-w-4xl mx-auto"
         >
-          <span className="text-primary font-medium mb-4 inline-block px-4 py-1 rounded-full bg-primary/10 backdrop-blur-sm">
+          <motion.span 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+            className="text-primary font-medium mb-6 inline-block px-6 py-2 rounded-full bg-primary/10 backdrop-blur-md border border-primary/20"
+          >
             הדיטיילינג המקצועי בדרום
-          </span>
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-glow">
-            שירותי דיטיילינג
-            <br />
-            ברמה אחרת
-          </h1>
-          <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-            אנחנו מתמחים בטיפול מקצועי ברכב שלך, עם אפשרות הגעה עד אליך
-          </p>
-          <Button size="lg" className="animate-pulse">
-            השאירו פרטים עכשיו
-            <PhoneCall className="mr-2 h-4 w-4" />
-          </Button>
+          </motion.span>
+          
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.6 }}
+            className="text-4xl md:text-6xl lg:text-7xl font-bold mb-8 text-text"
+          >
+           
+            <span className="text-primary/90">כי לרכב שלך מגיע יותר</span>
+          </motion.h1>
+          
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.6 }}
+            className="text-lg md:text-xl text-text/80 mb-10 max-w-2xl mx-auto leading-relaxed"
+          >
+            אנחנו מתמחים בטיפול מקצועי לרכב שלך, עם אפשרות הגעה עד אליך
+          </motion.p>
+          
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8, duration: 0.6 }}
+          >
+            <Button 
+              size="lg" 
+              className="bg-primary hover:bg-primary/90 transition-all duration-300 transform hover:scale-105"
+            >
+              השאירו פרטים עכשיו
+              <PhoneCall className="mr-2 h-5 w-5" />
+            </Button>
+          </motion.div>
         </motion.div>
       </div>
+
+      {/* Scroll indicator */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.2, duration: 0.6 }}
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20"
+      >
+        <ChevronDown className="w-6 h-6 text-primary animate-bounce" />
+      </motion.div>
     </section>
   );
 };
