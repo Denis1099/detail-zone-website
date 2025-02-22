@@ -18,11 +18,11 @@ export const Services = () => {
   const maxIndex = services.length - displayCount;
 
   const nextSlide = () => {
-    setCurrentIndex(prev => Math.min(prev + 1, maxIndex));
+    setCurrentIndex(prev => Math.max(prev - 1, 0));
   };
 
   const prevSlide = () => {
-    setCurrentIndex(prev => Math.max(prev - 1, 0));
+    setCurrentIndex(prev => Math.min(prev + 1, maxIndex));
   };
 
   return (
@@ -38,48 +38,56 @@ export const Services = () => {
         </div>
 
         <div className="relative">
+          {/* Overflow container */}
           <div className="overflow-hidden">
+            {/* Full-width container for all slides */}
             <motion.div
-  className="flex gap-4 px-1"
-  animate={{
-    x: `${-currentIndex * 100}%`
-  }}
-  transition={{ type: "spring", stiffness: 300, damping: 30 }}
->
-
+              className="flex gap-4"
+              style={{
+                width: `${services.length * 100}%`,
+                transform: `translateX(${currentIndex * (100 / services.length)}%)`
+              }}
+              animate={{
+                x: `${currentIndex * (100 / services.length)}%`
+              }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            >
               {services.map((service) => (
                 <div
                   key={service.id}
-                  className="w-full md:w-[calc(50%-0.5rem)] lg:w-[calc(33.33%-0.75rem)] flex-shrink-0"
+                  className="w-full"
+                  style={{ width: `${100 / services.length}%` }}
                 >
-                  <div className="bg-white rounded-2xl overflow-hidden shadow-xl">
-                    <div className="relative">
-                      <img
-                        src={service.image}
-                        alt={service.title}
-                        className="w-full aspect-video object-cover"
-                      />
-                      <span className="absolute top-4 left-4 bg-black/80 text-white w-10 h-10 rounded-full flex items-center justify-center text-lg font-semibold">
-                        {String(service.id).padStart(2, '0')}
-                      </span>
-                    </div>
-                    <div className="p-6">
-                      <div className="flex justify-between items-start mb-4">
-                        <div>
-                          <h3 className="text-xl font-bold text-gray-900 mb-2">
-                            {service.title}
-                          </h3>
-                          <p className="text-gray-600">
-                            {service.description}
-                          </p>
-                        </div>
+                  <div className="mx-2">
+                    <div className="bg-white rounded-2xl overflow-hidden shadow-xl">
+                      <div className="relative">
+                        <img
+                          src={service.image}
+                          alt={service.title}
+                          className="w-full aspect-video object-cover"
+                        />
+                        <span className="absolute top-4 left-4 bg-black/80 text-white w-10 h-10 rounded-full flex items-center justify-center text-lg font-semibold">
+                          {String(service.id).padStart(2, '0')}
+                        </span>
                       </div>
-                      <Button asChild className="w-full" variant="outline">
-                        <Link to={`/services/${service.slug}`} className="flex items-center justify-center gap-2">
-                          פרטים נוספים
-                          <ArrowUpRight className="h-4 w-4" />
-                        </Link>
-                      </Button>
+                      <div className="p-6">
+                        <div className="flex justify-between items-start mb-4">
+                          <div>
+                            <h3 className="text-xl font-bold text-gray-900 mb-2">
+                              {service.title}
+                            </h3>
+                            <p className="text-gray-600">
+                              {service.description}
+                            </p>
+                          </div>
+                        </div>
+                        <Button asChild className="w-full" variant="outline">
+                          <Link to={`/services/${service.slug}`} className="flex items-center justify-center gap-2">
+                            פרטים נוספים
+                            <ArrowUpRight className="h-4 w-4" />
+                          </Link>
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </div>
