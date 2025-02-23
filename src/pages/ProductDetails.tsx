@@ -1,7 +1,8 @@
+
 import { useParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, CreditCard } from "lucide-react";
+import { ShoppingCart, CreditCard, Star } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { products } from "@/data/products";
 import { Link } from "react-router-dom";
