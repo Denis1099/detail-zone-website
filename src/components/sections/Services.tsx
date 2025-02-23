@@ -24,14 +24,16 @@ export const Services = () => {
   }, []);
 
   const displayCount = isMobile ? itemsPerPage.mobile : itemsPerPage.desktop;
-  const maxIndex = Math.max(0, services.length - displayCount);
+  // Calculate how many slides we need based on total items and items per page
+  const totalSlides = Math.ceil(services.length / displayCount) - 1;
+  const maxIndex = totalSlides;
 
   const nextSlide = () => {
-    setCurrentIndex(prev => Math.min(prev + 1, maxIndex));
+    setCurrentIndex(prev => Math.max(prev - 1, 0));
   };
 
   const prevSlide = () => {
-    setCurrentIndex(prev => Math.max(prev - 1, 0));
+    setCurrentIndex(prev => Math.min(prev + 1, maxIndex));
   };
 
   return (
@@ -54,9 +56,13 @@ export const Services = () => {
                 width: `${100 * (services.length / displayCount)}%`,
               }}
               animate={{
-                x: `${-currentIndex * (100 / (services.length / displayCount))}%`
+                x: `${currentIndex * (100 / (services.length / displayCount))}%`
               }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              transition={{ 
+                type: "tween",
+                duration: 0.5,
+                ease: "easeInOut"
+              }}
             >
               {services.map((service) => (
                 <div
@@ -101,7 +107,7 @@ export const Services = () => {
             <Button
               variant="outline"
               size="icon"
-              onClick={prevSlide}
+              onClick={nextSlide}
               disabled={currentIndex === 0}
               className="rounded-full bg-white hover:bg-white/90 text-black"
             >
@@ -110,7 +116,7 @@ export const Services = () => {
             <Button
               variant="outline"
               size="icon"
-              onClick={nextSlide}
+              onClick={prevSlide}
               disabled={currentIndex >= maxIndex}
               className="rounded-full bg-white hover:bg-white/90 text-black"
             >
