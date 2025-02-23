@@ -1,7 +1,9 @@
 
 import { Card } from "@/components/ui/card";
-import { Star } from "lucide-react";
+import { Star, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
+import { useState, useRef, useEffect } from "react";
+import { Button } from "@/components/ui/button";
 
 const testimonials = [
   {
@@ -21,7 +23,45 @@ const testimonials = [
   },
 ];
 
+const videoTestimonials = [
+  "4naJH4_3qFY",
+  "4naJH4_3qFY",
+  "4naJH4_3qFY",
+  "4naJH4_3qFY",
+];
+
 export const Testimonials = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const itemsPerView = isMobile ? 1 : 3;
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const nextSlide = () => {
+    setCurrentIndex((prev) => (prev + 1) % videoTestimonials.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex((prev) => 
+      prev === 0 ? videoTestimonials.length - 1 : prev - 1
+    );
+  };
+
+  // Create an array that repeats the videos for infinite scroll effect
+  const extendedVideos = [
+    ...videoTestimonials,
+    ...videoTestimonials,
+    ...videoTestimonials,
+  ];
+
   return (
     <section className="py-20">
       <div className="container mx-auto px-4">
@@ -63,21 +103,63 @@ export const Testimonials = () => {
           ))}
         </div>
 
-        {/* Video Testimonials */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {[1, 2, 3, 4].map((_, index) => (
-            <div key={index} className="aspect-video">
-              <iframe
-                width="100%"
-                height="100%"
-                src="https://www.youtube.com/embed/4naJH4_3qFY"
-                title={`Video testimonial ${index + 1}`}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="rounded-lg"
-              ></iframe>
-            </div>
-          ))}
+        {/* Video Testimonials Carousel */}
+        <div className="relative">
+          <div className="overflow-hidden" ref={containerRef}>
+            <motion.div
+              className="flex gap-4"
+              animate={{
+                x: `${-100 * currentIndex}%`,
+              }}
+              transition={{
+                type: "tween",
+                duration: 0.5,
+                ease: "easeInOut",
+              }}
+              style={{
+                width: `${(100 * extendedVideos.length) / itemsPerView}%`,
+              }}
+            >
+              {extendedVideos.map((videoId, index) => (
+                <div
+                  key={index}
+                  style={{ width: `${100 / extendedVideos.length}%` }}
+                  className="px-2"
+                >
+                  <div className="aspect-[9/16] w-full max-w-[400px] mx-auto">
+                    <iframe
+                      width="100%"
+                      height="100%"
+                      src={`https://www.youtube.com/embed/${videoId}?rel=0`}
+                      title={`Video testimonial ${index + 1}`}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      className="rounded-lg"
+                    />
+                  </div>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+
+          <div className="flex justify-center gap-2 mt-8">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={prevSlide}
+              className="rounded-full bg-white hover:bg-white/90 text-black"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={nextSlide}
+              className="rounded-full bg-white hover:bg-white/90 text-black"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </div>
     </section>

@@ -7,6 +7,7 @@ import { Testimonials } from "@/components/sections/Testimonials";
 import { CTAForm } from "@/components/sections/CTAForm";
 import { MoreDetails } from "@/components/sections/MoreDetails";
 import { Footer } from "@/components/Footer";
+import { WhatsAppButton } from "@/components/WhatsAppButton";
 
 const Index = () => {
   return (
@@ -19,6 +20,7 @@ const Index = () => {
       <CTAForm />
       <MoreDetails />
       <Footer />
+      <WhatsAppButton />
     </div>
   );
 };
