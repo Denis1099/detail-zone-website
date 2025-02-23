@@ -8,9 +8,9 @@ import { products } from "@/data/products";
 
 export default function Shop() {
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Navbar />
-      <div className="container mx-auto py-12">
+      <div className="container mx-auto py-12 pt-24">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-4">חנות המוצרים שלנו</h1>
           <p className="text-muted-foreground">מוצרי טיפול מקצועיים לרכב שלך</p>
@@ -45,6 +45,6 @@ export default function Shop() {
           ))}
         </div>
       </div>
-    </>
+    </div>
   );
 }

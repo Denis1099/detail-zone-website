@@ -1,4 +1,6 @@
+
 import { Button } from "@/components/ui/button";
+import { ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export const Navbar = () => {
@@ -27,8 +29,14 @@ export const Navbar = () => {
             </Button>
           </div>
 
-          {/* CTA Button - Right Side */}
-          <div>
+          {/* Cart and CTA - Right Side */}
+          <div className="flex items-center gap-4">
+            <Button variant="ghost" size="icon" className="relative">
+              <ShoppingCart className="h-5 w-5" />
+              <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground w-5 h-5 rounded-full text-xs flex items-center justify-center">
+                0
+              </span>
+            </Button>
             <Button variant="default" asChild>
               <Link to="/contact">צור קשר</Link>
             </Button>
