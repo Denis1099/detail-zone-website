@@ -10,7 +10,7 @@ export const Services = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const itemsPerPage = {
-    desktop: 3,
+    desktop: 4,
     mobile: 1
   };
 
@@ -62,8 +62,8 @@ export const Services = () => {
               {services.map((service) => (
                 <div
                   key={service.id}
-                  className="w-full md:w-1/3"
-                  style={{ width: `${100 / (services.length * (isMobile ? 1 : 3))}%` }}
+                  className="w-full md:w-1/4"
+                  style={{ width: `${100 / (services.length * (isMobile ? 1 : 4))}%` }}
                 >
                   <div className="mx-2 h-full">
                     <div className="bg-white rounded-2xl overflow-hidden shadow-xl h-full flex flex-col">
@@ -77,12 +77,12 @@ export const Services = () => {
                           {String(service.id).padStart(2, '0')}
                         </span>
                       </div>
-                      <div className="p-6 flex flex-col flex-grow">
+                      <div className="p-4 flex flex-col flex-grow">
                         <div className="flex-grow">
-                          <h3 className="text-xl font-bold text-gray-900 mb-2">
+                          <h3 className="text-lg font-bold text-gray-900 mb-2">
                             {service.title}
                           </h3>
-                          <p className="text-gray-600">
+                          <p className="text-gray-600 text-sm">
                             {service.description}
                           </p>
                         </div>
