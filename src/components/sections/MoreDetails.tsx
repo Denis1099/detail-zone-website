@@ -1,7 +1,7 @@
 
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Phone, Facebook, Instagram, MessageCircle } from "lucide-react";
+import { Phone, Facebook, Instagram, Youtube } from "lucide-react";
 
 export const MoreDetails = () => {
   return (
@@ -16,7 +16,7 @@ export const MoreDetails = () => {
           {/* Map Section */}
           <Card className="glass-card p-4 h-[400px]">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3390.829284365661!2d34.6550145!3d31.7953463!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1502a23938902c91%3A0x75043bd0638f767c!2sHaAvoda%20St%2038%2C%20Ashdod!5e0!3m2!1sen!2sil!4v1707928167345!5m2!1sen!2sil"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3390.5491426030845!2d34.666411!3d31.812620!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzHCsDQ4JzQ1LjQiTiAzNMKwMzknNTkuMSJF!5e0!3m2!1sen!2sil!4v1707928167345!5m2!1sen!2sil"
               width="100%"
               height="100%"
               style={{ border: 0, borderRadius: "0.5rem" }}
@@ -64,9 +64,9 @@ export const MoreDetails = () => {
                       <Instagram className="h-5 w-5" />
                     </a>
                   </Button>
-                  <Button size="icon" variant="ghost" className="hover:text-[#25D366]" asChild>
-                    <a href="https://wa.me/9725447166278" target="_blank" rel="noopener noreferrer">
-                      <MessageCircle className="h-5 w-5" />
+                  <Button size="icon" variant="ghost" className="hover:text-[#FF0000]" asChild>
+                    <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">
+                      <Youtube className="h-5 w-5" />
                     </a>
                   </Button>
                 </div>

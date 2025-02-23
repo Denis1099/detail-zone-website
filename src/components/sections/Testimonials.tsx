@@ -34,7 +34,7 @@ export const Testimonials = () => {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {testimonials.map((testimonial, index) => (
             <motion.div
               key={testimonial.name}
@@ -60,6 +60,23 @@ export const Testimonials = () => {
                 <div className="font-medium text-center">{testimonial.name}</div>
               </Card>
             </motion.div>
+          ))}
+        </div>
+
+        {/* Video Testimonials */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {[1, 2, 3, 4].map((_, index) => (
+            <div key={index} className="aspect-video">
+              <iframe
+                width="100%"
+                height="100%"
+                src="https://www.youtube.com/embed/4naJH4_3qFY"
+                title={`Video testimonial ${index + 1}`}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="rounded-lg"
+              ></iframe>
+            </div>
           ))}
         </div>
       </div>
