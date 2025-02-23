@@ -1,7 +1,7 @@
 
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Phone, Facebook, Instagram, WhatsApp } from "lucide-react";
+import { Phone, Facebook, Instagram, MessageCircle } from "lucide-react";
 
 export const MoreDetails = () => {
   return (
@@ -66,7 +66,7 @@ export const MoreDetails = () => {
                   </Button>
                   <Button size="icon" variant="ghost" className="hover:text-[#25D366]" asChild>
                     <a href="https://wa.me/9725447166278" target="_blank" rel="noopener noreferrer">
-                      <WhatsApp className="h-5 w-5" />
+                      <MessageCircle className="h-5 w-5" />
                     </a>
                   </Button>
                 </div>
