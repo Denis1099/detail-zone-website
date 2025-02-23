@@ -17,6 +17,8 @@ export const Services = () => {
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
+      // Reset index when switching between mobile and desktop to prevent cut-off
+      setCurrentIndex(0);
     };
 
     window.addEventListener('resize', handleResize);
@@ -51,48 +53,45 @@ export const Services = () => {
             <motion.div
               className="flex gap-4"
               style={{
-                width: `${services.length * 100}%`,
-                transform: `translateX(${currentIndex * (100 / services.length)}%)`
+                width: `${100 * (services.length / displayCount)}%`,
               }}
               animate={{
-                x: `${currentIndex * (100 / services.length)}%`
+                x: `${-currentIndex * (100 / (services.length / displayCount))}%`
               }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
               {services.map((service) => (
                 <div
                   key={service.id}
-                  className="w-full md:w-1/4"
-                  style={{ width: `${100 / (services.length * (isMobile ? 1 : 4))}%` }}
+                  style={{ width: `${100 / services.length}%` }}
+                  className="px-2"
                 >
-                  <div className="mx-2 h-full">
-                    <div className="bg-white rounded-2xl overflow-hidden shadow-xl h-full flex flex-col">
-                      <div className="relative">
-                        <img
-                          src={service.image}
-                          alt={service.title}
-                          className="w-full aspect-video object-cover"
-                        />
-                        <span className="absolute top-4 left-4 bg-black/80 text-white w-10 h-10 rounded-full flex items-center justify-center text-lg font-semibold">
-                          {String(service.id).padStart(2, '0')}
-                        </span>
+                  <div className="bg-white rounded-2xl overflow-hidden shadow-xl h-full flex flex-col">
+                    <div className="relative">
+                      <img
+                        src={service.image}
+                        alt={service.title}
+                        className="w-full aspect-video object-cover"
+                      />
+                      <span className="absolute top-4 left-4 bg-black/80 text-white w-10 h-10 rounded-full flex items-center justify-center text-lg font-semibold">
+                        {String(service.id).padStart(2, '0')}
+                      </span>
+                    </div>
+                    <div className="p-4 flex flex-col flex-grow">
+                      <div className="flex-grow">
+                        <h3 className="text-lg font-bold text-gray-900 mb-2">
+                          {service.title}
+                        </h3>
+                        <p className="text-gray-600 text-sm">
+                          {service.description}
+                        </p>
                       </div>
-                      <div className="p-4 flex flex-col flex-grow">
-                        <div className="flex-grow">
-                          <h3 className="text-lg font-bold text-gray-900 mb-2">
-                            {service.title}
-                          </h3>
-                          <p className="text-gray-600 text-sm">
-                            {service.description}
-                          </p>
-                        </div>
-                        <Button asChild className="w-full mt-4" variant="outline">
-                          <Link to={`/services/${service.slug}`} className="flex items-center justify-center gap-2">
-                            פרטים נוספים
-                            <ArrowUpRight className="h-4 w-4" />
-                          </Link>
-                        </Button>
-                      </div>
+                      <Button asChild className="w-full mt-4" variant="outline">
+                        <Link to={`/services/${service.slug}`} className="flex items-center justify-center gap-2">
+                          פרטים נוספים
+                          <ArrowUpRight className="h-4 w-4" />
+                        </Link>
+                      </Button>
                     </div>
                   </div>
                 </div>
