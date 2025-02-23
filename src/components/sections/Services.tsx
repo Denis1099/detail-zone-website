@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -17,7 +16,6 @@ export const Services = () => {
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
-      // Reset index when switching between mobile and desktop to prevent cut-off
       setCurrentIndex(0);
     };
 
@@ -29,11 +27,11 @@ export const Services = () => {
   const maxIndex = Math.max(0, services.length - displayCount);
 
   const nextSlide = () => {
-    setCurrentIndex(prev => Math.max(prev - 1, 0));
+    setCurrentIndex(prev => Math.min(prev + 1, maxIndex));
   };
 
   const prevSlide = () => {
-    setCurrentIndex(prev => Math.min(prev + 1, maxIndex));
+    setCurrentIndex(prev => Math.max(prev - 1, 0));
   };
 
   return (
@@ -103,7 +101,7 @@ export const Services = () => {
             <Button
               variant="outline"
               size="icon"
-              onClick={nextSlide}
+              onClick={prevSlide}
               disabled={currentIndex === 0}
               className="rounded-full bg-white hover:bg-white/90 text-black"
             >
@@ -112,7 +110,7 @@ export const Services = () => {
             <Button
               variant="outline"
               size="icon"
-              onClick={prevSlide}
+              onClick={nextSlide}
               disabled={currentIndex >= maxIndex}
               className="rounded-full bg-white hover:bg-white/90 text-black"
             >
