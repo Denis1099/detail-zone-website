@@ -71,7 +71,7 @@ export const Services = () => {
                   className="px-2"
                 >
                   <motion.div 
-                    className="group relative h-full bg-card/30 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10"
+                    className="group relative h-[400px] bg-card/30 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10"
                     whileHover={{ scale: 1.02 }}
                     transition={{ duration: 0.2 }}
                   >
@@ -81,19 +81,18 @@ export const Services = () => {
                       alt={service.title}
                       className="w-full h-full object-cover absolute inset-0"
                     />
-                    <div className="relative z-20 p-6 h-full flex flex-col justify-end">
-                      <span className="absolute top-4 left-4 bg-black/80 text-primary w-10 h-10 rounded-full flex items-center justify-center text-lg font-semibold border border-primary/20">
-                        {String(service.id).padStart(2, '0')}
-                      </span>
-                      <h3 className="text-xl font-bold mb-2 text-white">
-                        {service.title}
-                      </h3>
-                      <p className="text-gray-300 text-sm mb-4 opacity-90">
-                        {service.description}
-                      </p>
+                    <div className="relative z-20 p-6 h-full flex flex-col">
+                      <div className="flex-grow">
+                        <h3 className="text-xl font-bold mb-2 text-white">
+                          {service.title}
+                        </h3>
+                        <p className="text-gray-300 text-sm opacity-90">
+                          {service.description}
+                        </p>
+                      </div>
                       <Button 
                         variant="ghost" 
-                        className="w-full border border-primary/20 bg-black/50 hover:bg-primary/20 backdrop-blur-sm group-hover:border-primary transition-all duration-300"
+                        className="w-full mt-4 border border-primary/20 bg-black/50 hover:bg-primary/20 backdrop-blur-sm group-hover:border-primary transition-all duration-300"
                         asChild
                       >
                         <Link to={`/services/${service.slug}`} className="flex items-center justify-center gap-2">
