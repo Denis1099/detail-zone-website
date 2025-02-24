@@ -5,8 +5,26 @@ import { ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { products } from "@/data/products";
+import { toast } from "sonner";
 
 export default function Shop() {
+  const addToCart = (product: any) => {
+    // Get existing cart
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    
+    // Add new item
+    cart.push(product);
+    
+    // Save back to localStorage
+    localStorage.setItem('cart', JSON.stringify(cart));
+    
+    // Dispatch event to notify navbar
+    window.dispatchEvent(new Event('cartUpdate'));
+    
+    // Show toast
+    toast.success('המוצר נוסף לסל');
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -23,7 +41,7 @@ export default function Shop() {
                 <CardHeader>
                   <div className="aspect-video relative rounded-lg overflow-hidden mb-4">
                     <img 
-                      src={product.image} 
+                      src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?q=80&w=1470&auto=format&fit=crop"
                       alt={product.name}
                       className="object-cover w-full h-full"
                     />
@@ -36,7 +54,10 @@ export default function Shop() {
               </Link>
               <CardFooter className="flex justify-between items-center">
                 <span className="text-lg font-bold">₪{product.price}</span>
-                <Button className="flex items-center gap-2">
+                <Button 
+                  className="flex items-center gap-2"
+                  onClick={() => addToCart(product)}
+                >
                   <ShoppingCart className="w-4 h-4" />
                   הוסף לסל
                 </Button>

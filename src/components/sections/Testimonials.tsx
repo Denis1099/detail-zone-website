@@ -1,4 +1,3 @@
-
 import { Card } from "@/components/ui/card";
 import { Star, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
@@ -83,7 +82,8 @@ export const Testimonials = () => {
     );
   };
 
-  // Create an array that repeats the videos for infinite scroll effect
+  const itemsPerPage = isMobile ? 1 : 3;
+
   const extendedVideos = [
     ...videoTestimonials,
     ...videoTestimonials,
@@ -135,11 +135,7 @@ export const Testimonials = () => {
         <div className="relative">
           <div 
             ref={containerRef}
-            className="overflow-hidden cursor-grab active:cursor-grabbing"
-            onMouseDown={handleMouseDown}
-            onMouseLeave={handleMouseLeave}
-            onMouseUp={handleMouseUp}
-            onMouseMove={handleMouseMove}
+            className="overflow-hidden"
           >
             <motion.div
               className="flex gap-4"
@@ -151,23 +147,23 @@ export const Testimonials = () => {
                 duration: 0.5,
                 ease: "easeInOut",
               }}
-              drag="x"
-              dragConstraints={{ right: 0, left: -1000 }}
             >
               {extendedVideos.map((videoId, index) => (
                 <div
                   key={index}
-                  className="min-w-[300px] md:min-w-[400px] px-2"
+                  style={{ width: `${100 / itemsPerPage}%` }}
+                  className="px-2"
                 >
                   <div className="aspect-[9/16]">
                     <iframe
                       width="100%"
                       height="100%"
-                      src={`https://www.youtube.com/embed/${videoId}?rel=0`}
+                      src={`https://www.youtube.com/embed/${videoId}?rel=0&loading=lazy`}
                       title={`Video testimonial ${index + 1}`}
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
                       className="rounded-lg"
+                      loading="lazy"
                     />
                   </div>
                 </div>

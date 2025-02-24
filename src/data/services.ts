@@ -4,7 +4,7 @@ export const services = [
     id: 1,
     title: "ציפוי ננו לכל חלקי הרכב",
     description: "הגנה מתקדמת לכל משטחי הרכב החיצוניים",
-    image: "https://images.unsplash.com/photo-1600964573034-fb9ea4c6ef86?q=80&w=1528&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=1470&auto=format&fit=crop",
     slug: "nano-coating"
   },
   {
@@ -25,14 +25,14 @@ export const services = [
     id: 4,
     title: "ציפוי ננו לג׳אנטים",
     description: "הגנה מתקדמת לחישוקי הרכב",
-    image: "https://images.unsplash.com/photo-1611740801CF-d60c261d627f?q=80&w=1374&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?q=80&w=1470&auto=format&fit=crop",
     slug: "wheel-coating"
   },
   {
     id: 5,
     title: "עיטוף PPF להגנה משריטות",
     description: "ציפוי שקוף להגנה מקסימלית מפני שריטות ואבנים",
-    image: "https://images.unsplash.com/photo-1599256621730-535171e28b17?q=80&w=1471&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?q=80&w=1470&auto=format&fit=crop",
     slug: "ppf-protection"
   },
   {
@@ -46,7 +46,7 @@ export const services = [
     id: 7,
     title: "חידוש רכב לפני מכירה",
     description: "טיפול מקיף להעלאת ערך הרכב לפני מכירה",
-    image: "https://images.unsplash.com/photo-1596559034419-1e993ddb9fd5?q=80&w=1528&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1439337153520-7082a56a81f4?q=80&w=1470&auto=format&fit=crop",
     slug: "pre-sale"
   },
   {
