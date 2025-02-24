@@ -25,16 +25,20 @@ const testimonials = [
 
 const videoTestimonials = [
   "4naJH4_3qFY",
-  "4naJH4_3qFY",
-  "4naJH4_3qFY",
-  "4naJH4_3qFY",
+  "d9yHOep_dcY",
+  "-JaYsFr35ok",
+  "-4P6NBADNPU",
+  "vMyqMDwLSP4",
+  "yCuDjwdbXcU"
 ];
 
 export const Testimonials = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const itemsPerView = isMobile ? 1 : 3;
 
   useEffect(() => {
     const handleResize = () => {
@@ -44,6 +48,30 @@ export const Testimonials = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    setStartX(e.pageX - (containerRef.current?.offsetLeft || 0));
+    setScrollLeft(containerRef.current?.scrollLeft || 0);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - (containerRef.current?.offsetLeft || 0);
+    const walk = (x - startX) * 2;
+    if (containerRef.current) {
+      containerRef.current.scrollLeft = scrollLeft - walk;
+    }
+  };
 
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev + 1) % videoTestimonials.length);
@@ -105,7 +133,14 @@ export const Testimonials = () => {
 
         {/* Video Testimonials Carousel */}
         <div className="relative">
-          <div className="overflow-hidden" ref={containerRef}>
+          <div 
+            ref={containerRef}
+            className="overflow-hidden cursor-grab active:cursor-grabbing"
+            onMouseDown={handleMouseDown}
+            onMouseLeave={handleMouseLeave}
+            onMouseUp={handleMouseUp}
+            onMouseMove={handleMouseMove}
+          >
             <motion.div
               className="flex gap-4"
               animate={{
@@ -116,17 +151,15 @@ export const Testimonials = () => {
                 duration: 0.5,
                 ease: "easeInOut",
               }}
-              style={{
-                width: `${(100 * extendedVideos.length) / itemsPerView}%`,
-              }}
+              drag="x"
+              dragConstraints={{ right: 0, left: -1000 }}
             >
               {extendedVideos.map((videoId, index) => (
                 <div
                   key={index}
-                  style={{ width: `${100 / extendedVideos.length}%` }}
-                  className="px-2"
+                  className="min-w-[300px] md:min-w-[400px] px-2"
                 >
-                  <div className="aspect-[9/16] w-full max-w-[400px] mx-auto">
+                  <div className="aspect-[9/16]">
                     <iframe
                       width="100%"
                       height="100%"
@@ -147,7 +180,7 @@ export const Testimonials = () => {
               variant="outline"
               size="icon"
               onClick={prevSlide}
-              className="rounded-full bg-white hover:bg-white/90 text-black"
+              className="rounded-full bg-background border-primary text-primary hover:bg-primary hover:text-white"
             >
               <ChevronRight className="h-4 w-4" />
             </Button>
@@ -155,7 +188,7 @@ export const Testimonials = () => {
               variant="outline"
               size="icon"
               onClick={nextSlide}
-              className="rounded-full bg-white hover:bg-white/90 text-black"
+              className="rounded-full bg-background border-primary text-primary hover:bg-primary hover:text-white"
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
