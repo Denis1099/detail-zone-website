@@ -2,7 +2,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Facebook, Instagram, Youtube } from "lucide-react";
+import { Facebook, Instagram, Youtube, BrandTiktok } from "lucide-react";
 
 export const Footer = () => {
   return (
@@ -29,14 +29,17 @@ export const Footer = () => {
           <div className="text-right">
             <h3 className="font-bold mb-4">עקבו אחרינו</h3>
             <div className="flex justify-end gap-6">
-              <a href="#" className="hover:text-primary p-2 rounded-full hover:bg-white/5 transition-colors">
+              <a href="https://www.facebook.com/detailzone07" target="_blank" rel="noopener noreferrer" className="hover:text-primary p-2 rounded-full hover:bg-white/5 transition-colors">
                 <Facebook className="h-6 w-6" />
               </a>
-              <a href="#" className="hover:text-primary p-2 rounded-full hover:bg-white/5 transition-colors">
+              <a href="https://www.instagram.com/detail__zone/" target="_blank" rel="noopener noreferrer" className="hover:text-primary p-2 rounded-full hover:bg-white/5 transition-colors">
                 <Instagram className="h-6 w-6" />
               </a>
-              <a href="#" className="hover:text-primary p-2 rounded-full hover:bg-white/5 transition-colors">
+              <a href="https://www.youtube.com/@daniel-detailzone" target="_blank" rel="noopener noreferrer" className="hover:text-primary p-2 rounded-full hover:bg-white/5 transition-colors">
                 <Youtube className="h-6 w-6" />
+              </a>
+              <a href="https://www.tiktok.com/@danieldetailzone" target="_blank" rel="noopener noreferrer" className="hover:text-primary p-2 rounded-full hover:bg-white/5 transition-colors">
+                <BrandTiktok className="h-6 w-6" />
               </a>
             </div>
           </div>

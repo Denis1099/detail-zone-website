@@ -1,7 +1,7 @@
 
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Phone, Facebook, Instagram, Youtube } from "lucide-react";
+import { Phone, Facebook, Instagram, Youtube, BrandTiktok } from "lucide-react";
 
 export const MoreDetails = () => {
   return (
@@ -55,18 +55,23 @@ export const MoreDetails = () => {
                 <p className="font-medium mb-4">עקבו אחרינו</p>
                 <div className="flex gap-4">
                   <Button size="icon" variant="ghost" className="hover:text-[#4267B2]" asChild>
-                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+                    <a href="https://www.facebook.com/detailzone07" target="_blank" rel="noopener noreferrer">
                       <Facebook className="h-5 w-5" />
                     </a>
                   </Button>
                   <Button size="icon" variant="ghost" className="hover:text-[#E1306C]" asChild>
-                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+                    <a href="https://www.instagram.com/detail__zone/" target="_blank" rel="noopener noreferrer">
                       <Instagram className="h-5 w-5" />
                     </a>
                   </Button>
                   <Button size="icon" variant="ghost" className="hover:text-[#FF0000]" asChild>
-                    <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">
+                    <a href="https://www.youtube.com/@daniel-detailzone" target="_blank" rel="noopener noreferrer">
                       <Youtube className="h-5 w-5" />
+                    </a>
+                  </Button>
+                  <Button size="icon" variant="ghost" className="hover:text-[#000000]" asChild>
+                    <a href="https://www.tiktok.com/@danieldetailzone" target="_blank" rel="noopener noreferrer">
+                      <BrandTiktok className="h-5 w-5" />
                     </a>
                   </Button>
                 </div>
