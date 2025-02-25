@@ -1,8 +1,7 @@
-
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Facebook, Instagram, Youtube, BrandTiktok } from "lucide-react";
+import { Facebook, Instagram, Youtube, TiktokIcon } from "lucide-react";
 
 export const Footer = () => {
   return (
@@ -39,7 +38,7 @@ export const Footer = () => {
                 <Youtube className="h-6 w-6" />
               </a>
               <a href="https://www.tiktok.com/@danieldetailzone" target="_blank" rel="noopener noreferrer" className="hover:text-primary p-2 rounded-full hover:bg-white/5 transition-colors">
-                <BrandTiktok className="h-6 w-6" />
+                <TiktokIcon className="h-6 w-6" />
               </a>
             </div>
           </div>

@@ -1,7 +1,6 @@
-
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Phone, Facebook, Instagram, Youtube, BrandTiktok } from "lucide-react";
+import { Phone, Facebook, Instagram, Youtube, TiktokIcon } from "lucide-react";
 
 export const MoreDetails = () => {
   return (
@@ -71,7 +70,7 @@ export const MoreDetails = () => {
                   </Button>
                   <Button size="icon" variant="ghost" className="hover:text-[#000000]" asChild>
                     <a href="https://www.tiktok.com/@danieldetailzone" target="_blank" rel="noopener noreferrer">
-                      <BrandTiktok className="h-5 w-5" />
+                      <TiktokIcon className="h-5 w-5" />
                     </a>
                   </Button>
                 </div>
