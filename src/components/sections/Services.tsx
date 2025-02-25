@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -90,16 +89,28 @@ export const Services = () => {
                           {service.description}
                         </p>
                       </div>
-                      <Button 
-                        variant="ghost" 
-                        className="w-full mt-4 border border-primary/20 bg-black/50 hover:bg-primary/20 backdrop-blur-sm group-hover:border-primary transition-all duration-300"
-                        asChild
-                      >
-                        <Link to={`/services/${service.slug}`} className="flex items-center justify-center gap-2">
-                          פרטים נוספים
-                          <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                        </Link>
-                      </Button>
+                      <div className="space-y-2">
+                        <Button 
+                          variant="ghost" 
+                          className="w-full border border-primary/20 bg-black/50 hover:bg-primary/20 backdrop-blur-sm group-hover:border-primary transition-all duration-300"
+                          asChild
+                        >
+                          <Link to={`/services/${service.slug}`} className="flex items-center justify-center gap-2">
+                            פרטים נוספים
+                            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                          </Link>
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          className="w-full border border-primary/20 bg-black/50 hover:bg-primary/20 backdrop-blur-sm group-hover:border-primary transition-all duration-300"
+                          asChild
+                        >
+                          <Link to={`/blog/${blogPosts.find(post => post.serviceSlug === service.slug)?.id}`} className="flex items-center justify-center gap-2">
+                            קרא במדריך
+                            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                          </Link>
+                        </Button>
+                      </div>
                     </div>
                   </motion.div>
                 </div>

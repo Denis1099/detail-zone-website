@@ -25,17 +25,20 @@ export const CTAForm = ({ formId = "main-page" }: CTAFormProps) => {
             <input
               type="text"
               placeholder="שם מלא"
-              className="w-full px-4 py-2 rounded-lg bg-background/50 border border-primary/20 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
+              className="w-full px-4 py-2 rounded-lg bg-background/50 border border-primary/20 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition text-right"
+              dir="rtl"
             />
             <input
               type="tel"
               placeholder="טלפון"
-              className="w-full px-4 py-2 rounded-lg bg-background/50 border border-primary/20 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
+              className="w-full px-4 py-2 rounded-lg bg-background/50 border border-primary/20 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition text-right"
+              dir="rtl"
             />
             <textarea
               placeholder="הודעה"
               rows={4}
-              className="w-full px-4 py-2 rounded-lg bg-background/50 border border-primary/20 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
+              className="w-full px-4 py-2 rounded-lg bg-background/50 border border-primary/20 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition text-right"
+              dir="rtl"
             />
             <Button className="w-full" size="lg">
               <ChevronLeft className="ml-2 h-4 w-4" />
