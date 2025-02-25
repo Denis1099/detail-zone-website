@@ -1,8 +1,10 @@
+
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, ArrowUpRight } from "lucide-react";
 import { services } from "@/data/services";
+import { blogPosts } from "@/data/blog";
 import { Link } from "react-router-dom";
 
 export const Services = () => {
