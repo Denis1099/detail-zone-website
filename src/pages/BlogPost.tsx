@@ -7,6 +7,7 @@ import { Calendar, Clock, ArrowLeft } from "lucide-react";
 import { services } from "@/data/services";
 import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { CTAForm } from "@/components/sections/CTAForm";
 
 export default function BlogPost() {
   const { id } = useParams();
@@ -66,22 +67,10 @@ export default function BlogPost() {
               </p>
             ))}
           </div>
-
-          {relatedService && (
-            <div className="mt-12 p-6 rounded-lg glass-card">
-              <h2 className="text-xl font-semibold mb-4">מעוניינים בשירות?</h2>
-              <p className="text-muted-foreground mb-4">
-                למידע נוסף על שירות {relatedService.title} ותיאום טיפול
-              </p>
-              <Button asChild>
-                <Link to={`/services/${relatedService.slug}`}>
-                  מעבר לדף השירות
-                </Link>
-              </Button>
-            </div>
-          )}
         </article>
       </main>
+      
+      <CTAForm formId={`blog-${post.id}`} />
       <Footer />
       <WhatsAppButton />
     </div>

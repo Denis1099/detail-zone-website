@@ -3,7 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ChevronLeft } from "lucide-react";
 
-export const CTAForm = () => {
+interface CTAFormProps {
+  formId?: string;
+}
+
+export const CTAForm = ({ formId = "main-page" }: CTAFormProps) => {
   return (
     <section className="py-20 relative overflow-hidden">
       <div className="absolute inset-0 bg-primary/5" />
@@ -17,7 +21,7 @@ export const CTAForm = () => {
               השאר פרטים ונחזור אליך בהקדם
             </p>
           </div>
-          <form className="max-w-md mx-auto space-y-4">
+          <form className="max-w-md mx-auto space-y-4" id={formId}>
             <input
               type="text"
               placeholder="שם מלא"
