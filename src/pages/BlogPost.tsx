@@ -1,5 +1,6 @@
 
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import { Navbar } from "@/components/Navbar";
 import { blogPosts } from "@/data/blog";
 import { Button } from "@/components/ui/button";
@@ -11,17 +12,26 @@ import { CTAForm } from "@/components/sections/CTAForm";
 
 export default function BlogPost() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const post = blogPosts.find(post => post.id === id);
   const relatedService = post?.serviceSlug 
     ? services.find(service => service.slug === post.serviceSlug)
     : null;
 
+  useEffect(() => {
+    if (!post) {
+      navigate('/blog');
+      return;
+    }
+    window.scrollTo(0, 0);
+  }, [post, navigate]);
+
   if (!post) {
-    return <div>Post not found</div>;
+    return null;
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-x-hidden">
       <Navbar />
       <main className="container mx-auto px-4 py-24">
         <article className="max-w-3xl mx-auto">
@@ -75,4 +85,4 @@ export default function BlogPost() {
       <WhatsAppButton />
     </div>
   );
-};
+}
