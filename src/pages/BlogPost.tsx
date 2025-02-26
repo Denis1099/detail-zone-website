@@ -1,3 +1,4 @@
+
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { Navbar } from "@/components/Navbar";
@@ -20,7 +21,9 @@ export default function BlogPost() {
   useEffect(() => {
     if (!post) {
       navigate('/blog');
+      return;
     }
+    window.scrollTo(0, 0);
   }, [post, navigate]);
 
   if (!post) {
@@ -28,7 +31,7 @@ export default function BlogPost() {
   }
 
   return (
-    <div className="min-h-screen overflow-hidden">
+    <div className="min-h-screen overflow-x-hidden">
       <Navbar />
       <main className="container mx-auto px-4 py-24">
         <article className="max-w-3xl mx-auto">

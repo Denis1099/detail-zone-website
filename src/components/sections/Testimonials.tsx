@@ -300,7 +300,7 @@ export const Testimonials = () => {
   }, []);
 
   return (
-    <section className="py-16 md:py-20 mb-20 md:mb-24 overflow-hidden" aria-labelledby="testimonials-heading">
+    <section className="py-16 md:py-20 mb-20 md:mb-24" aria-labelledby="testimonials-heading">
       <div className="container mx-auto px-4 relative">
         <div className="text-center mb-8 md:mb-12">
           <h2 id="testimonials-heading" className="text-3xl md:text-4xl font-bold">
@@ -308,7 +308,7 @@ export const Testimonials = () => {
           </h2>
         </div>
 
-        {/* Navigation buttons */}
+        {/* Navigation buttons - unchanged */}
         <div className="absolute left-2 md:left-8 top-1/2 mt-6 transform -translate-y-1/2 z-40">
           <button
             onClick={goToPrev}
@@ -355,7 +355,7 @@ export const Testimonials = () => {
           </button>
         </div>
         
-        {/* Main carousel */}
+        {/* Main carousel - unchanged */}
         <div 
           className="relative h-[580px] md:h-[680px] mx-auto" 
           ref={carouselRef}
@@ -364,7 +364,7 @@ export const Testimonials = () => {
           aria-roledescription="carousel"
           aria-label="חוות דעת של לקוחות"
         >
-          {/* Hidden navigation carousel */}
+          {/* Hidden navigation carousel - unchanged */}
           <Carousel
             dir="rtl"
             opts={{
@@ -386,7 +386,7 @@ export const Testimonials = () => {
             </CarouselContent>
           </Carousel>
 
-          {/* Cards container */}
+          {/* Cards container - unchanged */}
           <div 
             className="h-[520px] md:h-[620px] mx-auto relative overflow-visible"
             onTouchStart={handlePointerStart}
@@ -484,7 +484,41 @@ export const Testimonials = () => {
           </div>
 
           {/* Indicators with reversed mapping */}
-          
+          <div 
+            className="flex justify-center gap-2 mt-4 relative z-40"
+            role="tablist"
+            aria-label="בחירת חוות דעת"
+          >
+            {reversedOrder.map((reversedIndex) => {
+              const index = getReversedIndex(reversedIndex);
+              
+              return (
+                <button
+                  key={index}
+                  className={`h-3 rounded-full transition-all duration-300 carousel-focus-visible ${
+                    currentSlide === index
+                      ? "w-10 bg-primary"
+                      : "w-3 bg-gray-300 hover:bg-gray-400"
+                  }`}
+                  onClick={() => {
+                    if (!animationInProgress) {
+                      setAnimationInProgress(true);
+                      api?.scrollTo(index);
+                    }
+                  }}
+                  onFocus={() => {
+                    if (!animationInProgress && index !== currentSlide) {
+                      api?.scrollTo(index);
+                    }
+                  }}
+                  disabled={animationInProgress}
+                  aria-label={`חוות דעת של ${testimonials[index].name}`}
+                  aria-selected={currentSlide === index}
+                  role="tab"
+                />
+              );
+            })}
+          </div>
         </div>
       </div>
 
