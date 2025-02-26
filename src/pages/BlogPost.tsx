@@ -1,8 +1,7 @@
-
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { Navbar } from "@/components/Navbar";
-import { blogPosts } from "@/data/blog/index";
+import { blogPosts } from "@/data/blog";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, ArrowLeft } from "lucide-react";
 import { services } from "@/data/services";
