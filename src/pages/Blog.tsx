@@ -1,6 +1,6 @@
 
 import { Navbar } from "@/components/Navbar";
-import { blogPosts } from "@/data/blog";
+import { blogPosts } from "@/data/blog/index";
 import { Calendar, Clock, ArrowLeftIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
