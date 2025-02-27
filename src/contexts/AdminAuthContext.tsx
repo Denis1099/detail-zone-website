@@ -40,6 +40,7 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     getSession();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log("Auth state changed:", event, session?.user?.id);
       setSession(session);
       setUser(session?.user ?? null);
 
@@ -58,6 +59,8 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
   const fetchAdminUser = async (userId: string) => {
     try {
+      console.log("Fetching admin user for ID:", userId);
+      
       const { data, error } = await supabase
         .from('admin_users')
         .select('*')
@@ -68,6 +71,7 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         console.error('Error fetching admin user:', error);
         setAdminUser(null);
       } else {
+        console.log("Admin user data:", data);
         setAdminUser(data as AdminUser);
       }
     } catch (error) {
@@ -81,20 +85,33 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const signIn = async (email: string, password: string) => {
     setLoading(true);
     try {
+      console.log("Signing in with email:", email);
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       
       if (error) throw error;
       
       if (data.user) {
+        console.log("Auth successful for user ID:", data.user.id);
+        
         const { data: adminData, error: adminError } = await supabase
           .from('admin_users')
           .select('*')
           .eq('id', data.user.id)
           .single();
         
-        if (adminError || !adminData) {
-          await supabase.auth.signOut();
-          throw new Error('Not an admin user');
+        console.log("Admin lookup result:", adminData, adminError);
+        
+        if (adminError) {
+          console.error("Admin lookup error:", adminError);
+          if (adminError.code === 'PGRST116') {
+            throw new Error('Your user account is not registered as an admin. Please contact a super admin.');
+          } else {
+            throw new Error(`Database error: ${adminError.message}`);
+          }
+        }
+        
+        if (!adminData) {
+          throw new Error('Not an admin user. Please verify your admin status.');
         }
         
         setAdminUser(adminData as AdminUser);
@@ -104,6 +121,9 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         });
       }
     } catch (error: any) {
+      await supabase.auth.signOut();
+      setAdminUser(null);
+      
       toast({
         variant: 'destructive',
         title: 'Authentication error',
