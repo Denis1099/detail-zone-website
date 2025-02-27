@@ -66,22 +66,25 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     try {
       console.log("Fetching admin user for ID:", userId);
       
-      // Use maybeSingle() instead of single() to avoid error if no record is found
+      // Using an explicit SQL query to avoid any potential issues with the Postgrest API
       const { data, error } = await supabase
         .from('admin_users')
-        .select('*')
-        .eq('id', userId)
-        .maybeSingle();
+        .select('id, email, is_super_admin, created_at')
+        .eq('id', userId);
 
       if (error) {
         console.error('Error fetching admin user:', error);
         setAdminUser(null);
-      } else if (!data) {
+        setLoading(false);
+        return;
+      }
+      
+      if (!data || data.length === 0) {
         console.log("No admin user found for ID:", userId);
         setAdminUser(null);
       } else {
-        console.log("Admin user data:", data);
-        setAdminUser(data as AdminUser);
+        console.log("Admin user data found:", data[0]);
+        setAdminUser(data[0] as AdminUser);
       }
     } catch (error) {
       console.error('Error in fetchAdminUser:', error);
@@ -97,34 +100,43 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       console.log("Signing in with email:", email);
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       
-      if (error) throw error;
-      
-      if (data.user) {
-        console.log("Auth successful for user ID:", data.user.id);
-        
-        const { data: adminData, error: adminError } = await supabase
-          .from('admin_users')
-          .select('*')
-          .eq('id', data.user.id)
-          .maybeSingle(); // Use maybeSingle instead of single
-        
-        console.log("Admin lookup result:", adminData, adminError);
-        
-        if (adminError) {
-          console.error("Admin lookup error:", adminError);
-          throw new Error(`שגיאת מסד נתונים: ${adminError.message}`);
-        }
-        
-        if (!adminData) {
-          throw new Error('משתמש זה אינו מנהל. אנא ודא את סטטוס המנהל שלך.');
-        }
-        
-        setAdminUser(adminData as AdminUser);
-        toast({
-          title: 'ברוך שובך!',
-          description: 'התחברת בהצלחה.',
-        });
+      if (error) {
+        throw error;
       }
+      
+      if (!data.user) {
+        throw new Error('לא התקבלו פרטי משתמש מהשרת');
+      }
+      
+      console.log("Auth successful for user ID:", data.user.id);
+      
+      // Direct query to check if user is admin
+      const { data: adminData, error: adminError } = await supabase
+        .from('admin_users')
+        .select('id, email, is_super_admin, created_at')
+        .eq('id', data.user.id);
+      
+      console.log("Admin lookup result:", adminData, adminError);
+      
+      if (adminError) {
+        console.error("Admin lookup error:", adminError);
+        await supabase.auth.signOut();
+        setAdminUser(null);
+        throw new Error(`שגיאת מסד נתונים: ${adminError.message}`);
+      }
+      
+      if (!adminData || adminData.length === 0) {
+        await supabase.auth.signOut();
+        setAdminUser(null);
+        throw new Error('משתמש זה אינו מנהל. אנא ודא את סטטוס המנהל שלך.');
+      }
+      
+      setAdminUser(adminData[0] as AdminUser);
+      toast({
+        title: 'ברוך שובך!',
+        description: 'התחברת בהצלחה.',
+      });
+      
     } catch (error: any) {
       await supabase.auth.signOut();
       setAdminUser(null);
@@ -144,6 +156,9 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     setLoading(true);
     try {
       await supabase.auth.signOut();
+      setSession(null);
+      setUser(null);
+      setAdminUser(null);
       toast({
         title: 'התנתקת',
         description: 'התנתקת בהצלחה.',
