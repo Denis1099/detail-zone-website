@@ -31,39 +31,39 @@ export default function AdminLogin() {
       navigate('/admin/dashboard');
     } catch (error: any) {
       console.error("Login error:", error);
-      setError(error.message || 'Invalid credentials. Please check your email and password.');
+      setError(error.message || 'פרטי התחברות שגויים. אנא בדוק את האימייל והסיסמה שלך.');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
+    <div className="flex min-h-screen items-center justify-center bg-background" dir="rtl">
       <div className="w-full max-w-md space-y-6 p-8 rounded-xl bg-card border border-primary/10 shadow-lg">
         <div className="text-center">
-          <h2 className="mt-6 text-3xl font-bold text-text">Admin Access</h2>
-          <p className="mt-2 text-sm text-muted-foreground">Sign in to access the admin dashboard</p>
+          <h2 className="mt-6 text-3xl font-bold text-text">כניסת מנהל</h2>
+          <p className="mt-2 text-sm text-muted-foreground">התחבר כדי לגשת ללוח הבקרה</p>
         </div>
         
         {error && (
-          <Alert variant="destructive" className="my-4">
+          <Alert variant="destructive" className="my-4 text-right">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
         
-        <Alert className="my-4 bg-secondary/10 border-secondary/20">
+        <Alert className="my-4 bg-secondary/10 border-secondary/20 text-right">
           <Info className="h-4 w-4 text-secondary" />
           <AlertDescription className="text-sm">
-            If you need admin access, please contact an existing admin user.
+            אם אתה צריך גישת מנהל, אנא צור קשר עם מנהל קיים.
           </AlertDescription>
         </Alert>
         
         <form className="mt-8 space-y-6" onSubmit={handleLogin}>
           <div className="space-y-4 rounded-md">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-text">
-                Email address
+              <label htmlFor="email" className="block text-sm font-medium text-text text-right">
+                כתובת אימייל
               </label>
               <Input
                 id="email"
@@ -73,14 +73,14 @@ export default function AdminLogin() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mt-1"
+                className="mt-1 text-right"
                 placeholder="admin@example.com"
               />
             </div>
             
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-text">
-                Password
+              <label htmlFor="password" className="block text-sm font-medium text-text text-right">
+                סיסמה
               </label>
               <Input
                 id="password"
@@ -90,7 +90,7 @@ export default function AdminLogin() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1"
+                className="mt-1 text-right"
                 placeholder="••••••••"
               />
             </div>
@@ -103,10 +103,10 @@ export default function AdminLogin() {
           >
             {isLoading ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Signing in...
+                <Loader2 className="ml-2 h-4 w-4 animate-spin" /> מתחבר...
               </>
             ) : (
-              'Sign in'
+              'התחבר'
             )}
           </Button>
         </form>

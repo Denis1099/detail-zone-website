@@ -104,20 +104,20 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         if (adminError) {
           console.error("Admin lookup error:", adminError);
           if (adminError.code === 'PGRST116') {
-            throw new Error('Your user account is not registered as an admin. Please contact a super admin.');
+            throw new Error('חשבון המשתמש שלך אינו רשום כמנהל. אנא צור קשר עם מנהל-על.');
           } else {
-            throw new Error(`Database error: ${adminError.message}`);
+            throw new Error(`שגיאת מסד נתונים: ${adminError.message}`);
           }
         }
         
         if (!adminData) {
-          throw new Error('Not an admin user. Please verify your admin status.');
+          throw new Error('משתמש זה אינו מנהל. אנא ודא את סטטוס המנהל שלך.');
         }
         
         setAdminUser(adminData as AdminUser);
         toast({
-          title: 'Welcome back!',
-          description: 'You have successfully signed in.',
+          title: 'ברוך שובך!',
+          description: 'התחברת בהצלחה.',
         });
       }
     } catch (error: any) {
@@ -126,8 +126,8 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       
       toast({
         variant: 'destructive',
-        title: 'Authentication error',
-        description: error.message || 'Failed to sign in',
+        title: 'שגיאת אימות',
+        description: error.message || 'ההתחברות נכשלה',
       });
       throw error;
     } finally {
@@ -140,14 +140,14 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     try {
       await supabase.auth.signOut();
       toast({
-        title: 'Signed out',
-        description: 'You have been signed out successfully.',
+        title: 'התנתקת',
+        description: 'התנתקת בהצלחה.',
       });
     } catch (error: any) {
       toast({
         variant: 'destructive',
-        title: 'Error',
-        description: error.message || 'Failed to sign out',
+        title: 'שגיאה',
+        description: error.message || 'ההתנתקות נכשלה',
       });
     } finally {
       setLoading(false);
