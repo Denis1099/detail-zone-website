@@ -26,13 +26,18 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
   useEffect(() => {
     const getSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setSession(session);
-      setUser(session?.user ?? null);
-      
-      if (session?.user) {
-        await fetchAdminUser(session.user.id);
-      } else {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        setSession(session);
+        setUser(session?.user ?? null);
+        
+        if (session?.user) {
+          await fetchAdminUser(session.user.id);
+        } else {
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error('Error getting session:', error);
         setLoading(false);
       }
     };
@@ -61,14 +66,18 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     try {
       console.log("Fetching admin user for ID:", userId);
       
+      // Use maybeSingle() instead of single() to avoid error if no record is found
       const { data, error } = await supabase
         .from('admin_users')
         .select('*')
         .eq('id', userId)
-        .single();
+        .maybeSingle();
 
       if (error) {
         console.error('Error fetching admin user:', error);
+        setAdminUser(null);
+      } else if (!data) {
+        console.log("No admin user found for ID:", userId);
         setAdminUser(null);
       } else {
         console.log("Admin user data:", data);
@@ -97,17 +106,13 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           .from('admin_users')
           .select('*')
           .eq('id', data.user.id)
-          .single();
+          .maybeSingle(); // Use maybeSingle instead of single
         
         console.log("Admin lookup result:", adminData, adminError);
         
         if (adminError) {
           console.error("Admin lookup error:", adminError);
-          if (adminError.code === 'PGRST116') {
-            throw new Error('חשבון המשתמש שלך אינו רשום כמנהל. אנא צור קשר עם מנהל-על.');
-          } else {
-            throw new Error(`שגיאת מסד נתונים: ${adminError.message}`);
-          }
+          throw new Error(`שגיאת מסד נתונים: ${adminError.message}`);
         }
         
         if (!adminData) {
