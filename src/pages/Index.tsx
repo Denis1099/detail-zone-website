@@ -1,6 +1,7 @@
 
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/sections/Hero";
+import { AboutUs } from "@/components/sections/AboutUs"; // Import the new AboutUs component
 import { Services } from "@/components/sections/Services";
 import { Portfolio } from "@/components/sections/Portfolio";
 import { Testimonials } from "@/components/sections/Testimonials";
@@ -14,9 +15,10 @@ const Index = () => {
     <div className="min-h-screen">
       <Navbar />
       <Hero />
+      <AboutUs /> {/* Add the new AboutUs section right after Hero */}
       <Services />
-      <Portfolio />
-      <Testimonials />
+      <Testimonials /> {/* Reordered: Testimonials before Portfolio */}
+      <Portfolio /> {/* Reordered: Portfolio after Testimonials */}
       <CTAForm />
       <MoreDetails />
       <Footer />
