@@ -13,11 +13,12 @@ export default function AdminLogin() {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { signIn, isAuthenticated } = useAdminAuth();
+  const { signIn, isAuthenticated, loading: authLoading } = useAdminAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  if (isAuthenticated) {
+  // Only redirect if authentication is complete and successful
+  if (isAuthenticated && !authLoading) {
     return <Navigate to="/admin/dashboard" replace />;
   }
 
@@ -75,6 +76,7 @@ export default function AdminLogin() {
                 onChange={(e) => setEmail(e.target.value)}
                 className="mt-1 text-right"
                 placeholder="admin@example.com"
+                disabled={isLoading || authLoading}
               />
             </div>
             
@@ -92,6 +94,7 @@ export default function AdminLogin() {
                 onChange={(e) => setPassword(e.target.value)}
                 className="mt-1 text-right"
                 placeholder="••••••••"
+                disabled={isLoading || authLoading}
               />
             </div>
           </div>
@@ -99,9 +102,9 @@ export default function AdminLogin() {
           <Button
             type="submit"
             className="w-full"
-            disabled={isLoading}
+            disabled={isLoading || authLoading}
           >
-            {isLoading ? (
+            {isLoading || authLoading ? (
               <>
                 <Loader2 className="ml-2 h-4 w-4 animate-spin" /> מתחבר...
               </>
