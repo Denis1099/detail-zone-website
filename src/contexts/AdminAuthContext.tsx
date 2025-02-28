@@ -66,23 +66,23 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const fetchAdminUser = async (userId: string) => {
     try {
       console.log("Fetching admin user for ID:", userId);
+      setLoading(true);
       
-      // Simplify the query to make it more robust
       const { data, error } = await supabase
         .from('admin_users')
         .select('*')
         .eq('id', userId)
-        .limit(1);
+        .single();
       
       if (error) {
         console.error('Error fetching admin user:', error);
         setAdminUser(null);
-      } else if (!data || data.length === 0) {
+      } else if (!data) {
         console.log("No admin user found for ID:", userId);
         setAdminUser(null);
       } else {
-        console.log("Admin user data found:", data[0]);
-        setAdminUser(data[0] as AdminUser);
+        console.log("Admin user data found:", data);
+        setAdminUser(data as AdminUser);
       }
     } catch (error) {
       console.error('Error in fetchAdminUser:', error);
@@ -98,10 +98,13 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     
     try {
       console.log("Signing in with email:", email);
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      const { data, error: authError } = await supabase.auth.signInWithPassword({ 
+        email, 
+        password 
+      });
       
-      if (error) {
-        throw error;
+      if (authError) {
+        throw authError;
       }
       
       if (!data.user) {
@@ -110,12 +113,12 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       
       console.log("Auth successful for user ID:", data.user.id);
       
-      // Check if user is admin with a simpler query
+      // Check if user is admin
       const { data: adminData, error: adminError } = await supabase
         .from('admin_users')
         .select('*')
         .eq('id', data.user.id)
-        .limit(1);
+        .single();
       
       console.log("Admin lookup result:", adminData, adminError);
       
@@ -125,12 +128,12 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         throw new Error(`שגיאת מסד נתונים: ${adminError.message}`);
       }
       
-      if (!adminData || adminData.length === 0) {
+      if (!adminData) {
         await supabase.auth.signOut();
         throw new Error('משתמש זה אינו מנהל. אנא ודא את סטטוס המנהל שלך.');
       }
       
-      setAdminUser(adminData[0] as AdminUser);
+      setAdminUser(adminData as AdminUser);
       toast({
         title: 'ברוך שובך!',
         description: 'התחברת בהצלחה.',

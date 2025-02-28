@@ -24,6 +24,11 @@ export default function AdminLogin() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!email || !password) {
+      setError('נא למלא את כל השדות');
+      return;
+    }
+    
     setIsLoading(true);
     setError(null);
     
