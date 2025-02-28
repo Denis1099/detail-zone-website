@@ -49,7 +49,7 @@ export default function BlogEditor() {
           .upload(filePath, imageFile);
           
         if (uploadError) {
-          throw new Error('Error uploading image');
+          throw new Error('שגיאה בהעלאת התמונה');
         }
         
         const { data } = supabase.storage
@@ -63,8 +63,8 @@ export default function BlogEditor() {
       // This is a placeholder for now
       
       toast({
-        title: 'Success!',
-        description: 'Blog post saved successfully',
+        title: 'הצלחה!',
+        description: 'פוסט בלוג נשמר בהצלחה',
       });
       
       // Reset form
@@ -78,8 +78,8 @@ export default function BlogEditor() {
     } catch (error: any) {
       toast({
         variant: 'destructive',
-        title: 'Error',
-        description: error.message || 'Failed to save blog post',
+        title: 'שגיאה',
+        description: error.message || 'שמירת הפוסט נכשלה',
       });
     } finally {
       setIsLoading(false);
@@ -89,8 +89,8 @@ export default function BlogEditor() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Blog Editor</h1>
-        <p className="text-muted-foreground">Create and edit blog posts</p>
+        <h1 className="text-3xl font-bold tracking-tight">עורך הבלוג</h1>
+        <p className="text-muted-foreground">יצירה ועריכה של פוסטים בבלוג</p>
       </div>
       
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -99,13 +99,13 @@ export default function BlogEditor() {
             <div className="space-y-4">
               <div>
                 <label htmlFor="title" className="block text-sm font-medium text-text">
-                  Blog Title
+                  כותרת הפוסט
                 </label>
                 <Input
                   id="title"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  placeholder="Enter blog post title"
+                  placeholder="הזן כותרת לפוסט"
                   className="mt-1"
                   required
                 />
@@ -113,13 +113,13 @@ export default function BlogEditor() {
               
               <div>
                 <label htmlFor="excerpt" className="block text-sm font-medium text-text">
-                  Excerpt
+                  תקציר
                 </label>
                 <Textarea
                   id="excerpt"
                   value={excerpt}
                   onChange={(e) => setExcerpt(e.target.value)}
-                  placeholder="Brief description of the post"
+                  placeholder="תיאור קצר של הפוסט"
                   className="mt-1 resize-none"
                   rows={2}
                   required
@@ -128,13 +128,13 @@ export default function BlogEditor() {
               
               <div>
                 <label htmlFor="content" className="block text-sm font-medium text-text">
-                  Content
+                  תוכן
                 </label>
                 <Textarea
                   id="content"
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
-                  placeholder="Write your blog post content here"
+                  placeholder="כתוב את תוכן הפוסט כאן"
                   className="mt-1"
                   rows={15}
                   required
@@ -143,7 +143,7 @@ export default function BlogEditor() {
               
               <div>
                 <label htmlFor="readTime" className="block text-sm font-medium text-text">
-                  Read Time (minutes)
+                  זמן קריאה (דקות)
                 </label>
                 <Input
                   id="readTime"
@@ -159,12 +159,12 @@ export default function BlogEditor() {
               
               <div>
                 <label htmlFor="image" className="block text-sm font-medium text-text">
-                  Featured Image
+                  תמונה ראשית
                 </label>
                 <div className="mt-1 flex items-center">
                   <label className="flex cursor-pointer items-center rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm hover:bg-accent">
                     <Upload className="mr-2 h-4 w-4" />
-                    <span>{imageFile ? 'Change Image' : 'Upload Image'}</span>
+                    <span>{imageFile ? 'שנה תמונה' : 'העלה תמונה'}</span>
                     <Input
                       id="image"
                       type="file"
@@ -178,7 +178,7 @@ export default function BlogEditor() {
                       type="button"
                       variant="outline"
                       size="sm"
-                      className="ml-2"
+                      className="mr-2"
                       onClick={() => {
                         setImageFile(null);
                         setImagePreview(null);
@@ -193,7 +193,7 @@ export default function BlogEditor() {
                     <div className="relative aspect-video w-full max-w-md overflow-hidden rounded-lg border border-input">
                       <img
                         src={imagePreview}
-                        alt="Preview"
+                        alt="תצוגה מקדימה"
                         className="h-full w-full object-cover"
                       />
                     </div>
@@ -210,7 +210,7 @@ export default function BlogEditor() {
             variant="outline"
             disabled={isLoading}
           >
-            Cancel
+            ביטול
           </Button>
           <Button
             type="submit"
@@ -218,13 +218,13 @@ export default function BlogEditor() {
           >
             {isLoading ? (
               <>
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-background border-t-transparent mr-2" />
-                Saving...
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-background border-t-transparent ml-2" />
+                שומר...
               </>
             ) : (
               <>
-                <Save className="mr-2 h-4 w-4" />
-                Save Post
+                <Save className="ml-2 h-4 w-4" />
+                שמור פוסט
               </>
             )}
           </Button>

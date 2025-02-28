@@ -76,7 +76,7 @@ export default function MediaLibrary() {
     } catch (error: any) {
       toast({
         variant: 'destructive',
-        title: 'Error fetching files',
+        title: 'שגיאה בטעינת הקבצים',
         description: error.message,
       });
     } finally {
@@ -106,8 +106,8 @@ export default function MediaLibrary() {
       }
       
       toast({
-        title: 'Upload successful',
-        description: 'File has been uploaded',
+        title: 'העלאה הצליחה',
+        description: 'הקובץ הועלה בהצלחה',
       });
       
       // Refresh file list
@@ -116,7 +116,7 @@ export default function MediaLibrary() {
     } catch (error: any) {
       toast({
         variant: 'destructive',
-        title: 'Upload failed',
+        title: 'העלאה נכשלה',
         description: error.message,
       });
     } finally {
@@ -139,13 +139,13 @@ export default function MediaLibrary() {
       setFiles(files.filter(file => file.name !== fileName));
       
       toast({
-        title: 'File deleted',
-        description: 'File has been removed successfully',
+        title: 'הקובץ נמחק',
+        description: 'הקובץ הוסר בהצלחה',
       });
     } catch (error: any) {
       toast({
         variant: 'destructive',
-        title: 'Delete failed',
+        title: 'מחיקה נכשלה',
         description: error.message,
       });
     }
@@ -154,8 +154,8 @@ export default function MediaLibrary() {
   const copyToClipboard = (url: string) => {
     navigator.clipboard.writeText(url);
     toast({
-      title: 'Copied to clipboard',
-      description: 'The URL has been copied to your clipboard',
+      title: 'הועתק ללוח',
+      description: 'כתובת הקובץ הועתקה ללוח שלך',
     });
   };
 
@@ -164,9 +164,9 @@ export default function MediaLibrary() {
   );
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return '0 בייט';
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ['בייט', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
@@ -174,15 +174,15 @@ export default function MediaLibrary() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Media Library</h1>
-        <p className="text-muted-foreground">Manage uploaded images and files</p>
+        <h1 className="text-3xl font-bold tracking-tight">ספריית מדיה</h1>
+        <p className="text-muted-foreground">ניהול תמונות וקבצים שהועלו</p>
       </div>
       
       <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
         <div className="relative w-full sm:w-96">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search files..."
+            placeholder="חיפוש קבצים..."
             className="pl-8"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -190,8 +190,8 @@ export default function MediaLibrary() {
         </div>
         
         <label className="flex cursor-pointer items-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium shadow-sm hover:bg-accent">
-          <Upload className="mr-2 h-4 w-4" />
-          <span>{isUploading ? 'Uploading...' : 'Upload File'}</span>
+          <Upload className="ml-2 h-4 w-4" />
+          <span>{isUploading ? 'מעלה...' : 'העלאת קובץ'}</span>
           <Input
             type="file"
             className="hidden"
@@ -209,7 +209,7 @@ export default function MediaLibrary() {
             </div>
           ) : filteredFiles.length === 0 ? (
             <div className="text-center py-10 text-muted-foreground">
-              {searchQuery ? 'No matching files found' : 'No files uploaded yet'}
+              {searchQuery ? 'לא נמצאו קבצים תואמים' : 'עדיין לא הועלו קבצים'}
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -227,15 +227,15 @@ export default function MediaLibrary() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={() => copyToClipboard(file.url)}>
-                          <Copy className="mr-2 h-4 w-4" />
-                          <span>Copy URL</span>
+                          <Copy className="ml-2 h-4 w-4" />
+                          <span>העתק קישור</span>
                         </DropdownMenuItem>
                         <DropdownMenuItem 
                           className="text-destructive focus:text-destructive"
                           onClick={() => handleDelete(file.name)}
                         >
-                          <Trash2 className="mr-2 h-4 w-4" />
-                          <span>Delete</span>
+                          <Trash2 className="ml-2 h-4 w-4" />
+                          <span>מחק</span>
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>

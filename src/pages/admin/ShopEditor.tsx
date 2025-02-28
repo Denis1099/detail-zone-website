@@ -90,7 +90,7 @@ export default function ShopEditor() {
           .upload(fileName, currentProduct.imageFile);
           
         if (uploadError) {
-          throw new Error('Error uploading image');
+          throw new Error('שגיאה בהעלאת התמונה');
         }
         
         const { data } = supabase.storage
@@ -115,15 +115,15 @@ export default function ShopEditor() {
         );
         setProductsList(updatedProducts);
         toast({
-          title: 'Product updated',
-          description: 'The product has been updated successfully',
+          title: 'המוצר עודכן',
+          description: 'המוצר עודכן בהצלחה',
         });
       } else {
         // Add new product
         setProductsList([...productsList, updatedProduct]);
         toast({
-          title: 'Product added',
-          description: 'The product has been added successfully',
+          title: 'מוצר נוסף',
+          description: 'המוצר נוסף בהצלחה',
         });
       }
       
@@ -131,8 +131,8 @@ export default function ShopEditor() {
     } catch (error: any) {
       toast({
         variant: 'destructive',
-        title: 'Error',
-        description: error.message || 'Failed to save product',
+        title: 'שגיאה',
+        description: error.message || 'שמירת המוצר נכשלה',
       });
     } finally {
       setIsLoading(false);
@@ -142,34 +142,34 @@ export default function ShopEditor() {
   const handleDelete = (id: number) => {
     setProductsList(productsList.filter(product => product.id !== id));
     toast({
-      title: 'Product deleted',
-      description: 'The product has been deleted successfully',
+      title: 'המוצר נמחק',
+      description: 'המוצר נמחק בהצלחה',
     });
   };
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Shop Management</h1>
-        <p className="text-muted-foreground">Add and edit products in your shop</p>
+        <h1 className="text-3xl font-bold tracking-tight">ניהול חנות</h1>
+        <p className="text-muted-foreground">הוספה ועריכה של מוצרים בחנות שלך</p>
       </div>
       
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>{isEditing ? 'Edit Product' : 'Add New Product'}</CardTitle>
+            <CardTitle>{isEditing ? 'עריכת מוצר' : 'הוספת מוצר חדש'}</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium">
-                  Product Name
+                  שם המוצר
                 </label>
                 <Input
                   id="name"
                   value={currentProduct.name}
                   onChange={(e) => setCurrentProduct({...currentProduct, name: e.target.value})}
-                  placeholder="Product name"
+                  placeholder="שם המוצר"
                   className="mt-1"
                   required
                 />
@@ -177,7 +177,7 @@ export default function ShopEditor() {
               
               <div>
                 <label htmlFor="price" className="block text-sm font-medium">
-                  Price (₪)
+                  מחיר (₪)
                 </label>
                 <Input
                   id="price"
@@ -194,13 +194,13 @@ export default function ShopEditor() {
               
               <div>
                 <label htmlFor="description" className="block text-sm font-medium">
-                  Description
+                  תיאור
                 </label>
                 <Textarea
                   id="description"
                   value={currentProduct.description}
                   onChange={(e) => setCurrentProduct({...currentProduct, description: e.target.value})}
-                  placeholder="Product description"
+                  placeholder="תיאור המוצר"
                   className="mt-1"
                   rows={4}
                   required
@@ -209,12 +209,12 @@ export default function ShopEditor() {
               
               <div>
                 <label htmlFor="image" className="block text-sm font-medium">
-                  Product Image
+                  תמונת המוצר
                 </label>
                 <div className="mt-1 flex items-center">
                   <label className="flex cursor-pointer items-center rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm hover:bg-accent">
-                    <Upload className="mr-2 h-4 w-4" />
-                    <span>{currentProduct.imageFile || currentProduct.image ? 'Change Image' : 'Upload Image'}</span>
+                    <Upload className="ml-2 h-4 w-4" />
+                    <span>{currentProduct.imageFile || currentProduct.image ? 'שנה תמונה' : 'העלה תמונה'}</span>
                     <Input
                       id="image"
                       type="file"
@@ -229,7 +229,7 @@ export default function ShopEditor() {
                     <div className="relative aspect-square w-full max-w-md overflow-hidden rounded-lg border border-input">
                       <img
                         src={imagePreview}
-                        alt="Preview"
+                        alt="תצוגה מקדימה"
                         className="h-full w-full object-cover"
                       />
                     </div>
@@ -244,7 +244,7 @@ export default function ShopEditor() {
                   onClick={resetForm}
                   disabled={isLoading}
                 >
-                  Cancel
+                  ביטול
                 </Button>
                 <Button
                   type="submit"
@@ -252,13 +252,13 @@ export default function ShopEditor() {
                 >
                   {isLoading ? (
                     <>
-                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-background border-t-transparent mr-2" />
-                      Saving...
+                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-background border-t-transparent ml-2" />
+                      שומר...
                     </>
                   ) : (
                     <>
-                      <Save className="mr-2 h-4 w-4" />
-                      {isEditing ? 'Update Product' : 'Add Product'}
+                      <Save className="ml-2 h-4 w-4" />
+                      {isEditing ? 'עדכן מוצר' : 'הוסף מוצר'}
                     </>
                   )}
                 </Button>
@@ -269,13 +269,13 @@ export default function ShopEditor() {
         
         <Card>
           <CardHeader>
-            <CardTitle>Products List</CardTitle>
+            <CardTitle>רשימת מוצרים</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {productsList.length === 0 ? (
                 <div className="text-center py-10 text-muted-foreground">
-                  No products yet
+                  אין מוצרים עדיין
                 </div>
               ) : (
                 productsList.map((product) => (
@@ -288,7 +288,7 @@ export default function ShopEditor() {
                           className="h-full w-full object-cover"
                         />
                       </div>
-                      <div>
+                      <div className="mr-4">
                         <div className="font-medium">{product.name}</div>
                         <div className="text-xs text-muted-foreground">₪{product.price.toFixed(2)}</div>
                       </div>
@@ -298,6 +298,7 @@ export default function ShopEditor() {
                         variant="ghost"
                         size="icon"
                         onClick={() => handleEditProduct(product)}
+                        className="mr-2"
                       >
                         <Edit className="h-4 w-4" />
                       </Button>

@@ -90,7 +90,7 @@ export default function ServicesEditor() {
           .upload(fileName, currentService.imageFile);
           
         if (uploadError) {
-          throw new Error('Error uploading image');
+          throw new Error('שגיאה בהעלאת התמונה');
         }
         
         const { data } = supabase.storage
@@ -115,15 +115,15 @@ export default function ServicesEditor() {
         );
         setServicesList(updatedServices);
         toast({
-          title: 'Service updated',
-          description: 'The service has been updated successfully',
+          title: 'השירות עודכן',
+          description: 'השירות עודכן בהצלחה',
         });
       } else {
         // Add new service
         setServicesList([...servicesList, updatedService]);
         toast({
-          title: 'Service added',
-          description: 'The service has been added successfully',
+          title: 'שירות נוסף',
+          description: 'השירות נוסף בהצלחה',
         });
       }
       
@@ -131,8 +131,8 @@ export default function ServicesEditor() {
     } catch (error: any) {
       toast({
         variant: 'destructive',
-        title: 'Error',
-        description: error.message || 'Failed to save service',
+        title: 'שגיאה',
+        description: error.message || 'שמירת השירות נכשלה',
       });
     } finally {
       setIsLoading(false);
@@ -142,34 +142,34 @@ export default function ServicesEditor() {
   const handleDelete = (id: number) => {
     setServicesList(servicesList.filter(service => service.id !== id));
     toast({
-      title: 'Service deleted',
-      description: 'The service has been deleted successfully',
+      title: 'השירות נמחק',
+      description: 'השירות נמחק בהצלחה',
     });
   };
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Services Management</h1>
-        <p className="text-muted-foreground">Add and edit services</p>
+        <h1 className="text-3xl font-bold tracking-tight">ניהול שירותים</h1>
+        <p className="text-muted-foreground">הוספה ועריכה של שירותים</p>
       </div>
       
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>{isEditing ? 'Edit Service' : 'Add New Service'}</CardTitle>
+            <CardTitle>{isEditing ? 'עריכת שירות' : 'הוספת שירות חדש'}</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label htmlFor="title" className="block text-sm font-medium">
-                  Service Title
+                  שם השירות
                 </label>
                 <Input
                   id="title"
                   value={currentService.title}
                   onChange={(e) => setCurrentService({...currentService, title: e.target.value})}
-                  placeholder="Service title"
+                  placeholder="שם השירות"
                   className="mt-1"
                   required
                 />
@@ -177,7 +177,7 @@ export default function ServicesEditor() {
               
               <div>
                 <label htmlFor="slug" className="block text-sm font-medium">
-                  Service Slug
+                  מזהה לכתובת URL
                 </label>
                 <Input
                   id="slug"
@@ -188,19 +188,19 @@ export default function ServicesEditor() {
                   required
                 />
                 <p className="mt-1 text-xs text-muted-foreground">
-                  Used in URLs, use lowercase letters, numbers, and hyphens only
+                  משמש בכתובות URL, השתמש באותיות קטנות, מספרים ומקפים בלבד
                 </p>
               </div>
               
               <div>
                 <label htmlFor="description" className="block text-sm font-medium">
-                  Description
+                  תיאור
                 </label>
                 <Textarea
                   id="description"
                   value={currentService.description}
                   onChange={(e) => setCurrentService({...currentService, description: e.target.value})}
-                  placeholder="Service description"
+                  placeholder="תיאור השירות"
                   className="mt-1"
                   rows={4}
                   required
@@ -209,12 +209,12 @@ export default function ServicesEditor() {
               
               <div>
                 <label htmlFor="image" className="block text-sm font-medium">
-                  Featured Image
+                  תמונה ראשית
                 </label>
                 <div className="mt-1 flex items-center">
                   <label className="flex cursor-pointer items-center rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm hover:bg-accent">
-                    <Upload className="mr-2 h-4 w-4" />
-                    <span>{currentService.imageFile || currentService.image ? 'Change Image' : 'Upload Image'}</span>
+                    <Upload className="ml-2 h-4 w-4" />
+                    <span>{currentService.imageFile || currentService.image ? 'שנה תמונה' : 'העלה תמונה'}</span>
                     <Input
                       id="image"
                       type="file"
@@ -229,7 +229,7 @@ export default function ServicesEditor() {
                     <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-input">
                       <img
                         src={imagePreview}
-                        alt="Preview"
+                        alt="תצוגה מקדימה"
                         className="h-full w-full object-cover"
                       />
                     </div>
@@ -244,7 +244,7 @@ export default function ServicesEditor() {
                   onClick={resetForm}
                   disabled={isLoading}
                 >
-                  Cancel
+                  ביטול
                 </Button>
                 <Button
                   type="submit"
@@ -252,13 +252,13 @@ export default function ServicesEditor() {
                 >
                   {isLoading ? (
                     <>
-                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-background border-t-transparent mr-2" />
-                      Saving...
+                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-background border-t-transparent ml-2" />
+                      שומר...
                     </>
                   ) : (
                     <>
-                      <Save className="mr-2 h-4 w-4" />
-                      {isEditing ? 'Update Service' : 'Add Service'}
+                      <Save className="ml-2 h-4 w-4" />
+                      {isEditing ? 'עדכן שירות' : 'הוסף שירות'}
                     </>
                   )}
                 </Button>
@@ -269,13 +269,13 @@ export default function ServicesEditor() {
         
         <Card>
           <CardHeader>
-            <CardTitle>Services List</CardTitle>
+            <CardTitle>רשימת שירותים</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {servicesList.length === 0 ? (
                 <div className="text-center py-10 text-muted-foreground">
-                  No services yet
+                  אין שירותים עדיין
                 </div>
               ) : (
                 servicesList.map((service) => (
@@ -288,7 +288,7 @@ export default function ServicesEditor() {
                           className="h-full w-full object-cover"
                         />
                       </div>
-                      <div>
+                      <div className="mr-4">
                         <div className="font-medium">{service.title}</div>
                         <div className="text-xs text-muted-foreground">{service.slug}</div>
                       </div>
@@ -298,6 +298,7 @@ export default function ServicesEditor() {
                         variant="ghost"
                         size="icon"
                         onClick={() => handleEditService(service)}
+                        className="mr-2"
                       >
                         <Edit className="h-4 w-4" />
                       </Button>
