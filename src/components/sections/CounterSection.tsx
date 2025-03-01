@@ -1,6 +1,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import { Star } from "lucide-react";
 
 type AnimatedCounterProps = {
   end: number;
@@ -8,7 +9,7 @@ type AnimatedCounterProps = {
   suffix?: string;
 };
 
-const AnimatedCounter = ({ end, duration = 1500, suffix = "" }: AnimatedCounterProps) => {
+const AnimatedCounter = ({ end, duration = 3000, suffix = "" }: AnimatedCounterProps) => {
   const [count, setCount] = useState(0);
   const counterRef = useRef<HTMLSpanElement>(null);
   const isInView = useInView(counterRef, { once: true, margin: "-50px" });
@@ -61,16 +62,14 @@ export const CounterSection = () => {
           עם <AnimatedCounter end={98} suffix="%" /> אחוזי שביעות רצון.
         </p>
 
-        <div className="mt-8">
-          <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d849.0721146020093!2d34.81596!3d31.242995!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1502a3218b9bfe33%3A0x99f84b9f7fe66e18!2sDetail%20Zone!5e0!3m2!1sen!2sil!4v1689952867296!5m2!1sen!2sil" 
-            className="w-full max-w-xl h-32 mx-auto rounded-lg shadow-lg border border-primary/30 glass-card"
-            style={{ border: 0 }}
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            title="Google Maps"
-            aria-label="Google Maps"
-          ></iframe>
+        <div className="mt-4 flex justify-center">
+          {Array(5).fill(0).map((_, index) => (
+            <Star 
+              key={index}
+              className="text-primary mx-1 w-8 h-8 md:w-10 md:h-10"
+              fill="#1babbb"
+            />
+          ))}
         </div>
       </motion.div>
     </section>

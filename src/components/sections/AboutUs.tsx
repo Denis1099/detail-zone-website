@@ -1,15 +1,19 @@
+
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+
 type CounterProps = {
   end: number;
   label: string;
   duration?: number;
   suffix?: string;
 };
+
 const Counter = ({
   end,
   label,
-  duration = 1500,
+  duration = 3000,
   suffix = ""
 }: CounterProps) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -18,6 +22,7 @@ const Counter = ({
     margin: "-50px"
   });
   const [count, setCount] = useState(0);
+
   useEffect(() => {
     if (isInView) {
       let startTime: number;
@@ -34,6 +39,7 @@ const Counter = ({
       return () => cancelAnimationFrame(animationFrameId);
     }
   }, [isInView, end, duration]);
+
   return <div ref={ref} className="text-center">
       <div className="text-3xl md:text-4xl font-bold text-primary mb-2">
         {isInView ? count : 0}{suffix}
@@ -41,6 +47,7 @@ const Counter = ({
       <div className="text-sm md:text-base text-text/80">{label}</div>
     </div>;
 };
+
 export const AboutUs = () => {
   return <section className="min-h-screen flex flex-col justify-between bg-gradient-to-b from-black to-card relative overflow-hidden py-6" id="about" dir="rtl">
       {/* Subtle background pattern */}
@@ -110,6 +117,16 @@ export const AboutUs = () => {
               <p className="text-text/80 leading-relaxed text-sm md:text-base">
                 המטרה שלנו היא להחזיר את הרכב שלכם למצב מושלם, בין אם מדובר בניקוי פנימי מעמיק, פוליש וציפוי קרמי, או טיפולים מיוחדים. אנו מציעים שירות נייד להגעה עד אליכם או עבודה במתחם המקצועי שלנו.
               </p>
+            </div>
+
+            <div className="pt-4">
+              <Button 
+                variant="secondary" 
+                size="lg" 
+                className="rounded-full font-bold"
+              >
+                קרא עוד
+              </Button>
             </div>
           </motion.div>
 
