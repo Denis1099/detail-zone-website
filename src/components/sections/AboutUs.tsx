@@ -1,4 +1,3 @@
-
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 
@@ -9,9 +8,9 @@ type CounterProps = {
   suffix?: string;
 };
 
-const Counter = ({ end, label, duration = 2000, suffix = "" }: CounterProps) => {
+const Counter = ({ end, label, duration = 1500, suffix = "" }: CounterProps) => {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
   const [count, setCount] = useState(0);
 
   useEffect(() => {
@@ -36,7 +35,7 @@ const Counter = ({ end, label, duration = 2000, suffix = "" }: CounterProps) => 
 
   return (
     <div ref={ref} className="text-center">
-      <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
+      <div className="text-3xl md:text-4xl font-bold text-primary mb-2">
         {isInView ? count : 0}{suffix}
       </div>
       <div className="text-sm md:text-base text-text/80">{label}</div>
@@ -47,7 +46,7 @@ const Counter = ({ end, label, duration = 2000, suffix = "" }: CounterProps) => 
 export const AboutUs = () => {
   return (
     <section 
-      className="py-20 bg-gradient-to-b from-black to-card relative overflow-hidden" 
+      className="min-h-screen flex flex-col justify-between bg-gradient-to-b from-black to-card relative overflow-hidden py-6" 
       id="about" 
       dir="rtl"
     >
@@ -56,54 +55,54 @@ export const AboutUs = () => {
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0iI2ZmZiIgZmlsbC1ydWxlPSJldmVub2RkIj48Y2lyY2xlIGN4PSIxIiBjeT0iMSIgcj0iMSIvPjwvZz48L3N2Zz4=')]"/>
       </div>
 
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
+      <div className="container mx-auto px-4 flex flex-col h-full">
+        <div className="text-center mb-6">
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-bold text-text mb-4"
+            className="text-3xl md:text-4xl font-bold text-text mb-2"
           >
-            <span className="text-primary">מי </span>אנחנו?
+            מי אנחנו?
           </motion.h2>
           <motion.p 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
-            className="text-muted-foreground max-w-2xl mx-auto"
+            className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto"
           >
             צוות מקצועי וניסיון עשיר בתחום הדיטיילינג והטיפוח לרכב
           </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+        <div className="flex-grow grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-8">
           {/* Left column - Text content */}
           <motion.div 
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
             viewport={{ once: true }}
-            className="space-y-6"
+            className="space-y-4 pr-2"
           >
             <div>
-              <h3 className="text-2xl md:text-3xl font-bold mb-4 text-text">
+              <h3 className="text-xl md:text-2xl font-bold mb-2 text-text">
                 הסיפור שלנו
               </h3>
-              <p className="text-text/80 leading-relaxed mb-4">
+              <p className="text-text/80 leading-relaxed mb-2 text-sm md:text-base">
                 ב-Detail Zone, אנחנו מקפידים על איכות ושירות ללא פשרות כבר למעלה מעשור. המומחיות שלנו בטיפולי דיטיילינג מקצועיים הפכה אותנו למובילים בדרום הארץ.
               </p>
-              <p className="text-text/80 leading-relaxed">
+              <p className="text-text/80 leading-relaxed text-sm md:text-base">
                 הצוות שלנו, בהובלת דניאל, משלב ידע מקצועי עם תשוקה לרכבים ולפרטים הקטנים. אנו מאמינים שכל רכב ראוי לטיפול אישי ומותאם, ולכן אנו משתמשים רק בחומרים איכותיים ובטכניקות מתקדמות מהעולם.
               </p>
             </div>
 
             <div>
-              <h3 className="text-2xl md:text-3xl font-bold mb-4 text-text">
+              <h3 className="text-xl md:text-2xl font-bold mb-2 text-text">
                 הגישה שלנו
               </h3>
-              <p className="text-text/80 leading-relaxed">
+              <p className="text-text/80 leading-relaxed text-sm md:text-base">
                 המטרה שלנו היא להחזיר את הרכב שלכם למצב מושלם, בין אם מדובר בניקוי פנימי מעמיק, פוליש וציפוי קרמי, או טיפולים מיוחדים. אנו מציעים שירות נייד להגעה עד אליכם או עבודה במתחם המקצועי שלנו.
               </p>
             </div>
@@ -115,27 +114,13 @@ export const AboutUs = () => {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.5 }}
             viewport={{ once: true }}
-            className="grid grid-cols-12 grid-rows-6 gap-3 h-[600px]"
+            className="flex justify-center items-center"
           >
-            <div className="col-span-8 row-span-3 rounded-xl overflow-hidden shadow-lg">
+            <div className="rounded-xl overflow-hidden shadow-lg w-full max-w-sm aspect-[4/5]">
               <img 
-                src="/lovable-uploads/bf1aea89-b8c8-48c1-b4c5-3d4d40db6cda.png" 
+                src="/lovable-uploads/daniel.png" 
                 alt="מומחה דיטיילינג מטפל ברכב" 
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="col-span-4 row-span-6 rounded-xl overflow-hidden shadow-lg">
-              <img 
-                src="https://images.unsplash.com/photo-1582539240614-18d985c08b9c" 
-                alt="צוות עבודה מקצועי" 
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="col-span-8 row-span-3 rounded-xl overflow-hidden shadow-lg">
-              <img 
-                src="https://images.unsplash.com/photo-1600880292089-90a7e086ee0c" 
-                alt="ציוד מקצועי לטיפול ברכב" 
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover object-top"
               />
             </div>
           </motion.div>
@@ -147,12 +132,21 @@ export const AboutUs = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.7 }}
           viewport={{ once: true }}
-          className="mt-20 py-12 px-6 rounded-2xl bg-gradient-to-r from-primary/10 to-secondary/10 border border-primary/20 backdrop-blur-sm"
+          className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"
         >
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
+          <div className="py-5 px-4 rounded-xl bg-gradient-to-b from-primary/10 to-secondary/10 border border-primary/20 backdrop-blur-sm shadow-lg hover:shadow-primary/10 transition-all duration-300">
             <Counter end={5000} label="לקוחות מרוצים" />
+          </div>
+          
+          <div className="py-5 px-4 rounded-xl bg-gradient-to-b from-primary/10 to-secondary/10 border border-primary/20 backdrop-blur-sm shadow-lg hover:shadow-primary/10 transition-all duration-300">
             <Counter end={98} label="אחוזי שביעות רצון" suffix="%" />
+          </div>
+          
+          <div className="py-5 px-4 rounded-xl bg-gradient-to-b from-primary/10 to-secondary/10 border border-primary/20 backdrop-blur-sm shadow-lg hover:shadow-primary/10 transition-all duration-300">
             <Counter end={12} label="שנות ניסיון" suffix="+" />
+          </div>
+          
+          <div className="py-5 px-4 rounded-xl bg-gradient-to-b from-primary/10 to-secondary/10 border border-primary/20 backdrop-blur-sm shadow-lg hover:shadow-primary/10 transition-all duration-300">
             <Counter end={15000} label="רכבים טופלו" suffix="+" />
           </div>
         </motion.div>
