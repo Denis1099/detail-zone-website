@@ -1,9 +1,11 @@
 
-import { motion, useMotionValue, useTransform, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useRef } from "react";
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
+import { motion } from "framer-motion";
+import { WhatsAppButton } from "@/components/WhatsAppButton";
 
+// Use the same data from the Portfolio component
 const beforeAfterPairs = [
   {
     before: "/lovable-uploads/mercedes-jeep-before.webp",
@@ -34,27 +36,14 @@ const beforeAfterPairs = [
     before: "/lovable-uploads/byd-before.webp",
     after: "/lovable-uploads/byd-after.webp",
     label: "BYD האן"
-  }
+  },
+  // Add more examples here in the future
 ];
 
 const BeforeAfterSlider = ({ before, after, label }) => {
-  const containerRef = useRef(null);
-  const [containerWidth, setContainerWidth] = useState(0);
+  const [position, setPosition] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
-  const [position, setPosition] = useState(50); // Start at 50% (middle)
-  
-  // Initialize container width on mount and window resize
-  useEffect(() => {
-    const updateWidth = () => {
-      if (containerRef.current) {
-        setContainerWidth(containerRef.current.offsetWidth);
-      }
-    };
-    
-    updateWidth();
-    window.addEventListener('resize', updateWidth);
-    return () => window.removeEventListener('resize', updateWidth);
-  }, []);
+  const containerRef = useRef(null);
   
   const handleMove = (e) => {
     if (!containerRef.current || !isDragging) return;
@@ -121,7 +110,7 @@ const BeforeAfterSlider = ({ before, after, label }) => {
           </div>
         )}
         
-        {/* Before image (background) */}
+        {/* Before image */}
         <div 
           className="absolute inset-0 w-full h-full bg-cover bg-center"
           style={{
@@ -134,7 +123,7 @@ const BeforeAfterSlider = ({ before, after, label }) => {
           </div>
         </div>
         
-        {/* After image (revealed by slider) */}
+        {/* After image */}
         <div 
           className="absolute inset-0 w-full h-full bg-cover bg-center"
           style={{
@@ -163,67 +152,65 @@ const BeforeAfterSlider = ({ before, after, label }) => {
   );
 };
 
-export const Portfolio = () => {
+const Gallery = () => {
   return (
-    <section className="py-20 bg-gradient-to-b from-card to-background" id="portfolio">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <motion.span 
-            initial={{ opacity: 0, y: -10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-            className="text-primary text-sm font-medium mb-4 inline-block px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20"
-          >
-            הפורטפוליו שלנו
-          </motion.span>
-          <motion.h2 
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="text-3xl md:text-5xl font-bold text-text mb-4"
-          >
-            עבודות אחרונות
-          </motion.h2>
-          <motion.p 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            viewport={{ once: true }}
-            className="text-muted-foreground max-w-2xl mx-auto"
-          >
-            הצצה לתוצאות העבודה שלנו. הזיזו את הסליידר כדי לראות את ההבדל
-          </motion.p>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {beforeAfterPairs.map((pair, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
-            >
-              <BeforeAfterSlider {...pair} />
-            </motion.div>
-          ))}
-        </div>
+    <>
+      <Navbar />
+      <main className="pt-16 min-h-screen">
+        {/* Hero section for Gallery */}
+        <section className="bg-gradient-to-b from-black to-card py-20">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16">
+              <motion.span 
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="text-primary text-sm font-medium mb-4 inline-block px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20"
+              >
+                הפורטפוליו שלנו
+              </motion.span>
+              <motion.h1 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="text-4xl md:text-6xl font-bold text-text mb-4"
+              >
+                גלריית עבודות
+              </motion.h1>
+              <motion.p 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="text-muted-foreground max-w-2xl mx-auto"
+              >
+                תוצאות עבודה מרשימות של הצוות המקצועי שלנו. הזיזו את הסליידר כדי לראות את ההבדל
+              </motion.p>
+            </div>
+          </div>
+        </section>
 
-        {/* "See More" Button */}
-        <div className="flex justify-center mt-12">
-          <Button
-            size="lg"
-            className="bg-primary hover:bg-primary/90 transition-all duration-300 transform hover:scale-105 font-medium py-6 px-8 text-lg shadow-lg shadow-primary/20"
-            asChild
-          >
-            <Link to="/gallery">
-              ראה עוד
-            </Link>
-          </Button>
-        </div>
-      </div>
-    </section>
+        {/* Gallery Grid */}
+        <section className="py-16 bg-background">
+          <div className="container mx-auto px-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {beforeAfterPairs.map((pair, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <BeforeAfterSlider {...pair} />
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </main>
+      <Footer />
+      <WhatsAppButton />
+    </>
   );
 };
+
+export default Gallery;

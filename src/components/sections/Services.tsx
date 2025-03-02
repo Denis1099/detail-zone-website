@@ -108,14 +108,16 @@ export const Services = () => {
                       </Button>
                     </div>
                     
-                    {/* Service image */}
-                    <div className="w-full h-full mt-16 p-5">
-                      <img
-                        src={service.image}
-                        alt={service.title}
-                        className="w-full h-[calc(100%-20px)] object-cover rounded-2xl"
-                        loading="lazy"
-                      />
+                    {/* Service image - Updated for 16:9 aspect ratio with margin */}
+                    <div className="w-full h-full mt-16 p-5 pb-8">
+                      <div className="w-full h-[calc(100%-20px)] aspect-video rounded-2xl overflow-hidden">
+                        <img
+                          src={service.image}
+                          alt={service.title}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      </div>
                     </div>
                   </motion.div>
                 </div>

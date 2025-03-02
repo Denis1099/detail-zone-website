@@ -3,9 +3,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, useLocation } from "react-router-dom";
 import { AdminAuthProvider } from "@/contexts/AdminAuthContext";
 import ProtectedRoute from "@/components/admin/ProtectedRoute";
+import { useEffect } from "react";
 import Index from "./pages/Index";
 import Shop from "./pages/Shop";
 import Blog from "./pages/Blog";
@@ -18,6 +19,18 @@ import BlogEditor from "./pages/admin/BlogEditor";
 import ShopEditor from "./pages/admin/ShopEditor";
 import ServicesEditor from "./pages/admin/ServicesEditor";
 import MediaLibrary from "./pages/admin/MediaLibrary";
+import Gallery from "./pages/Gallery";
+
+// Scroll to top component
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  
+  return null;
+};
 
 const queryClient = new QueryClient();
 
@@ -25,23 +38,57 @@ const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Index />,
+    element: (
+      <>
+        <ScrollToTop />
+        <Index />
+      </>
+    ),
   },
   {
     path: "/shop",
-    element: <Shop />,
+    element: (
+      <>
+        <ScrollToTop />
+        <Shop />
+      </>
+    ),
   },
   {
     path: "/shop/:id",
-    element: <ProductDetails />,
+    element: (
+      <>
+        <ScrollToTop />
+        <ProductDetails />
+      </>
+    ),
   },
   {
     path: "/blog",
-    element: <Blog />,
+    element: (
+      <>
+        <ScrollToTop />
+        <Blog />
+      </>
+    ),
   },
   {
     path: "/blog/:id",
-    element: <BlogPost />,
+    element: (
+      <>
+        <ScrollToTop />
+        <BlogPost />
+      </>
+    ),
+  },
+  {
+    path: "/gallery",
+    element: (
+      <>
+        <ScrollToTop />
+        <Gallery />
+      </>
+    ),
   },
   {
     path: "/admin/login",
