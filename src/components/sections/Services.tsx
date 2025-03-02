@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -10,7 +11,7 @@ export const Services = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const itemsPerPage = {
-    desktop: 4,
+    desktop: 3, // Changed from 4 to 3 to match the reference image
     mobile: 1
   };
 
@@ -38,7 +39,7 @@ export const Services = () => {
   };
 
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-b from-background to-card" id="services">
+    <section className="py-16 md:py-24 bg-gradient-to-b from-background to-background" id="services">
       <div className="container mx-auto px-4">
         <div className="text-center mb-10 md:mb-16">
           <motion.span 
@@ -62,7 +63,7 @@ export const Services = () => {
         </div>
 
         <div className="relative">
-          <div className="overflow-hidden rounded-xl">
+          <div className="overflow-hidden">
             {/* ORIGINAL MOTION LOGIC PRESERVED */}
             <motion.div
               className="flex gap-6"
@@ -85,46 +86,36 @@ export const Services = () => {
                   className="px-2"
                 >
                   <motion.div 
-                    className="group relative h-[380px] md:h-[450px] bg-card/30 rounded-2xl overflow-hidden border border-white/20 shadow-lg shadow-black/20"
+                    className="group relative h-[400px] md:h-[380px] rounded-3xl overflow-hidden shadow-xl bg-white"
                     whileHover={{ scale: 1.02 }}
                     transition={{ duration: 0.2 }}
                   >
-                    {/* Lighter gradient overlay to let image show through */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10" />
-                    
-                    <img
-                      src={service.image}
-                      alt={service.title}
-                      className="w-full h-full object-cover absolute inset-0 transition-transform duration-500 group-hover:scale-105"
-                      loading="lazy"
-                    />
-                    
-                    {/* Content area without the blur effect */}
-                    <div className="relative z-20 p-5 md:p-7 h-full flex flex-col">
-                      <div className="flex-grow">
-                        {/* Service title with improved visibility */}
-                        <h3 className="text-xl md:text-2xl font-bold mb-3 text-white drop-shadow-md">
-                          {service.title}
-                        </h3>
-                        
-                        {/* Service description with better contrast */}
-                        <p className="text-gray-100 text-sm md:text-base leading-relaxed drop-shadow-sm">
-                          {service.description}
-                        </p>
-                      </div>
+                    {/* Service button on top */}
+                    <div className="absolute top-4 left-4 right-4 z-20 flex justify-between items-center">
+                      <h3 className="text-lg md:text-xl font-bold text-black">
+                        {service.title}
+                      </h3>
                       
-                      <div className="mt-4">
-                        <Button 
-                          variant="ghost" 
-                          className="w-full border border-primary/30 bg-black/60 hover:bg-primary/30 group-hover:border-primary transition-all duration-300 py-5 text-white font-medium"
-                          asChild
-                        >
-                          <Link to={`/blog/${blogPosts.find(post => post.serviceSlug === service.slug)?.id}`} className="flex items-center justify-center gap-2">
-                            פרטים נוספים
-                            <ArrowUpRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-                          </Link>
-                        </Button>
-                      </div>
+                      <Button 
+                        variant="ghost" 
+                        size="icon"
+                        className="rounded-full bg-white hover:bg-primary/10 transition-all w-10 h-10"
+                        asChild
+                      >
+                        <Link to={`/blog/${blogPosts.find(post => post.serviceSlug === service.slug)?.id}`}>
+                          <ArrowUpRight className="h-5 w-5 text-black" />
+                        </Link>
+                      </Button>
+                    </div>
+                    
+                    {/* Service image */}
+                    <div className="w-full h-full mt-16 p-5">
+                      <img
+                        src={service.image}
+                        alt={service.title}
+                        className="w-full h-[calc(100%-20px)] object-cover rounded-2xl"
+                        loading="lazy"
+                      />
                     </div>
                   </motion.div>
                 </div>
@@ -132,7 +123,7 @@ export const Services = () => {
             </motion.div>
           </div>
 
-          {/* Improved navigation controls - larger and more spaced out */}
+          {/* Navigation controls */}
           <div className="flex justify-center gap-6 mt-8">
             <Button
               variant="outline"
@@ -153,8 +144,6 @@ export const Services = () => {
               <ChevronLeft className="h-5 w-5" />
             </Button>
           </div>
-          
-          {/* Removed pagination dots as requested */}
         </div>
       </div>
     </section>
