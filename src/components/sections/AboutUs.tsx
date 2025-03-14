@@ -1,7 +1,6 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
 
 type CounterProps = {
   end: number;
@@ -98,35 +97,55 @@ export const AboutUs = () => {
         }} viewport={{
           once: true
         }} className="space-y-4 pr-2">
-            <div>
-              <h3 className="text-xl md:text-2xl font-bold mb-2 text-text">
-                הסיפור שלנו
-              </h3>
-              <p className="text-text/80 leading-relaxed mb-2 text-sm md:text-base">
-                ב-Detail Zone, אנחנו מקפידים על איכות ושירות ללא פשרות כבר למעלה מעשור. המומחיות שלנו בטיפולי דיטיילינג מקצועיים הפכה אותנו למובילים בדרום הארץ.
-              </p>
-              <p className="text-text/80 leading-relaxed text-sm md:text-base">
-                הצוות שלנו, בהובלת דניאל, משלב ידע מקצועי עם תשוקה לרכבים ולפרטים הקטנים. אנו מאמינים שכל רכב ראוי לטיפול אישי ומותאם, ולכן אנו משתמשים רק בחומרים איכותיים ובטכניקות מתקדמות מהעולם.
-              </p>
-            </div>
+            <div className="space-y-4">
+              <div>
+                <h3 className="text-xl md:text-2xl font-bold mb-2 text-text">
+                  הסיפור שלנו
+                </h3>
+                <p className="text-text/80 leading-relaxed mb-4 text-sm md:text-base">
+                  אני דניאל הבעלים של Detail zone ואנחנו פועלים כבר 6 שנים בתחום הדיטיילינג וציפוי ננו לרכבים ואופנועים, לאורך השנים, טיפלנו במעל ל-2,000 לקוחות מרוצים, והבנו שכשמדובר ברכב שלך – לא מתפשרים על איכות- גם בשביל החיוך שלך וההנאה שלך מהרכב וגם בשביל התדמית שלנו שתורמת לנו להמון לקוחות ממליצים וחוזרים
+                </p>
+                <p className="text-text/80 leading-relaxed mb-4 text-sm md:text-base">
+                  אנחנו מתמחים ברכבים חדשים ורכבי יוקרה, ומציעים שירותי טיפוח וציפוי ננו-קרמי ברמה הגבוהה ביותר, כדי להבטיח שהרכב שלך יישאר במצב מושלם, עם הגנה ארוכת טווח וברק אינסופי.
+                </p>
+                <p className="text-text/80 leading-relaxed mb-4 text-sm md:text-base">
+                  ציפוי ננו הוא לא סתם פתרון הגנה – הוא טכנולוגיה מתקדמת שמספקת ברק ועמידות לאורך זמן. אנחנו משתמשים בחומרים מהשורה הראשונה, המובילים בשוק, כדי להבטיח שלרכב שלך תהיה הגנה מושלמת מפני כתמים, פגעי סביבה ואפילו תנאי מזג האוויר הקשים.
+                </p>
+              </div>
 
-            <div>
-              <h3 className="text-xl md:text-2xl font-bold mb-2 text-text">
-                הגישה שלנו
-              </h3>
-              <p className="text-text/80 leading-relaxed text-sm md:text-base">
-                המטרה שלנו היא להחזיר את הרכב שלכם למצב מושלם, בין אם מדובר בניקוי פנימי מעמיק, פוליש וציפוי קרמי, או טיפולים מיוחדים. אנו מציעים שירות נייד להגעה עד אליכם או עבודה במתחם המקצועי שלנו.
-              </p>
-            </div>
-
-            <div className="pt-4">
-              <Button 
-                variant="secondary" 
-                size="lg" 
-                className="rounded-full font-bold"
-              >
-                קרא עוד
-              </Button>
+              <div>
+                <h3 className="text-xl md:text-2xl font-bold mb-2 text-text">
+                  למה DetailZone?
+                </h3>
+                <ul className="space-y-2 text-text/80 text-sm md:text-base">
+                  <li className="flex items-start">
+                    <span className="text-primary font-bold ml-2">✔</span>
+                    <span>6 שנים של ניסיון בתחום – עם מעל ל-2,000 לקוחות מרוצים, אנחנו מבינים את הצרכים שלך, חשוב לנו שהכל יצא כמו שרצית- פשוט כי אנחנו אנשים כאלו שאוהבים שהכל כמו שצריך וניתן לראות את זה חוזר על עצמו בהמלצות שלנו.</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-primary font-bold ml-2">✔</span>
+                    <span>חומרים איכותיים וחדשניים – כל טיפול מתבצע עם חומרי גלם מהמתקדמים ביותר טכנולוגית, כדי להבטיח את התוצאה המושלמת ועמידה לאורך זמן.</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-primary font-bold ml-2">✔</span>
+                    <span>ציפוי ננו-קרמי ברמה הגבוהה ביותר – הגנה עמידה ומראה רכב כמו חדש לאורך זמן.</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-primary font-bold ml-2">✔</span>
+                    <span>שירות אישי ומקצועי – אנחנו שמים דגש על שביעות רצון הלקוח ומאמינים שזו הדרך הטובה ביותר לגדול ולתת שירות מצוין. הלקוחות שלנו ממליצים עלינו לחברים, וזו ההמלצה הכי טובה שיכולה להיות.</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-primary font-bold ml-2">✔</span>
+                    <span>הגנה ושימור הרכב שלך – כל טיפול אצלנו מתבצע עם מטרה אחת: לשמור על הרכב שלך במצב הטוב ביותר, עכשיו ובעתיד.</span>
+                  </li>
+                </ul>
+                <p className="text-text/80 leading-relaxed mt-4 text-sm md:text-base">
+                  ב-DetailZone, אנחנו לא רק מטפלים ברכב שלך – אנחנו דואגים לו, כדי שתוכל ליהנות ממנו כל יום מחדש.
+                </p>
+                <p className="text-text/80 leading-relaxed mt-2 text-sm md:text-base">
+                  אז אם משהו שאתה מתלבט לגביו או מחפש לטפל בו בצורה מקצועית, נשמח לתת יעוץ
+                </p>
+              </div>
             </div>
           </motion.div>
 

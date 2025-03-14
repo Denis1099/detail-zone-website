@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -85,12 +86,12 @@ export const Services = () => {
                   className="px-2"
                 >
                   <motion.div 
-                    className="group relative h-[400px] md:h-[380px] rounded-3xl overflow-hidden shadow-xl bg-white/10 backdrop-blur-md border border-white/20"
+                    className="group relative h-[400px] md:h-[380px] rounded-3xl overflow-hidden shadow-xl bg-gradient-to-b from-secondary/30 to-primary/20 backdrop-blur-md border border-accent/10"
                     whileHover={{ scale: 1.02 }}
                     transition={{ duration: 0.2 }}
                   >
                     {/* Glassmorphism background effect */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-white/5 z-0"></div>
+                    <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-white/5 z-0"></div>
                     
                     {/* Service button on top */}
                     <div className="absolute top-4 left-4 right-4 z-20 flex justify-between items-center">
@@ -101,7 +102,7 @@ export const Services = () => {
                       <Button 
                         variant="ghost" 
                         size="icon"
-                        className="rounded-full bg-white/20 backdrop-blur-md hover:bg-primary/30 transition-all w-10 h-10 border border-white/30"
+                        className="rounded-full bg-accent/20 backdrop-blur-md hover:bg-accent/40 transition-all w-10 h-10 border border-accent/30"
                         asChild
                       >
                         <Link to={`/blog/${blogPosts.find(post => post.serviceSlug === service.slug)?.id}`}>
@@ -112,7 +113,7 @@ export const Services = () => {
                     
                     {/* Service image - Updated for better placement and glassmorphism */}
                     <div className="w-full h-full flex justify-center items-center p-6 pt-16 z-10 relative">
-                      <div className="w-full h-full rounded-2xl overflow-hidden shadow-lg border border-white/30">
+                      <div className="w-full h-full rounded-2xl overflow-hidden shadow-lg border border-primary/20">
                         <img
                           src={service.image}
                           alt={service.title}
@@ -136,7 +137,7 @@ export const Services = () => {
               size="icon"
               onClick={nextSlide}
               disabled={currentIndex === 0}
-              className="rounded-full bg-white/10 backdrop-blur-md border-primary/50 text-primary hover:bg-primary/20 hover:text-white transition-colors h-12 w-12 shadow-md"
+              className="rounded-full bg-accent/10 backdrop-blur-md border-accent/50 text-accent hover:bg-accent/20 hover:text-white transition-colors h-12 w-12 shadow-md"
             >
               <ChevronRight className="h-5 w-5" />
             </Button>
@@ -145,7 +146,7 @@ export const Services = () => {
               size="icon"
               onClick={prevSlide}
               disabled={currentIndex >= maxIndex}
-              className="rounded-full bg-white/10 backdrop-blur-md border-primary/50 text-primary hover:bg-primary/20 hover:text-white transition-colors h-12 w-12 shadow-md"
+              className="rounded-full bg-accent/10 backdrop-blur-md border-accent/50 text-accent hover:bg-accent/20 hover:text-white transition-colors h-12 w-12 shadow-md"
             >
               <ChevronLeft className="h-5 w-5" />
             </Button>
