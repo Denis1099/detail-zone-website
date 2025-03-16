@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
@@ -39,9 +38,9 @@ export default function Shop() {
             <Card key={product.id} className="flex flex-col">
               <Link to={`/shop/${product.id}`}>
                 <CardHeader>
-                  <div className="aspect-video relative rounded-lg overflow-hidden mb-4">
+                  <div className="aspect-square relative rounded-lg overflow-hidden mb-4">
                     <img 
-                      src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?q=80&w=1470&auto=format&fit=crop"
+                      src={product.image}
                       alt={product.name}
                       className="object-cover w-full h-full"
                     />

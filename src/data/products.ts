@@ -1,45 +1,72 @@
-
 export const products = [
   {
     id: 1,
-    name: "Premium Car Wax",
-    description: "High-quality car wax for ultimate shine and protection. Our premium car wax is specially formulated to provide long-lasting protection and an incredible deep shine. Perfect for all paint types and colors.",
+    name: "סט 3 מברשות דיטיילינג – לכל פינה ברכב",
+    description: "ניקוי מושלם גם במקומות הקשים ביותר! הסט כולל 3 מברשות בדרגות קושי שונות – מברשת קשיחה ללכלוך קשה ועד מברשת עדינה במיוחד לחלקים רגישים בפנים הרכב. כי הפרטים הקטנים עושים את ההבדל!",
     price: 129.99,
-    image: "/placeholder.svg"
+    image: "/lovable-uploads/products/pd1.webp"
   },
   {
     id: 2,
-    name: "Interior Cleaner Pro",
-    description: "Professional-grade interior cleaning solution. Safely cleans all interior surfaces including leather, vinyl, plastic, and fabric. Leaves a fresh scent and UV protection.",
-    price: 79.99,
-    image: "/placeholder.svg"
+    name: "מברשת מיוחדת לניקוי גלגלים – עמידות גבוהה בשילוב עם רכות.",
+    description: "הדרך הכי קלה לניקוי עמוק של הגלגלים! המברשת עמידה במיוחד, מחזיקה שנים, ומאפשרת גישה לכל החריצים והאזורים הקשים לניקוי – בלי לגרום נזק לג'אנטים. שמור על גלגלים נקיים בקלות!",
+    price: 74.99,
+    image: "/lovable-uploads/products/pd2.webp"
   },
   {
     id: 3,
-    name: "Microfiber Towel Set",
-    description: "Ultra-soft microfiber towels for gentle cleaning. Set includes 6 premium towels perfect for washing, drying, and polishing. Safe for all surfaces.",
-    price: 49.99,
-    image: "/placeholder.svg"
+    name: "שמפו מקציף לרכב – עם ברק וריח דובדבנים",
+    description: "השמפו המושלם לשטיפה יסודית! בטוח לשימוש גם על רכבים עם ציפוי ננו, שומר על הצבע, מנקה בעדינות ומעניק ברק מרשים. מגיע עם קצף עשיר ומפנק, בריח דובדבנים נעים. מתאים לשימוש גם עם דלי וגם עם מקציף – לשטיפה מקצועית בכל דרך שתבחר!",
+    price: 69.99,
+    image: "/lovable-uploads/products/pd3.webp"
   },
   {
     id: 4,
-    name: "Ceramic Coating Kit",
-    description: "Long-lasting ceramic protection for your vehicle. Professional-grade ceramic coating that provides up to 3 years of protection. Includes all necessary application tools.",
+    name: "חומר לניקוי פנימי – ניקיון יסודי לכל משטח",
+    description: "נקה את פנים הרכב שלך כמו מקצוען! החומר מתאים לכל סוגי המשטחים – בד, עור, פלסטיק, ומסיר לכלוך עיקש בקלות. משאיר את הפנים רענן, נקי וחדש, בלי לפגוע בחומרי הרכב.",
     price: 299.99,
-    image: "/placeholder.svg"
+    image: "/lovable-uploads/products/pd4.webp"
   },
   {
     id: 5,
-    name: "Wheel Cleaner",
-    description: "Advanced wheel cleaning formula. Safely removes brake dust, road grime, and other contaminants. pH balanced and safe for all wheel finishes.",
+    name: "כפפת שטיפה מקצועית – ניקוי יסודי, ללא שריטות",
+    description: "חובה בכל שטיפה! כפפה עשויה מיקרופייבר איכותי, מסירה לכלוך בקלות תוך הגנה מקסימלית על הצבע, ומונעת שריטות. הרכב שלך יבריק בלי מאמץ!",
     price: 89.99,
-    image: "/placeholder.svg"
+    image: "/lovable-uploads/products/pd5.webp"
   },
   {
     id: 6,
-    name: "Paint Sealant",
-    description: "Professional paint protection sealant. Creates a durable barrier against environmental contaminants. Lasts up to 12 months with proper maintenance.",
-    price: 159.99,
-    image: "/placeholder.svg"
+    name: "ספריי הברקה מהירה + הגנה מצואת יונים",
+    description: "שמור על הרכב שלך מבריק בין השטיפות עם חומר הברקה איכותי! בנוסף, הוא נותן פתרון מפני צואת יונים, שמזיקה לצבע הרכב. אל תיתן לכתמים להרוס את הצבע – פשוט החזק בקבוק ברכב, ותטפל בבעיה מיידית!",
+    price: 49.99,
+    image: "/lovable-uploads/products/pd6.webp"
+  },
+  {
+    id: 7,
+    name: "חומר ניקוי לג'אנטים – הפתרון ללכלוך הקשה",
+    description: "הפתרון המושלם להחזרת הברק לג'אנטים! חומר עוצמתי המיועד לכל סוגי הג'אנטים ולמשטחי חוץ מלוכלכים במיוחד. מסיר לכלוך קשה ושומנים עיקשים ביעילות – וכל זה תוך שמירה על הג'אנט. קל לשימוש ובניגוד לחומרים זולים בשוק אין מה לחשוש מנזק לרכב",
+    price: 79.99,
+    image: "/lovable-uploads/products/pd7.webp"
+  },
+  {
+    id: 8,
+    name: "מגבת ייבוש מיקרופייבר פרימיום",
+    description: 'המגבת המושלמת לייבוש הרכב! בזכות סיבים בתפירה כפולה, היא סופגת מים עד פי 8 יותר ממגבות רגילות, מייבשת במהירות וללא שריטות. גודל ענק – 60x90 ס"מ, מספיק לייבוש של כל הרכב בלי להשאיר סימני מים וללא צורך בסחיטה. תחסוך לך פי 3 בזמן הייבוש ותשאיר את הרכב מבריק בקלות',
+    price: 109.99,
+    image: "/lovable-uploads/products/pd8.webp"
+  },
+  {
+    id: 9,
+    name: "ווקס לרכב – בוסט לברק של הרכב בכמה דקות",
+    description: "רוצה רכב מבריק ונוצץ לאורך זמן? הווקס שלנו לא רק מעניק ברק עוצמתי וחלקות מדהימה, אלא גם דוחה מים ולכלוך, כך שהרכב יישאר נקי יותר זמן ויהיה קל לשטיפה בפעם הבאה. תן לרכב שלך את ההגנה שמגיעה לו!",
+    price: 79.99,
+    image: "/lovable-uploads/products/pd9.webp"
+  },
+  {
+    id: 10,
+    name: "מטליות מיקרופייבר רב-שימושיות",
+    description: 'מטליות איכותיות לכל צורך – ניקוי חלונות, פנים הרכב, יישום ווקס ועוד. עדינות לצבע, סופגות מעולה, ומושלמות לכל משימה. חובה לכל מי שאוהב לשמור על הרכב נקי ומטופח!',
+    price: 14.99,
+    image: "/lovable-uploads/products/pd10.webp"
   }
 ];
