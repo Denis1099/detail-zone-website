@@ -1,28 +1,14 @@
+
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { products } from "@/data/products";
-import { toast } from "sonner";
+import { useCart } from "@/hooks/useCart";
 
 export default function Shop() {
-  const addToCart = (product: any) => {
-    // Get existing cart
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    
-    // Add new item
-    cart.push(product);
-    
-    // Save back to localStorage
-    localStorage.setItem('cart', JSON.stringify(cart));
-    
-    // Dispatch event to notify navbar
-    window.dispatchEvent(new Event('cartUpdate'));
-    
-    // Show toast
-    toast.success('המוצר נוסף לסל');
-  };
+  const { addToCart } = useCart();
 
   return (
     <div className="min-h-screen flex flex-col">

@@ -68,9 +68,6 @@ const testimonials: Testimonial[] = [
   },
 ];
 
-// Create a reversed order of testimonials for the reverse indicator logic
-const reversedOrder = [...testimonials].map((_, index) => (testimonials.length - 1) - index);
-
 export const Testimonials = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [api, setApi] = useState<any>(null);
@@ -92,7 +89,7 @@ export const Testimonials = () => {
     resize: null
   });
   
-  // Navigation functions - unchanged
+  // Navigation functions
   const goToNext = useCallback(() => {
     if (!api || animationInProgress) return;
     setAnimationInProgress(true);
@@ -122,7 +119,7 @@ export const Testimonials = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // API event handling with reversed indicator mapping
+  // API event handling
   useEffect(() => {
     if (!api) return;
 
@@ -165,7 +162,7 @@ export const Testimonials = () => {
     };
   }, [animationInProgress]);
 
-  // Keyboard navigation - unchanged
+  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (animationInProgress) return;
@@ -228,7 +225,7 @@ export const Testimonials = () => {
     }
   }, [currentSlide]);
 
-  // Touch/Mouse event handlers - unchanged
+  // Touch/Mouse event handlers
   const getClientX = useCallback((e: React.TouchEvent | React.MouseEvent): number => {
     return 'touches' in e ? e.touches[0].clientX : e.clientX;
   }, []);
@@ -270,7 +267,6 @@ export const Testimonials = () => {
     
     if ((Math.abs(diff) > screenWidth.current * 0.1 || velocity > 0.5) && !animationInProgress) {
       setAnimationInProgress(true);
-      // Reverse the swipe direction to match arrow behavior - unchanged
       diff > 0 ? api?.scrollPrev() : api?.scrollNext();
     }
     
@@ -292,11 +288,6 @@ export const Testimonials = () => {
         timeout => timeout && clearTimeout(timeout)
       );
     };
-  }, []);
-
-  // Get the reversed index for indicators to make them move in the opposite direction
-  const getReversedIndex = useCallback((index: number) => {
-    return (testimonials.length - 1) - index;
   }, []);
 
   return (
@@ -482,9 +473,6 @@ export const Testimonials = () => {
               </div>
             </div>
           </div>
-
-          {/* Indicators with reversed mapping */}
-          
         </div>
       </div>
 

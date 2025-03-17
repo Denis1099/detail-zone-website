@@ -1,4 +1,7 @@
-export const products = [
+
+import { Product } from "@/types/products";
+
+export const products: Product[] = [
   {
     id: 1,
     name: "סט 3 מברשות דיטיילינג – לכל פינה ברכב",
