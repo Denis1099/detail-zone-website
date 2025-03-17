@@ -10,17 +10,56 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
+import { useForm } from "react-hook-form";
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const checkoutSchema = z.object({
+  fullName: z.string().min(2, { message: "נא להזין שם מלא" }),
+  phone: z.string().min(9, { message: "נא להזין מספר טלפון תקין" }),
+  email: z.string().email({ message: "נא להזין כתובת אימייל תקינה" }),
+  address: z.string().min(5, { message: "נא להזין כתובת מלאה" }),
+  city: z.string().min(2, { message: "נא להזין עיר" }),
+});
+
+type CheckoutFormValues = z.infer<typeof checkoutSchema>;
 
 export default function Cart() {
   const { cartItems, removeFromCart, updateQuantity, getCartTotal, clearCart } = useCart();
   const [coupon, setCoupon] = useState("");
+  const [showCheckoutForm, setShowCheckoutForm] = useState(false);
   
+  const form = useForm<CheckoutFormValues>({
+    resolver: zodResolver(checkoutSchema),
+    defaultValues: {
+      fullName: "",
+      phone: "",
+      email: "",
+      address: "",
+      city: "",
+    },
+  });
+
   const handleCheckout = () => {
-    toast.success("הזמנתך התקבלה בהצלחה!");
-    clearCart();
+    if (cartItems.length === 0) {
+      toast.error("הסל שלך ריק");
+      return;
+    }
+    setShowCheckoutForm(true);
   };
 
-  if (cartItems.length === 0) {
+  const onSubmitForm = (data: CheckoutFormValues) => {
+    // Here we would integrate with GrowAPI
+    console.log("Checkout data:", data);
+    console.log("Cart data:", cartItems);
+    
+    toast.success("הזמנתך התקבלה בהצלחה!");
+    clearCart();
+    setShowCheckoutForm(false);
+  };
+
+  if (cartItems.length === 0 && !showCheckoutForm) {
     return (
       <div className="min-h-screen flex flex-col">
         <Navbar />
@@ -36,6 +75,155 @@ export default function Cart() {
               המשך בקניות
             </Button>
           </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (showCheckoutForm) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <div className="container mx-auto py-12 pt-24">
+          <h1 className="text-4xl font-bold mb-8 text-center">השלמת הזמנה</h1>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <Card>
+                <CardHeader>
+                  <CardTitle>פרטי משלוח</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmitForm)} className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <FormField
+                          control={form.control}
+                          name="fullName"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>שם מלא</FormLabel>
+                              <FormControl>
+                                <Input placeholder="ישראל ישראלי" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="phone"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>טלפון</FormLabel>
+                              <FormControl>
+                                <Input type="tel" placeholder="050-0000000" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      
+                      <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>אימייל</FormLabel>
+                            <FormControl>
+                              <Input type="email" placeholder="your@email.com" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="address"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>כתובת</FormLabel>
+                            <FormControl>
+                              <Input placeholder="רחוב ומספר בית" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="city"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>עיר</FormLabel>
+                            <FormControl>
+                              <Input placeholder="תל אביב" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <div className="flex gap-2 justify-end">
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          onClick={() => setShowCheckoutForm(false)}
+                        >
+                          חזרה לסל
+                        </Button>
+                        <Button type="submit" className="flex items-center gap-2">
+                          <CreditCard className="w-4 h-4" />
+                          המשך לתשלום
+                        </Button>
+                      </div>
+                    </form>
+                  </Form>
+                </CardContent>
+              </Card>
+            </div>
+            
+            <div>
+              <Card className="sticky top-24">
+                <CardHeader>
+                  <CardTitle>סיכום הזמנה</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    {cartItems.map((item) => (
+                      <div key={item.id} className="flex justify-between">
+                        <span>{item.name} x{item.quantity}</span>
+                        <span>₪{Math.round(item.price * (item.quantity || 1))}</span>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <Separator className="my-4" />
+                  
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span>סה"כ מוצרים</span>
+                      <span>₪{Math.round(getCartTotal())}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>משלוח</span>
+                      <span>₪0</span>
+                    </div>
+                  </div>
+                  
+                  <Separator className="my-4" />
+                  
+                  <div className="flex justify-between font-bold text-lg">
+                    <span>סה"כ לתשלום</span>
+                    <span>₪{Math.round(getCartTotal())}</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -65,9 +253,9 @@ export default function Cart() {
                     </div>
                     
                     <div className="flex-grow">
-                      <h3 className="font-semibold text-lg">{item.name}</h3>
-                      <p className="text-muted-foreground text-sm mb-2 line-clamp-1">{item.description}</p>
-                      <p className="font-bold">₪{item.price}</p>
+                      <h3 className="font-semibold text-lg select-text">{item.name}</h3>
+                      <p className="text-muted-foreground text-sm mb-2 line-clamp-1 select-text">{item.description}</p>
+                      <p className="font-bold">₪{Math.round(item.price)}</p>
                     </div>
                     
                     <div className="flex flex-col items-end justify-between">
@@ -132,7 +320,7 @@ export default function Cart() {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span>סה"כ מוצרים</span>
-                    <span>₪{getCartTotal()}</span>
+                    <span>₪{Math.round(getCartTotal())}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>משלוח</span>
@@ -148,7 +336,7 @@ export default function Cart() {
                 
                 <div className="flex justify-between font-bold text-lg">
                   <span>סה"כ לתשלום</span>
-                  <span>₪{getCartTotal()}</span>
+                  <span>₪{Math.round(getCartTotal())}</span>
                 </div>
                 
                 <Button 
