@@ -6,6 +6,8 @@ import { ShoppingCart, CreditCard, Star } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { products } from "@/data/products";
 import { Link } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
+import { useCart } from "@/hooks/useCart";
 
 const reviews = [
   { id: 1, author: "דני כהן", rating: 5, content: "מוצר מעולה, ממליץ בחום!" },
@@ -15,6 +17,7 @@ const reviews = [
 
 export default function ProductDetails() {
   const { id } = useParams();
+  const { addToCart } = useCart();
   const product = products.find(p => p.id === Number(id));
   
   const similarProducts = products
@@ -30,12 +33,17 @@ export default function ProductDetails() {
       <Navbar />
       <div className="container mx-auto py-12 pt-24">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="aspect-square relative rounded-lg overflow-hidden">
-            <img 
-              src={product.image} 
-              alt={product.name}
-              className="object-cover w-full h-full"
-            />
+          <div className="relative">
+            <div className="aspect-square relative rounded-lg overflow-hidden">
+              <img 
+                src={product.image} 
+                alt={product.name}
+                className="object-cover w-full h-full"
+              />
+            </div>
+            {product.recommended && (
+              <Badge className="absolute top-4 right-4 bg-primary text-white">מומלץ</Badge>
+            )}
           </div>
           
           <div className="space-y-6">
@@ -44,7 +52,10 @@ export default function ProductDetails() {
             <p className="text-muted-foreground">{product.description}</p>
             
             <div className="flex gap-4">
-              <Button className="flex-1 flex items-center gap-2">
+              <Button 
+                className="flex-1 flex items-center gap-2"
+                onClick={() => addToCart(product)}
+              >
                 <ShoppingCart className="w-4 h-4" />
                 הוסף לסל
               </Button>
@@ -85,20 +96,24 @@ export default function ProductDetails() {
             {similarProducts.map((similarProduct) => (
               <Card key={similarProduct.id}>
                 <Link to={`/shop/${similarProduct.id}`}>
-                  <CardHeader>
-                    <div className="aspect-video relative rounded-lg overflow-hidden mb-4">
-                      <img 
-                        src={similarProduct.image} 
-                        alt={similarProduct.name}
-                        className="object-cover w-full h-full"
-                      />
-                    </div>
-                    <CardTitle>{similarProduct.name}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-lg font-bold mb-2">₪{similarProduct.price}</p>
-                    <p className="text-muted-foreground line-clamp-2">{similarProduct.description}</p>
-                  </CardContent>
+                  <div className="relative">
+                    <CardHeader>
+                      <div className="aspect-square relative rounded-lg overflow-hidden mb-4">
+                        <img 
+                          src={similarProduct.image} 
+                          alt={similarProduct.name}
+                          className="object-cover w-full h-full"
+                        />
+                      </div>
+                      {similarProduct.recommended && (
+                        <Badge className="absolute top-4 right-4 bg-primary text-white">מומלץ</Badge>
+                      )}
+                      <CardTitle className="mt-2">{similarProduct.name}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-lg font-bold mb-2">₪{similarProduct.price}</p>
+                    </CardContent>
+                  </div>
                 </Link>
               </Card>
             ))}

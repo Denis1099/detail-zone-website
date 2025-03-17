@@ -7,14 +7,16 @@ export const products: Product[] = [
     name: "סט 3 מברשות דיטיילינג – לכל פינה ברכב",
     description: "ניקוי מושלם גם במקומות הקשים ביותר! הסט כולל 3 מברשות בדרגות קושי שונות – מברשת קשיחה ללכלוך קשה ועד מברשת עדינה במיוחד לחלקים רגישים בפנים הרכב. כי הפרטים הקטנים עושים את ההבדל!",
     price: 44.99,
-    image: "/lovable-uploads/products/pd1.webp"
+    image: "/lovable-uploads/products/pd1.webp",
+    recommended: true
   },
   {
     id: 2,
     name: "מברשת מיוחדת לניקוי גלגלים – עמידות גבוהה בשילוב עם רכות.",
     description: "הדרך הכי קלה לניקוי עמוק של הגלגלים! המברשת עמידה במיוחד, מחזיקה שנים, ומאפשרת גישה לכל החריצים והאזורים הקשים לניקוי – בלי לגרום נזק לג'אנטים. שמור על גלגלים נקיים בקלות!",
     price: 74.99,
-    image: "/lovable-uploads/products/pd2.webp"
+    image: "/lovable-uploads/products/pd2.webp",
+    recommended: true
   },
   {
     id: 3,
@@ -35,14 +37,16 @@ export const products: Product[] = [
     name: "כפפת שטיפה מקצועית – ניקוי יסודי, ללא שריטות",
     description: "חובה בכל שטיפה! כפפה עשויה מיקרופייבר איכותי, מסירה לכלוך בקלות תוך הגנה מקסימלית על הצבע, ומונעת שריטות. הרכב שלך יבריק בלי מאמץ!",
     price: 44.99,
-    image: "/lovable-uploads/products/pd5.webp"
+    image: "/lovable-uploads/products/pd5.webp",
+    recommended: true
   },
   {
     id: 6,
     name: "ספריי הברקה מהירה + הגנה מצואת יונים",
     description: "שמור על הרכב שלך מבריק בין השטיפות עם חומר הברקה איכותי! בנוסף, הוא נותן פתרון מפני צואת יונים, שמזיקה לצבע הרכב. אל תיתן לכתמים להרוס את הצבע – פשוט החזק בקבוק ברכב, ותטפל בבעיה מיידית!",
     price: 49.99,
-    image: "/lovable-uploads/products/pd6.webp"
+    image: "/lovable-uploads/products/pd6.webp",
+    recommended: true
   },
   {
     id: 7,
@@ -56,7 +60,8 @@ export const products: Product[] = [
     name: "מגבת ייבוש מיקרופייבר פרימיום",
     description: 'המגבת המושלמת לייבוש הרכב! בזכות סיבים בתפירה כפולה, היא סופגת מים עד פי 8 יותר ממגבות רגילות, מייבשת במהירות וללא שריטות. גודל ענק – 60x90 ס"מ, מספיק לייבוש של כל הרכב בלי להשאיר סימני מים וללא צורך בסחיטה. תחסוך לך פי 3 בזמן הייבוש ותשאיר את הרכב מבריק בקלות',
     price: 109.99,
-    image: "/lovable-uploads/products/pd8.webp"
+    image: "/lovable-uploads/products/pd8.webp",
+    recommended: true
   },
   {
     id: 9,
@@ -70,6 +75,7 @@ export const products: Product[] = [
     name: "מטליות מיקרופייבר רב-שימושיות",
     description: 'מטליות איכותיות לכל צורך – ניקוי חלונות, פנים הרכב, יישום ווקס ועוד. עדינות לצבע, סופגות מעולה, ומושלמות לכל משימה. חובה לכל מי שאוהב לשמור על הרכב נקי ומטופח!',
     price: 14.99,
-    image: "/lovable-uploads/products/pd10.webp"
+    image: "/lovable-uploads/products/pd10.webp",
+    recommended: true
   }
 ];

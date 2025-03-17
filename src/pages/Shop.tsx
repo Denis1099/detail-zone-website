@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { products } from "@/data/products";
 import { useCart } from "@/hooks/useCart";
+import { Badge } from "@/components/ui/badge";
 
 export default function Shop() {
   const { addToCart } = useCart();
@@ -22,30 +23,45 @@ export default function Shop() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {products.map((product) => (
             <Card key={product.id} className="flex flex-col">
-              <Link to={`/shop/${product.id}`}>
-                <CardHeader>
-                  <div className="aspect-square relative rounded-lg overflow-hidden mb-4">
+              <div className="relative">
+                <Link to={`/shop/${product.id}`}>
+                  <div className="aspect-square relative rounded-lg overflow-hidden m-4">
                     <img 
                       src={product.image}
                       alt={product.name}
                       className="object-cover w-full h-full"
                     />
                   </div>
-                  <CardTitle>{product.name}</CardTitle>
-                </CardHeader>
-                <CardContent className="flex-grow">
-                  <p className="text-muted-foreground">{product.description}</p>
-                </CardContent>
-              </Link>
+                </Link>
+                {product.recommended && (
+                  <Badge className="absolute top-6 right-6 bg-primary text-white">מומלץ</Badge>
+                )}
+              </div>
+              
+              <CardHeader>
+                <CardTitle>
+                  <div className="cursor-text">{product.name}</div>
+                </CardTitle>
+              </CardHeader>
+              
+              <CardContent className="flex-grow">
+                <div className="text-muted-foreground cursor-text">{product.description}</div>
+              </CardContent>
+              
               <CardFooter className="flex justify-between items-center">
                 <span className="text-lg font-bold">₪{product.price}</span>
-                <Button 
-                  className="flex items-center gap-2"
-                  onClick={() => addToCart(product)}
-                >
-                  <ShoppingCart className="w-4 h-4" />
-                  הוסף לסל
-                </Button>
+                <div className="flex gap-2">
+                  <Button 
+                    className="flex items-center gap-2"
+                    onClick={() => addToCart(product)}
+                  >
+                    <ShoppingCart className="w-4 h-4" />
+                    הוסף לסל
+                  </Button>
+                  <Link to={`/shop/${product.id}`}>
+                    <Button variant="outline">פרטים</Button>
+                  </Link>
+                </div>
               </CardFooter>
             </Card>
           ))}
