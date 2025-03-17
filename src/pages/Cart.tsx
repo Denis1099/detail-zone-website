@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -24,6 +23,10 @@ const checkoutSchema = z.object({
 });
 
 type CheckoutFormValues = z.infer<typeof checkoutSchema>;
+
+const formatPrice = (price: number) => {
+  return parseFloat(price.toFixed(2));
+};
 
 export default function Cart() {
   const { cartItems, removeFromCart, updateQuantity, getCartTotal, clearCart } = useCart();
@@ -196,7 +199,7 @@ export default function Cart() {
                     {cartItems.map((item) => (
                       <div key={item.id} className="flex justify-between">
                         <span>{item.name} x{item.quantity}</span>
-                        <span>₪{Math.round(item.price * (item.quantity || 1))}</span>
+                        <span>₪{formatPrice(item.price * (item.quantity || 1))}</span>
                       </div>
                     ))}
                   </div>
@@ -206,11 +209,11 @@ export default function Cart() {
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span>סה"כ מוצרים</span>
-                      <span>₪{Math.round(getCartTotal())}</span>
+                      <span>₪{formatPrice(getCartTotal())}</span>
                     </div>
                     <div className="flex justify-between">
                       <span>משלוח</span>
-                      <span>₪0</span>
+                      <span>₪0.00</span>
                     </div>
                   </div>
                   
@@ -218,7 +221,7 @@ export default function Cart() {
                   
                   <div className="flex justify-between font-bold text-lg">
                     <span>סה"כ לתשלום</span>
-                    <span>₪{Math.round(getCartTotal())}</span>
+                    <span>₪{formatPrice(getCartTotal())}</span>
                   </div>
                 </CardContent>
               </Card>
@@ -255,7 +258,7 @@ export default function Cart() {
                     <div className="flex-grow">
                       <h3 className="font-semibold text-lg select-text">{item.name}</h3>
                       <p className="text-muted-foreground text-sm mb-2 line-clamp-1 select-text">{item.description}</p>
-                      <p className="font-bold">₪{Math.round(item.price)}</p>
+                      <p className="font-bold">₪{formatPrice(item.price)}</p>
                     </div>
                     
                     <div className="flex flex-col items-end justify-between">
@@ -320,15 +323,15 @@ export default function Cart() {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span>סה"כ מוצרים</span>
-                    <span>₪{Math.round(getCartTotal())}</span>
+                    <span>₪{formatPrice(getCartTotal())}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>משלוח</span>
-                    <span>₪0</span>
+                    <span>₪0.00</span>
                   </div>
                   <div className="flex justify-between">
                     <span>הנחה</span>
-                    <span>₪0</span>
+                    <span>₪0.00</span>
                   </div>
                 </div>
                 
@@ -336,7 +339,7 @@ export default function Cart() {
                 
                 <div className="flex justify-between font-bold text-lg">
                   <span>סה"כ לתשלום</span>
-                  <span>₪{Math.round(getCartTotal())}</span>
+                  <span>₪{formatPrice(getCartTotal())}</span>
                 </div>
                 
                 <Button 

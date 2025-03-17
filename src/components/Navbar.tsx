@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, Menu } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -57,12 +58,25 @@ export const Navbar = () => {
             </Link>
           </div>
           
-          {/* Menu explicitly on right */}
-          <div className="absolute right-0 top-1/2 -translate-y-1/2">
+          {/* Menu and Cart together on the right */}
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-2">
+            {/* Cart icon next to menu button */}
+            {cartItems > 0 && (
+              <Button variant="ghost" size="icon" className="relative" asChild>
+                <Link to="/cart">
+                  <ShoppingCart className="h-5 w-5" />
+                  <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground w-5 h-5 rounded-full text-xs flex items-center justify-center">
+                    {cartItems}
+                  </span>
+                </Link>
+              </Button>
+            )}
+            
+            {/* Menu button */}
             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="p-2">
-                  <Menu className="h-8 w-8" /> {/* Significantly larger icon */}
+                  <Menu className="h-8 w-8" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-[300px]">
@@ -84,20 +98,6 @@ export const Navbar = () => {
               </SheetContent>
             </Sheet>
           </div>
-          
-          {/* Cart in center if needed */}
-          {cartItems > 0 && (
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-              <Button variant="ghost" size="icon" className="relative" asChild>
-                <Link to="/cart">
-                  <ShoppingCart className="h-5 w-5" />
-                  <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground w-5 h-5 rounded-full text-xs flex items-center justify-center">
-                    {cartItems}
-                  </span>
-                </Link>
-              </Button>
-            </div>
-          )}
         </div>
 
         {/* Desktop navbar (unchanged) */}
