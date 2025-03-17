@@ -42,7 +42,7 @@ export default function ProductDetails() {
               />
             </div>
             {product.recommended && (
-              <Badge className="absolute top-4 right-4 bg-primary text-white">מומלץ</Badge>
+              <Badge className="absolute top-4 right-4 bg-yellow-500 text-black px-3 py-1 text-sm font-bold">מומלץ</Badge>
             )}
           </div>
           
@@ -106,7 +106,7 @@ export default function ProductDetails() {
                         />
                       </div>
                       {similarProduct.recommended && (
-                        <Badge className="absolute top-4 right-4 bg-primary text-white">מומלץ</Badge>
+                        <Badge className="absolute top-4 right-4 bg-yellow-500 text-black px-3 py-1 text-sm font-bold">מומלץ</Badge>
                       )}
                       <CardTitle className="mt-2">{similarProduct.name}</CardTitle>
                     </CardHeader>

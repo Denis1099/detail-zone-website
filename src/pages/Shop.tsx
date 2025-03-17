@@ -34,18 +34,18 @@ export default function Shop() {
                   </div>
                 </Link>
                 {product.recommended && (
-                  <Badge className="absolute top-6 right-6 bg-primary text-white">מומלץ</Badge>
+                  <Badge className="absolute top-6 right-6 bg-yellow-500 text-black px-3 py-1 text-sm font-bold">מומלץ</Badge>
                 )}
               </div>
               
               <CardHeader>
                 <CardTitle>
-                  <div className="cursor-text">{product.name}</div>
+                  <div className="select-text">{product.name}</div>
                 </CardTitle>
               </CardHeader>
               
               <CardContent className="flex-grow">
-                <div className="text-muted-foreground cursor-text">{product.description}</div>
+                <div className="text-muted-foreground select-text">{product.description}</div>
               </CardContent>
               
               <CardFooter className="flex justify-between items-center">

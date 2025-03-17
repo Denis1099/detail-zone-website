@@ -20,6 +20,7 @@ import ShopEditor from "./pages/admin/ShopEditor";
 import ServicesEditor from "./pages/admin/ServicesEditor";
 import MediaLibrary from "./pages/admin/MediaLibrary";
 import Gallery from "./pages/Gallery";
+import Cart from "./pages/Cart";
 
 // Scroll to top component
 const ScrollToTop = () => {
@@ -60,6 +61,15 @@ const router = createBrowserRouter([
       <>
         <ScrollToTop />
         <ProductDetails />
+      </>
+    ),
+  },
+  {
+    path: "/cart",
+    element: (
+      <>
+        <ScrollToTop />
+        <Cart />
       </>
     ),
   },
