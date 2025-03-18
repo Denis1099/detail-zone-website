@@ -116,16 +116,14 @@ export const Services = () => {
                         <span className="sr-only">קרא עוד על {service.title}</span>
                       </Link>
                       
-                      {/* Service image container - Improved for full visibility */}
-                      <div className="w-full h-full pt-16 p-6 flex items-center justify-center">
-                        <div className="w-full max-w-[180px] mx-auto aspect-square relative overflow-hidden">
-                          <img
-                            src={service.image}
-                            alt={service.title}
-                            className="w-full h-full object-contain"
-                            loading="lazy"
-                          />
-                        </div>
+                      {/* Service image container - Full width without cutting off */}
+                      <div className="absolute inset-0 w-full h-full flex items-center justify-center px-6 pt-16 pb-6">
+                        <img
+                          src={service.image}
+                          alt={service.title}
+                          className="max-w-full max-h-full w-auto h-auto object-contain"
+                          loading="lazy"
+                        />
                       </div>
                     </motion.div>
                   </div>
