@@ -33,15 +33,15 @@ export const Services = () => {
   };
 
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-b from-background/80 to-background/90" id="services">
+    <section className="py-12 md:py-16 bg-gradient-to-b from-background/80 to-background/90" id="services">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-10 md:mb-16">
+        <div className="text-center mb-8 md:mb-10">
           <motion.span 
             initial={{ opacity: 0, y: -10 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
-            className="text-primary text-sm font-medium mb-4 md:mb-6 inline-block px-4 py-1.5 rounded-full bg-primary/10 backdrop-blur-md border border-primary/20"
+            className="text-primary text-sm font-medium mb-3 md:mb-4 inline-block px-4 py-1.5 rounded-full bg-primary/10 backdrop-blur-md border border-primary/20"
           >
             השירותים שלנו
           </motion.span>
@@ -82,7 +82,7 @@ export const Services = () => {
                     className="px-2"
                   >
                     <motion.div 
-                      className="group relative h-[400px] md:h-[380px] rounded-3xl overflow-hidden shadow-xl bg-gradient-to-b from-secondary/30 to-primary/20 backdrop-blur-md border border-accent/10"
+                      className="group relative h-[380px] rounded-3xl overflow-hidden shadow-xl bg-gradient-to-b from-secondary/30 to-primary/20 backdrop-blur-md border border-accent/10"
                       whileHover={{ scale: 1.02 }}
                       transition={{ duration: 0.2 }}
                     >
@@ -116,12 +116,12 @@ export const Services = () => {
                         <span className="sr-only">קרא עוד על {service.title}</span>
                       </Link>
                       
-                      {/* Service image container - Full width without cutting off */}
-                      <div className="absolute inset-0 w-full h-full flex items-center justify-center px-6 pt-16 pb-6">
+                      {/* Service image container - Full width with padding for better visibility */}
+                      <div className="absolute inset-0 flex items-center justify-center p-6 pt-16">
                         <img
                           src={service.image}
                           alt={service.title}
-                          className="max-w-full max-h-full w-auto h-auto object-contain"
+                          className="w-full h-auto max-h-full object-contain"
                           loading="lazy"
                         />
                       </div>
@@ -133,7 +133,7 @@ export const Services = () => {
           </div>
 
           {/* Navigation controls */}
-          <div className="flex justify-center gap-6 mt-8">
+          <div className="flex justify-center gap-6 mt-6">
             <Button
               variant="outline"
               size="icon"

@@ -9,12 +9,12 @@ interface CTAFormProps {
 
 export const CTAForm = ({ formId = "main-page" }: CTAFormProps) => {
   return (
-    <section className="py-20 relative overflow-hidden">
+    <section className="py-12 relative overflow-hidden">
       <div className="absolute inset-0 bg-primary/5" />
       <div className="container mx-auto px-4 relative">
-        <Card className="glass-card max-w-4xl mx-auto p-6 md:p-12">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+        <Card className="glass-card max-w-4xl mx-auto p-6 md:p-10">
+          <div className="text-center mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold mb-3">
               רוצה להתחיל?
             </h2>
             <p className="text-gray-400">

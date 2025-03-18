@@ -3,6 +3,7 @@ import { motion, useMotionValue, useTransform, AnimatePresence } from "framer-mo
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 const beforeAfterPairs = [
   {
@@ -107,73 +108,75 @@ const BeforeAfterSlider = ({ before, after, label }) => {
 
   return (
     <div className="relative rounded-xl overflow-hidden shadow-xl">
-      {/* Card container */}
-      <div 
-        ref={containerRef}
-        className="relative aspect-video overflow-hidden cursor-ew-resize"
-        onMouseDown={() => setIsDragging(true)}
-        onTouchStart={() => setIsDragging(true)}
-      >
-        {/* Label */}
-        {label && (
-          <div className="absolute top-3 right-3 z-30 bg-black/70 px-3 py-1 rounded-full text-white text-sm font-medium">
-            {label}
-          </div>
-        )}
-        
-        {/* Before image (background) */}
+      {/* Card container with 1:1 aspect ratio */}
+      <AspectRatio ratio={1} className="w-full">
         <div 
-          className="absolute inset-0 w-full h-full bg-cover bg-center"
-          style={{
-            backgroundImage: `url(${before})`,
-          }}
+          ref={containerRef}
+          className="relative w-full h-full overflow-hidden cursor-ew-resize"
+          onMouseDown={() => setIsDragging(true)}
+          onTouchStart={() => setIsDragging(true)}
         >
-          {/* "Before" Label */}
-          <div className="absolute bottom-3 right-3 bg-red-500/80 px-2 py-0.5 rounded text-white text-xs font-medium">
-            לפני
+          {/* Label */}
+          {label && (
+            <div className="absolute top-3 right-3 z-30 bg-black/70 px-3 py-1 rounded-full text-white text-sm font-medium">
+              {label}
+            </div>
+          )}
+          
+          {/* Before image (background) */}
+          <div 
+            className="absolute inset-0 w-full h-full bg-cover bg-center"
+            style={{
+              backgroundImage: `url(${before})`,
+            }}
+          >
+            {/* "Before" Label */}
+            <div className="absolute bottom-3 right-3 bg-red-500/80 px-2 py-0.5 rounded text-white text-xs font-medium">
+              לפני
+            </div>
+          </div>
+          
+          {/* After image (revealed by slider) */}
+          <div 
+            className="absolute inset-0 w-full h-full bg-cover bg-center"
+            style={{
+              backgroundImage: `url(${after})`,
+              clipPath: `polygon(${100-position}% 0%, 100% 0%, 100% 100%, ${100-position}% 100%)`,
+            }}
+          >
+            {/* "After" Label */}
+            <div className="absolute bottom-3 left-3 bg-green-500/80 px-2 py-0.5 rounded text-white text-xs font-medium">
+              אחרי
+            </div>
+          </div>
+          
+          {/* Divider line */}
+          <div 
+            className="absolute top-0 bottom-0 w-1 bg-white z-10"
+            style={{ right: `${position}%` }}
+          >
+            {/* Handle with bidirectional arrow */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-primary rounded-full flex items-center justify-center shadow-md">
+              <span className="text-white font-bold text-sm">&lt;&gt;</span>
+            </div>
           </div>
         </div>
-        
-        {/* After image (revealed by slider) */}
-        <div 
-          className="absolute inset-0 w-full h-full bg-cover bg-center"
-          style={{
-            backgroundImage: `url(${after})`,
-            clipPath: `polygon(${100-position}% 0%, 100% 0%, 100% 100%, ${100-position}% 100%)`,
-          }}
-        >
-          {/* "After" Label */}
-          <div className="absolute bottom-3 left-3 bg-green-500/80 px-2 py-0.5 rounded text-white text-xs font-medium">
-            אחרי
-          </div>
-        </div>
-        
-        {/* Divider line */}
-        <div 
-          className="absolute top-0 bottom-0 w-1 bg-white z-10"
-          style={{ right: `${position}%` }}
-        >
-          {/* Handle with bidirectional arrow */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-primary rounded-full flex items-center justify-center shadow-md">
-            <span className="text-white font-bold text-sm">&lt;&gt;</span>
-          </div>
-        </div>
-      </div>
+      </AspectRatio>
     </div>
   );
 };
 
 export const Portfolio = () => {
   return (
-    <section className="py-20 bg-gradient-to-b from-card to-background" id="portfolio">
+    <section className="py-12 bg-gradient-to-b from-card to-background" id="portfolio">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
+        <div className="text-center mb-10">
           <motion.span 
             initial={{ opacity: 0, y: -10 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
-            className="text-primary text-sm font-medium mb-4 inline-block px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20"
+            className="text-primary text-sm font-medium mb-3 inline-block px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20"
           >
             הפורטפוליו שלנו
           </motion.span>
@@ -182,7 +185,7 @@ export const Portfolio = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
             viewport={{ once: true }}
-            className="text-3xl md:text-5xl font-bold text-text mb-4"
+            className="text-3xl md:text-5xl font-bold text-text mb-3"
           >
             עבודות אחרונות
           </motion.h2>
@@ -191,13 +194,13 @@ export const Portfolio = () => {
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.3 }}
             viewport={{ once: true }}
-            className="text-muted-foreground max-w-2xl mx-auto"
+            className="text-muted-foreground max-w-2xl mx-auto mb-8"
           >
             הצצה לתוצאות העבודה שלנו. הזיזו את הסליידר כדי לראות את ההבדל
           </motion.p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
           {beforeAfterPairs.map((pair, index) => (
             <motion.div
               key={index}
@@ -212,7 +215,7 @@ export const Portfolio = () => {
         </div>
 
         {/* "See More" Button */}
-        <div className="flex justify-center mt-12">
+        <div className="flex justify-center mt-10">
           <Button
             size="lg"
             className="bg-primary hover:bg-primary/90 transition-all duration-300 transform hover:scale-105 font-medium py-6 px-8 text-lg shadow-lg shadow-primary/20"

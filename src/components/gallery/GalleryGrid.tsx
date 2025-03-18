@@ -1,6 +1,7 @@
 
 import { motion } from "framer-motion";
 import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 // Define the types for the before-after pairs
 interface BeforeAfterPair {
@@ -15,9 +16,9 @@ interface GalleryGridProps {
 
 export const GalleryGrid = ({ items }: GalleryGridProps) => {
   return (
-    <section className="py-16 bg-background">
+    <section className="py-12 bg-background">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {items.map((pair, index) => (
             <motion.div
               key={index}
@@ -25,7 +26,9 @@ export const GalleryGrid = ({ items }: GalleryGridProps) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <BeforeAfterSlider {...pair} />
+              <AspectRatio ratio={1} className="w-full">
+                <BeforeAfterSlider {...pair} />
+              </AspectRatio>
             </motion.div>
           ))}
         </div>
