@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -121,7 +120,7 @@ export const Services = () => {
                         <img
                           src={service.image}
                           alt={service.title}
-                          className="w-full h-auto max-h-full object-contain"
+                          className="w-full h-auto max-h-full object-cover rounded-2xl border border-white/10"
                           loading="lazy"
                         />
                       </div>
