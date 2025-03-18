@@ -410,12 +410,12 @@ export const Testimonials = () => {
                       aria-hidden={!isActive}
                     >
                       <Card className="glass-card w-full max-w-[20rem] mx-auto h-[580px] md:h-[620px] bg-gradient-to-br from-purple-500/20 to-orange-400/20 backdrop-blur-md border border-white/10 shadow-xl relative">
-                        {/* Vehicle Image */}
-                        <div className="w-full h-40 md:h-48 rounded-t-lg overflow-hidden mx-auto">
+                        {/* Vehicle Image - Fixed for mobile display */}
+                        <div className="w-full h-40 md:h-48 rounded-t-lg overflow-hidden">
                           <img
                             src={testimonial.vehicleImage || '/api/placeholder/320/250'}
-                            alt={`רכב של ${testimonial.name}`}
-                            className="w-full h-full object-contain md:object-cover"
+                            alt={`ר��ב של ${testimonial.name}`}
+                            className="w-full h-full object-cover"
                             style={{ objectPosition: 'center' }}
                             draggable="false"
                             loading="lazy"
