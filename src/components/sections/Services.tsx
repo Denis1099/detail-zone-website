@@ -116,20 +116,15 @@ export const Services = () => {
                         <span className="sr-only">קרא עוד על {service.title}</span>
                       </Link>
                       
-                      {/* Service image container with proper aspect ratio */}
+                      {/* Service image container - Improved for full visibility */}
                       <div className="w-full h-full pt-16 p-6 flex items-center justify-center">
-                        <div className="w-full max-w-[200px] mx-auto aspect-square relative rounded-xl overflow-hidden border border-primary/20 shadow-lg">
+                        <div className="w-full max-w-[180px] mx-auto aspect-square relative overflow-hidden">
                           <img
                             src={service.image}
                             alt={service.title}
-                            className="w-full h-full object-contain p-2"
+                            className="w-full h-full object-contain"
                             loading="lazy"
                           />
-                        </div>
-                        
-                        {/* Caption at the bottom */}
-                        <div className="absolute bottom-4 left-4 right-4 text-center px-3 py-2 bg-black/30 backdrop-blur-sm rounded-xl">
-                          <p className="text-sm text-white">{service.description}</p>
                         </div>
                       </div>
                     </motion.div>
@@ -139,7 +134,7 @@ export const Services = () => {
             </motion.div>
           </div>
 
-          {/* Navigation controls - Updated with glassmorphism */}
+          {/* Navigation controls */}
           <div className="flex justify-center gap-6 mt-8">
             <Button
               variant="outline"
