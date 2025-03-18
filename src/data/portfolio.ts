@@ -7,33 +7,33 @@ export interface BeforeAfterPair {
 
 export const beforeAfterPairs: BeforeAfterPair[] = [
   {
-    before: "/lovable-uploads/mercedes-jeep-before.webp",
-    after: "/lovable-uploads/mercedes-jeep-after.webp",
+    before: "/lovable-uploads/before-after/mercedes-jeep-before.webp",
+    after: "/lovable-uploads/before-after/mercedes-jeep-after.webp",
     label: "מרצדס AMG GLE"
   },
   {
-    before: "/lovable-uploads/skoda-back-before.webp",
-    after: "/lovable-uploads/skoda-back-after.webp",
-    label: "סקודה - חידוש פנסים"
+    before: "/lovable-uploads/before-after/seat-before.webp",
+    after: "/lovable-uploads/before-after/seat-after.webp",
+    label: "סיאט"
   },
   {
-    before: "/lovable-uploads/rover-before.webp",
-    after: "/lovable-uploads/rover-after.webp",
+    before: "/lovable-uploads/before-after/rover-before.webp",
+    after: "/lovable-uploads/before-after/rover-after.webp",
     label: "ריינג׳ רובר ספורט"
   },
   {
-    before: "/lovable-uploads/infinity-before.webp",
-    after: "/lovable-uploads/infinity-after.webp",
-    label: "אינפיניטי QX70"
+    before: "/lovable-uploads/before-after/kia-before.webp",
+    after: "/lovable-uploads/before-after/kia-after.webp",
+    label: "קיה"
   },
   {
-    before: "/lovable-uploads/infinity-back-before.webp",
-    after: "/lovable-uploads/infinity-back-after.webp",
-    label: "אינפיניטי - טיפול חוץ"
+    before: "/lovable-uploads/before-after/infinity-back-before.webp",
+    after: "/lovable-uploads/before-after/infinity-back-after.webp",
+    label: "אינפיניטי"
   },
   {
-    before: "/lovable-uploads/byd-before.webp",
-    after: "/lovable-uploads/byd-after.webp",
-    label: "BYD האן"
+    before: "/lovable-uploads/before-after/byd-before.webp",
+    after: "/lovable-uploads/before-after/byd-after.webp",
+    label: "BYD"
   }
 ];
