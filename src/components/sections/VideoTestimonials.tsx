@@ -1,7 +1,10 @@
 
 import { motion } from "framer-motion";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export const VideoTestimonials = () => {
+  const isMobile = useIsMobile();
+  
   // YouTube short links converted to embed format, with the specified video removed
   const videoLinks = [
     "https://www.youtube.com/embed/d9yHOep_dcY",
@@ -34,7 +37,7 @@ export const VideoTestimonials = () => {
           </motion.h2>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 md:gap-6 max-w-[36%] mx-auto">
+        <div className={`grid grid-cols-2 ${isMobile ? 'gap-4' : 'gap-8'} md:gap-8 max-w-[39.6%] mx-auto`}>
           {videoLinks.map((videoUrl, index) => (
             <motion.div
               key={index}
