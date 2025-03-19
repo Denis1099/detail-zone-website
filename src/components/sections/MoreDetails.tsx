@@ -54,15 +54,10 @@ export const MoreDetails = () => {
               {/* Social Links */}
               <div>
                 <p className="font-medium mb-4">עקבו אחרינו</p>
-                <div className="flex gap-4">
-                  <Button size="icon" variant="ghost" className="hover:text-[#4267B2]" asChild>
-                    <a href="https://www.facebook.com/detailzone07" target="_blank" rel="noopener noreferrer">
-                      <Facebook className="h-5 w-5" />
-                    </a>
-                  </Button>
-                  <Button size="icon" variant="ghost" className="hover:text-[#E1306C]" asChild>
-                    <a href="https://www.instagram.com/detail__zone/" target="_blank" rel="noopener noreferrer">
-                      <Instagram className="h-5 w-5" />
+                <div className="flex flex-col items-start gap-3">
+                  <Button size="icon" variant="ghost" className="hover:text-[#000000]" asChild>
+                    <a href="https://www.tiktok.com/@danieldetailzone" target="_blank" rel="noopener noreferrer">
+                      <TikTokIcon className="h-5 w-5" />
                     </a>
                   </Button>
                   <Button size="icon" variant="ghost" className="hover:text-[#FF0000]" asChild>
@@ -70,9 +65,14 @@ export const MoreDetails = () => {
                       <Youtube className="h-5 w-5" />
                     </a>
                   </Button>
-                  <Button size="icon" variant="ghost" className="hover:text-[#000000]" asChild>
-                    <a href="https://www.tiktok.com/@danieldetailzone" target="_blank" rel="noopener noreferrer">
-                      <TikTokIcon className="h-5 w-5" />
+                  <Button size="icon" variant="ghost" className="hover:text-[#E1306C]" asChild>
+                    <a href="https://www.instagram.com/detail__zone/" target="_blank" rel="noopener noreferrer">
+                      <Instagram className="h-5 w-5" />
+                    </a>
+                  </Button>
+                  <Button size="icon" variant="ghost" className="hover:text-[#4267B2]" asChild>
+                    <a href="https://www.facebook.com/detailzone07" target="_blank" rel="noopener noreferrer">
+                      <Facebook className="h-5 w-5" />
                     </a>
                   </Button>
                 </div>
