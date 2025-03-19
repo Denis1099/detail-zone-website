@@ -1,21 +1,38 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAdminAuth } from '@/contexts/AdminAuthContext';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2, AlertCircle, Info } from 'lucide-react';
+import { Loader2, AlertCircle, Info, RefreshCw } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { supabase } from '@/lib/supabase';
 
 export default function AdminLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { signIn, isAuthenticated, loading: authLoading } = useAdminAuth();
+  const { signIn, isAuthenticated, loading: authLoading, signOut } = useAdminAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+  
+  // Clear any lingering sessions on component mount
+  useEffect(() => {
+    const clearSession = async () => {
+      // Only clear if not already authenticated
+      if (!isAuthenticated && !authLoading) {
+        try {
+          // This helps with stale token issues
+          await supabase.auth.signOut();
+        } catch (error) {
+          console.error("Error clearing session:", error);
+        }
+      }
+    };
+    
+    clearSession();
+  }, [isAuthenticated, authLoading]);
 
   // Only redirect if authentication is complete and successful
   if (isAuthenticated && !authLoading) {
@@ -37,7 +54,35 @@ export default function AdminLogin() {
       navigate('/admin/dashboard');
     } catch (error: any) {
       console.error("Login error:", error);
-      setError(error.message || 'פרטי התחברות שגויים. אנא בדוק את האימייל והסיסמה שלך.');
+      
+      // Handle specific error types with clear messages
+      if (error.message?.includes('Invalid login credentials')) {
+        setError('פרטי התחברות שגויים. אנא בדוק את האימייל והסיסמה שלך.');
+      } else if (error.message?.includes('אינו מנהל')) {
+        setError('משתמש זה אינו רשום כמנהל במערכת.');
+      } else {
+        setError(error.message || 'אירעה שגיאה במהלך ההתחברות. אנא נסה שוב.');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleClearAndRetry = async () => {
+    try {
+      setIsLoading(true);
+      // Force sign out to clear any stale tokens
+      await signOut();
+      // Clear the form
+      setEmail('');
+      setPassword('');
+      setError(null);
+      toast({
+        title: 'נתוני הכניסה נוקו',
+        description: 'ניתן לנסות להתחבר שוב.',
+      });
+    } catch (error) {
+      console.error("Error in clear and retry:", error);
     } finally {
       setIsLoading(false);
     }
@@ -55,6 +100,15 @@ export default function AdminLogin() {
           <Alert variant="destructive" className="my-4 text-right">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>{error}</AlertDescription>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="mt-2 mr-auto" 
+              onClick={handleClearAndRetry}
+              disabled={isLoading}
+            >
+              <RefreshCw className="h-3 w-3 mr-1" /> נקה ונסה שוב
+            </Button>
           </Alert>
         )}
         
