@@ -24,57 +24,35 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
-  // Clear site storage for development purpose
-  // Remove this for production build
   useEffect(() => {
-    const clearStorageOnce = () => {
+    const initializeAuth = async () => {
       try {
-        if (!localStorage.getItem('admin-auth-cleared')) {
-          console.log("⚠️ Development: Clearing auth state on initial load");
-          supabase.auth.signOut();
-          localStorage.setItem('admin-auth-cleared', 'true');
-        }
-      } catch (e) {
-        console.error("Storage error:", e);
-      }
-    };
-    
-    // Only run this in development mode
-    if (import.meta.env.DEV) {
-      clearStorageOnce();
-    }
-  }, []);
+        // First set up auth state listener
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, currentSession) => {
+          console.log("Auth state changed:", event, currentSession?.user?.id);
+          
+          setSession(currentSession);
+          setUser(currentSession?.user ?? null);
+          
+          if (event === 'SIGNED_OUT') {
+            console.log("User signed out, clearing state");
+            setSession(null);
+            setUser(null);
+            setAdminUser(null);
+            setLoading(false);
+            return;
+          }
 
-  useEffect(() => {
-    // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, currentSession) => {
-      console.log("Auth state changed:", event, currentSession?.user?.id);
-      
-      setSession(currentSession);
-      setUser(currentSession?.user ?? null);
-      
-      if (event === 'SIGNED_OUT') {
-        console.log("User signed out, clearing state");
-        setSession(null);
-        setUser(null);
-        setAdminUser(null);
-        setLoading(false);
-        return;
-      }
+          if (currentSession?.user) {
+            await fetchAdminUser(currentSession.user.id);
+          } else {
+            setAdminUser(null);
+            setLoading(false);
+          }
+        });
 
-      if (currentSession?.user) {
-        await fetchAdminUser(currentSession.user.id);
-      } else {
-        setAdminUser(null);
-        setLoading(false);
-      }
-    });
-
-    // THEN check for existing session
-    const getSession = async () => {
-      try {
+        // Then check for existing session
         console.log("Checking for existing session...");
-        setLoading(true);
         const { data: { session: currentSession } } = await supabase.auth.getSession();
         console.log("Current session:", currentSession);
         
@@ -88,17 +66,15 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           console.log("No session found");
           setLoading(false);
         }
+
+        return () => subscription.unsubscribe();
       } catch (error) {
-        console.error('Error getting session:', error);
+        console.error('Error in initialization:', error);
         setLoading(false);
       }
     };
 
-    getSession();
-
-    return () => {
-      subscription.unsubscribe();
-    };
+    initializeAuth();
   }, []);
 
   const fetchAdminUser = async (userId: string) => {
@@ -135,9 +111,6 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     
     try {
       console.log("Signing in with email:", email);
-      
-      // Clear any existing session first to prevent conflicts
-      await supabase.auth.signOut();
       
       const { data, error: authError } = await supabase.auth.signInWithPassword({ 
         email, 

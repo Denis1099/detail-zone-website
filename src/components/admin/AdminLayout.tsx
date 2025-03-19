@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAdminAuth } from '@/contexts/AdminAuthContext';
@@ -9,6 +10,7 @@ import {
   Menu,
   X,
   Image,
+  ExternalLink
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetTrigger, SheetContent } from '@/components/ui/sheet';
@@ -73,14 +75,24 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
             <p className="text-xs text-muted-foreground">מחובר כ:</p>
             <p className="font-medium truncate">{adminUser?.email}</p>
           </div>
-          <Button 
-            variant="outline" 
-            className="w-full justify-end" 
-            onClick={handleSignOut}
-          >
-            <span>התנתק</span>
-            <LogOut className="ml-2 h-4 w-4" />
-          </Button>
+          <div className="flex flex-col gap-2">
+            <Button 
+              variant="outline" 
+              className="w-full justify-end" 
+              onClick={() => window.open('/', '_blank')}
+            >
+              <span>צפה באתר</span>
+              <ExternalLink className="ml-2 h-4 w-4" />
+            </Button>
+            <Button 
+              variant="outline" 
+              className="w-full justify-end" 
+              onClick={handleSignOut}
+            >
+              <span>התנתק</span>
+              <LogOut className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </aside>
 
@@ -115,14 +127,24 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
               <p className="text-xs text-muted-foreground">מחובר כ:</p>
               <p className="font-medium truncate">{adminUser?.email}</p>
             </div>
-            <Button 
-              variant="outline" 
-              className="w-full justify-end" 
-              onClick={handleSignOut}
-            >
-              <span>התנתק</span>
-              <LogOut className="ml-2 h-4 w-4" />
-            </Button>
+            <div className="flex flex-col gap-2">
+              <Button 
+                variant="outline" 
+                className="w-full justify-end" 
+                onClick={() => window.open('/', '_blank')}
+              >
+                <span>צפה באתר</span>
+                <ExternalLink className="ml-2 h-4 w-4" />
+              </Button>
+              <Button 
+                variant="outline" 
+                className="w-full justify-end" 
+                onClick={handleSignOut}
+              >
+                <span>התנתק</span>
+                <LogOut className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
           </div>
         </SheetContent>
       </Sheet>
@@ -132,6 +154,17 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
         <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 lg:px-6">
           <div className="lg:hidden w-8" /> {/* Placeholder for mobile menu button */}
           <h1 className="text-lg font-semibold lg:hidden">פאנל ניהול</h1>
+          <div className="ml-auto">
+            <Button
+              variant="outline"
+              size="sm"
+              className="hidden md:inline-flex"
+              onClick={() => window.open('/', '_blank')}
+            >
+              <span>צפה באתר</span>
+              <ExternalLink className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
         </header>
         <main className="flex-1 p-4 lg:p-6">
           {children}
@@ -139,6 +172,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
       </div>
     </div>
   );
-};
+}
 
 export default AdminLayout;

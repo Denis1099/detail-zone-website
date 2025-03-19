@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useAdminAuth } from '@/contexts/AdminAuthContext';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
@@ -16,17 +16,6 @@ export default function AdminLogin() {
   const { signIn, isAuthenticated, loading: authLoading } = useAdminAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
-  
-  // Force clear site data in development
-  useEffect(() => {
-    try {
-      if (import.meta.env.DEV) {
-        localStorage.removeItem('admin-auth-cleared');
-      }
-    } catch (e) {
-      console.error("Storage error:", e);
-    }
-  }, []);
 
   // Only redirect if authentication is complete and successful
   if (isAuthenticated && !authLoading) {
