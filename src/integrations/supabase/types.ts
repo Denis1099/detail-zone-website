@@ -30,6 +30,33 @@ export type Database = {
         }
         Relationships: []
       }
+      gallery_items: {
+        Row: {
+          after: string
+          before: string
+          color: string
+          created_at: string
+          id: number
+          label: string
+        }
+        Insert: {
+          after: string
+          before: string
+          color: string
+          created_at?: string
+          id?: number
+          label: string
+        }
+        Update: {
+          after?: string
+          before?: string
+          color?: string
+          created_at?: string
+          id?: number
+          label?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
