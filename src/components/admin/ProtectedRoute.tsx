@@ -11,8 +11,16 @@ export default function ProtectedRoute() {
   useEffect(() => {
     // Check current session on component mount
     const checkSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      console.log("Current session in ProtectedRoute:", data.session);
+      try {
+        const { data, error } = await supabase.auth.getSession();
+        if (error) {
+          console.error("Error checking session:", error);
+          return;
+        }
+        console.log("Current session in ProtectedRoute:", data.session);
+      } catch (error) {
+        console.error("Exception checking session:", error);
+      }
     };
     
     checkSession();

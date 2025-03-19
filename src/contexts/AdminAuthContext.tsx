@@ -28,6 +28,16 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     // Set up auth state listener FIRST to catch all auth events
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, currentSession) => {
       console.log("Auth state changed:", event, currentSession?.user?.id);
+      
+      if (event === 'SIGNED_OUT') {
+        console.log("User signed out, clearing state");
+        setSession(null);
+        setUser(null);
+        setAdminUser(null);
+        setLoading(false);
+        return;
+      }
+      
       setSession(currentSession);
       setUser(currentSession?.user ?? null);
 
@@ -42,14 +52,19 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     // THEN check for existing session
     const getSession = async () => {
       try {
+        console.log("Checking for existing session...");
         setLoading(true);
         const { data: { session: currentSession } } = await supabase.auth.getSession();
+        console.log("Current session:", currentSession);
+        
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
         
         if (currentSession?.user) {
+          console.log("Session found, fetching admin user data");
           await fetchAdminUser(currentSession.user.id);
         } else {
+          console.log("No session found");
           setLoading(false);
         }
       } catch (error) {
@@ -121,7 +136,7 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         .eq('id', data.user.id)
         .maybeSingle(); // Using maybeSingle instead of single
       
-      console.log("Admin lookup result:", adminData, adminError);
+      console.log("Admin lookup result:", adminData);
       
       if (adminError) {
         console.error("Admin lookup error:", adminError);
@@ -130,10 +145,12 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       }
       
       if (!adminData) {
+        console.log("User is not an admin, signing out");
         await supabase.auth.signOut();
         throw new Error('משתמש זה אינו מנהל. אנא ודא את סטטוס המנהל שלך.');
       }
       
+      console.log("Admin authentication successful");
       setAdminUser(adminData as AdminUser);
       toast({
         title: 'ברוך שובך!',
@@ -157,6 +174,7 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   };
 
   const signOut = async () => {
+    console.log("Signing out...");
     setLoading(true);
     try {
       await supabase.auth.signOut();
@@ -168,6 +186,7 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         description: 'התנתקת בהצלחה.',
       });
     } catch (error: any) {
+      console.error("Signout error:", error);
       toast({
         variant: 'destructive',
         title: 'שגיאה',
