@@ -1,11 +1,12 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
-import { beforeAfterPairs, colorMap, CarColor, BeforeAfterPairWithColor } from '@/data/gallery';
+import { colorMap, CarColor, BeforeAfterPairWithColor } from '@/data/gallery';
 import GalleryItemForm from '@/components/admin/gallery/GalleryItemForm';
 import GalleryItemList from '@/components/admin/gallery/GalleryItemList';
 import { uploadGalleryImage } from '@/utils/galleryUpload';
+import { supabase } from '@/lib/supabase';
 
 interface GalleryItem {
   id?: number;
@@ -18,7 +19,7 @@ interface GalleryItem {
 }
 
 export default function GalleryEditor() {
-  const [galleryItems, setGalleryItems] = useState<BeforeAfterPairWithColor[]>(beforeAfterPairs);
+  const [galleryItems, setGalleryItems] = useState<BeforeAfterPairWithColor[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [currentItem, setCurrentItem] = useState<GalleryItem>({
     before: '',
@@ -31,7 +32,39 @@ export default function GalleryEditor() {
   const [beforePreview, setBeforePreview] = useState<string | null>(null);
   const [afterPreview, setAfterPreview] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingItems, setIsLoadingItems] = useState(true);
   const { toast } = useToast();
+
+  // Fetch gallery items from Supabase when the component mounts
+  useEffect(() => {
+    fetchGalleryItems();
+  }, []);
+
+  const fetchGalleryItems = async () => {
+    setIsLoadingItems(true);
+    try {
+      const { data, error } = await supabase
+        .from('gallery_items')
+        .select('*')
+        .order('id', { ascending: false });
+
+      if (error) {
+        throw error;
+      }
+
+      console.log('Fetched gallery items:', data);
+      setGalleryItems(data || []);
+    } catch (error: any) {
+      console.error('Error fetching gallery items:', error);
+      toast({
+        variant: 'destructive',
+        title: 'שגיאה',
+        description: `שגיאה בטעינת פריטי הגלריה: ${error.message}`,
+      });
+    } finally {
+      setIsLoadingItems(false);
+    }
+  };
 
   const resetForm = () => {
     setCurrentItem({
@@ -124,31 +157,43 @@ export default function GalleryEditor() {
         afterUrl = result.url;
       }
       
-      const updatedItem: BeforeAfterPairWithColor = {
-        id: currentItem.id || Math.max(0, ...galleryItems.map(item => item.id || 0)) + 1,
+      const itemToSave = {
         before: beforeUrl,
         after: afterUrl,
         label: currentItem.label,
         color: currentItem.color as Exclude<CarColor, "all">
       };
       
-      if (isEditing) {
-        const updatedItems = galleryItems.map(item => 
-          item.id === updatedItem.id ? updatedItem : item
-        );
-        setGalleryItems(updatedItems);
+      if (isEditing && currentItem.id) {
+        // Update existing item
+        const { error } = await supabase
+          .from('gallery_items')
+          .update(itemToSave)
+          .eq('id', currentItem.id);
+          
+        if (error) throw error;
+        
         toast({
           title: 'פריט עודכן',
           description: 'פריט הגלריה עודכן בהצלחה',
         });
       } else {
-        setGalleryItems([...galleryItems, updatedItem]);
+        // Create new item
+        const { error, data } = await supabase
+          .from('gallery_items')
+          .insert(itemToSave)
+          .select();
+          
+        if (error) throw error;
+        
         toast({
           title: 'פריט נוסף',
           description: 'פריט הגלריה נוסף בהצלחה',
         });
       }
       
+      // Refresh the gallery items
+      await fetchGalleryItems();
       resetForm();
     } catch (error: any) {
       toast({
@@ -161,12 +206,29 @@ export default function GalleryEditor() {
     }
   };
 
-  const handleDelete = (id: number) => {
-    setGalleryItems(galleryItems.filter(item => item.id !== id));
-    toast({
-      title: 'פריט נמחק',
-      description: 'פריט הגלריה נמחק בהצלחה',
-    });
+  const handleDelete = async (id: number) => {
+    try {
+      const { error } = await supabase
+        .from('gallery_items')
+        .delete()
+        .eq('id', id);
+        
+      if (error) throw error;
+      
+      // Update local state to reflect deletion
+      setGalleryItems(galleryItems.filter(item => item.id !== id));
+      
+      toast({
+        title: 'פריט נמחק',
+        description: 'פריט הגלריה נמחק בהצלחה',
+      });
+    } catch (error: any) {
+      toast({
+        variant: 'destructive',
+        title: 'שגיאה',
+        description: `מחיקת פריט נכשלה: ${error.message}`,
+      });
+    }
   };
 
   return (
@@ -203,11 +265,17 @@ export default function GalleryEditor() {
             <CardTitle>רשימת פריטי גלריה</CardTitle>
           </CardHeader>
           <CardContent>
-            <GalleryItemList
-              galleryItems={galleryItems}
-              onEdit={handleEditItem}
-              onDelete={handleDelete}
-            />
+            {isLoadingItems ? (
+              <div className="flex justify-center py-10">
+                <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
+              </div>
+            ) : (
+              <GalleryItemList
+                galleryItems={galleryItems}
+                onEdit={handleEditItem}
+                onDelete={handleDelete}
+              />
+            )}
           </CardContent>
         </Card>
       </div>
