@@ -16,7 +16,7 @@ export const detailingPosts: BlogPost[] = [
     • טיפול בכתמים עיקשים
     • ייבוש מבוקר למניעת ריחות רעים`,
     date: "2024-03-14",
-    imageUrl: "https://images.unsplash.com/photo-1507136566006-cfc505b114fc?q=80&w=1374&auto=format&fit=crop",
+    imageUrl: "/lovable-uploads/services/service2.webp",
     serviceSlug: "interior-detailing",
     readTime: 4
   },
@@ -34,7 +34,7 @@ export const detailingPosts: BlogPost[] = [
     • זיהוי אזורים בעייתיים
     • מדידת עובי הצבע`,
     date: "2024-03-10",
-    imageUrl: "https://images.unsplash.com/photo-1601362840469-51e4d8d58785?q=80&w=1470&auto=format&fit=crop",
+    imageUrl: "/lovable-uploads/services/service6.webp",
     serviceSlug: "paint-correction",
     readTime: 5
   }
