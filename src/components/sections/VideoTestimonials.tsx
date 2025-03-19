@@ -2,11 +2,10 @@
 import { motion } from "framer-motion";
 
 export const VideoTestimonials = () => {
-  // YouTube short links converted to embed format
+  // YouTube short links converted to embed format, with the specified video removed
   const videoLinks = [
     "https://www.youtube.com/embed/d9yHOep_dcY",
     "https://www.youtube.com/embed/-JaYsFr35ok",
-    "https://www.youtube.com/embed/-4P6NBADNPU",
     "https://www.youtube.com/embed/vMyqMDwLSP4",
     "https://www.youtube.com/embed/yCuDjwdbXcU"
   ];
@@ -35,7 +34,7 @@ export const VideoTestimonials = () => {
           </motion.h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        <div className="grid grid-cols-2 gap-4 md:gap-6">
           {videoLinks.map((videoUrl, index) => (
             <motion.div
               key={index}
