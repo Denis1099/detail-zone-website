@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { Star } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type AnimatedCounterProps = {
   end: number;
@@ -42,6 +43,8 @@ const AnimatedCounter = ({ end, duration = 3000, suffix = "" }: AnimatedCounterP
 };
 
 export const CounterSection = () => {
+  const isMobile = useIsMobile();
+
   return (
     <section className="bg-black relative h-[33vh] flex flex-col items-center justify-center text-center px-4 overflow-hidden" dir="rtl">
       {/* Background pattern */}
@@ -56,11 +59,19 @@ export const CounterSection = () => {
         transition={{ duration: 0.6 }}
         viewport={{ once: true }}
       >
-        <p className="text-xl md:text-2xl text-text mb-8 leading-relaxed">
-          טיפלנו במעל ל-<AnimatedCounter end={2000} /> רכבים 
-          ב-<AnimatedCounter end={6} /> שנות עבודה 
-          עם <AnimatedCounter end={98} suffix="%" /> אחוזי שביעות רצון.
-        </p>
+        {isMobile ? (
+          <p className="text-xl md:text-2xl text-text mb-8 leading-relaxed flex flex-col gap-2">
+            <span>טיפלנו במעל ל-<AnimatedCounter end={2000} /> רכבים</span> 
+            <span>ב-<AnimatedCounter end={6} /> שנות עבודה</span> 
+            <span>עם <AnimatedCounter end={98} suffix="%" /> אחוזי שביעות רצון.</span>
+          </p>
+        ) : (
+          <p className="text-xl md:text-2xl text-text mb-8 leading-relaxed">
+            טיפלנו במעל ל-<AnimatedCounter end={2000} /> רכבים 
+            ב-<AnimatedCounter end={6} /> שנות עבודה 
+            עם <AnimatedCounter end={98} suffix="%" /> אחוזי שביעות רצון.
+          </p>
+        )}
 
         <div className="mt-4 flex justify-center">
           {Array(5).fill(0).map((_, index) => (

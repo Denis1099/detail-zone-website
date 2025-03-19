@@ -1,6 +1,7 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type CounterProps = {
   end: number;
@@ -48,6 +49,8 @@ const Counter = ({
 };
 
 export const AboutUs = () => {
+  const isMobile = useIsMobile();
+
   return <section className=" flex flex-col justify-between bg-gradient-to-b from-black to-card  relative overflow-hidden" id="about" dir="rtl">
       {/* Subtle background pattern */}
       <div className="absolute inset-0 opacity-5 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0iI2ZmZiIgZmlsbC1ydWxlPSJldmVub2RkIj48Y2lyY2xlIGN4PSIxIiBjeT0iMSIgcj0iMSIvPjwvZz48L3N2Zz4=')] pointer-events-none">
@@ -109,6 +112,20 @@ export const AboutUs = () => {
                 מומחי הדיטיילינג שלנו מתמחים בטיפול ברכבים חדשים ורכבי יוקרה, ומבטיחים להם הגנה מושלמת, ברק אינסופי ועמידות ארוכת טווח בעזרת חומרים מהשורה הראשונה.                </p>
               </div>
 
+              {isMobile && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.5 }}
+                  viewport={{ once: true }}
+                  className="flex justify-center items-center my-6"
+                >
+                  <div className="rounded-xl overflow-hidden shadow-lg w-full max-w-sm aspect-[4/5]">
+                    <img src="/lovable-uploads/daniel.png" alt="מומחה דיטיילינג מטפל ברכב" className="w-full h-full object-cover object-top" />
+                  </div>
+                </motion.div>
+              )}
+
               <div>
                 <h3 className="text-xl md:text-2xl font-bold mb-2 text-text">
                 למה לבחור ב-DetailZone?
@@ -143,23 +160,25 @@ export const AboutUs = () => {
             </div>
           </motion.div>
 
-          {/* Right column - Images */}
-          <motion.div initial={{
-          opacity: 0,
-          x: 30
-        }} whileInView={{
-          opacity: 1,
-          x: 0
-        }} transition={{
-          duration: 0.6,
-          delay: 0.5
-        }} viewport={{
-          once: true
-        }} className="flex justify-center items-center">
-            <div className="rounded-xl overflow-hidden shadow-lg w-full max-w-sm aspect-[4/5]">
-              <img src="/lovable-uploads/daniel.png" alt="מומחה דיטיילינג מטפל ברכב" className="w-full h-full object-cover object-top" />
-            </div>
-          </motion.div>
+          {/* Right column - Images - Only shown on non-mobile */}
+          {!isMobile && (
+            <motion.div initial={{
+              opacity: 0,
+              x: 30
+            }} whileInView={{
+              opacity: 1,
+              x: 0
+            }} transition={{
+              duration: 0.6,
+              delay: 0.5
+            }} viewport={{
+              once: true
+            }} className="flex justify-center items-center">
+              <div className="rounded-xl overflow-hidden shadow-lg w-full max-w-sm aspect-[4/5]">
+                <img src="/lovable-uploads/daniel.png" alt="מומחה דיטיילינג מטפל ברכב" className="w-full h-full object-cover object-top" />
+              </div>
+            </motion.div>
+          )}
         </div>
 
         {/* Stats section */}
