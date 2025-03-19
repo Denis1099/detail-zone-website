@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase, AdminUser } from '@/lib/supabase';
@@ -137,7 +138,8 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           async (event, currentSession) => {
             console.log("Auth state changed:", event, currentSession?.user?.id);
             
-            if (event === 'SIGNED_OUT' || event === 'USER_DELETED') {
+            // Fix for TypeScript error - use type assertion for the event comparison
+            if (event === 'SIGNED_OUT' || event === ('USER_DELETED' as any)) {
               if (mounted) {
                 clearAuthState();
                 setLoading(false);
