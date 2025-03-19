@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAdminAuth } from '@/contexts/AdminAuthContext';
@@ -6,11 +5,9 @@ import {
   LayoutDashboard,
   FileEdit,
   Store,
-  Settings,
+  LogOut,
   Menu,
   X,
-  LogOut,
-  Upload,
   Image,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -25,7 +22,7 @@ const navItems = [
   { path: '/admin/dashboard', label: 'לוח בקרה', icon: LayoutDashboard },
   { path: '/admin/blog', label: 'פוסטים בבלוג', icon: FileEdit },
   { path: '/admin/shop', label: 'פריטי חנות', icon: Store },
-  { path: '/admin/services', label: 'שירותים', icon: Settings },
+  { path: '/admin/gallery', label: 'גלריה', icon: Image },
   { path: '/admin/media', label: 'ספריית מדיה', icon: Image },
 ];
 

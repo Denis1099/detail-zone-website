@@ -17,7 +17,7 @@ import AdminLogin from "./pages/admin/Login";
 import AdminDashboard from "./pages/admin/Dashboard";
 import BlogEditor from "./pages/admin/BlogEditor";
 import ShopEditor from "./pages/admin/ShopEditor";
-import ServicesEditor from "./pages/admin/ServicesEditor";
+import GalleryEditor from "./pages/admin/GalleryEditor";
 import MediaLibrary from "./pages/admin/MediaLibrary";
 import Gallery from "./pages/Gallery";
 import Cart from "./pages/Cart";
@@ -120,8 +120,8 @@ const router = createBrowserRouter([
         element: <ShopEditor />,
       },
       {
-        path: "/admin/services",
-        element: <ServicesEditor />,
+        path: "/admin/gallery",
+        element: <GalleryEditor />,
       },
       {
         path: "/admin/media",
