@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase, AdminUser } from '@/lib/supabase';
@@ -24,63 +23,17 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
-  useEffect(() => {
-    const initializeAuth = async () => {
-      try {
-        // First set up auth state listener
-        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, currentSession) => {
-          console.log("Auth state changed:", event, currentSession?.user?.id);
-          
-          setSession(currentSession);
-          setUser(currentSession?.user ?? null);
-          
-          if (event === 'SIGNED_OUT') {
-            console.log("User signed out, clearing state");
-            setSession(null);
-            setUser(null);
-            setAdminUser(null);
-            setLoading(false);
-            return;
-          }
+  // Function to clear all auth state
+  const clearAuthState = () => {
+    setSession(null);
+    setUser(null);
+    setAdminUser(null);
+  };
 
-          if (currentSession?.user) {
-            await fetchAdminUser(currentSession.user.id);
-          } else {
-            setAdminUser(null);
-            setLoading(false);
-          }
-        });
-
-        // Then check for existing session
-        console.log("Checking for existing session...");
-        const { data: { session: currentSession } } = await supabase.auth.getSession();
-        console.log("Current session:", currentSession);
-        
-        setSession(currentSession);
-        setUser(currentSession?.user ?? null);
-        
-        if (currentSession?.user) {
-          console.log("Session found, fetching admin user data");
-          await fetchAdminUser(currentSession.user.id);
-        } else {
-          console.log("No session found");
-          setLoading(false);
-        }
-
-        return () => subscription.unsubscribe();
-      } catch (error) {
-        console.error('Error in initialization:', error);
-        setLoading(false);
-      }
-    };
-
-    initializeAuth();
-  }, []);
-
-  const fetchAdminUser = async (userId: string) => {
+  // Improved function to fetch admin user with retry logic
+  const fetchAdminUser = async (userId: string, retryCount = 0): Promise<AdminUser | null> => {
     try {
       console.log("Fetching admin user for ID:", userId);
-      setLoading(true);
       
       const { data, error } = await supabase
         .from('admin_users')
@@ -90,21 +43,134 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       
       if (error) {
         console.error('Error fetching admin user:', error);
-        setAdminUser(null);
-      } else if (!data) {
+        
+        // Retry logic for network errors (max 2 retries)
+        if (retryCount < 2 && (error.code === 'NETWORK_ERROR' || error.code?.includes('timeout'))) {
+          console.log(`Retrying admin user fetch (attempt ${retryCount + 1})...`);
+          return await fetchAdminUser(userId, retryCount + 1);
+        }
+        
+        return null;
+      } 
+      
+      if (!data) {
         console.log("No admin user found for ID:", userId);
-        setAdminUser(null);
-      } else {
-        console.log("Admin user data found:", data);
-        setAdminUser(data as AdminUser);
+        return null;
       }
+      
+      console.log("Admin user data found:", data);
+      return data as AdminUser;
     } catch (error) {
       console.error('Error in fetchAdminUser:', error);
-      setAdminUser(null);
-    } finally {
-      setLoading(false);
+      return null;
     }
   };
+
+  // Handle session changes systematically
+  const handleSessionChange = async (newSession: Session | null) => {
+    console.log("Handling session change, session exists:", !!newSession);
+    
+    setSession(newSession);
+    setUser(newSession?.user ?? null);
+    
+    if (newSession?.user) {
+      try {
+        // Fetch admin user data
+        const adminData = await fetchAdminUser(newSession.user.id);
+        setAdminUser(adminData);
+        
+        if (!adminData) {
+          console.warn("User authenticated but no admin record found - logging out");
+          // Only sign out if this wasn't triggered by a sign-out operation
+          if (newSession) {
+            await supabase.auth.signOut();
+            clearAuthState();
+            toast({
+              variant: 'destructive',
+              title: 'גישה נדחתה',
+              description: 'משתמש זה אינו מנהל. אנא ודא את סטטוס המנהל שלך.',
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Error handling session change:", error);
+        // Don't auto-sign out on errors here to prevent login loops
+      }
+    } else {
+      setAdminUser(null);
+    }
+    
+    setLoading(false);
+  };
+
+  // Set up auth state management
+  useEffect(() => {
+    let mounted = true;
+    
+    const initializeAuth = async () => {
+      try {
+        console.log("Initializing auth state...");
+        setLoading(true);
+        
+        // First, get the current session
+        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+        
+        if (sessionError) {
+          console.error("Error getting session:", sessionError);
+          if (mounted) {
+            clearAuthState();
+            setLoading(false);
+          }
+          return;
+        }
+        
+        // Process the initial session
+        if (mounted && sessionData.session) {
+          await handleSessionChange(sessionData.session);
+        } else if (mounted) {
+          clearAuthState();
+          setLoading(false);
+        }
+        
+        // Set up the auth state change listener
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(
+          async (event, currentSession) => {
+            console.log("Auth state changed:", event, currentSession?.user?.id);
+            
+            if (event === 'SIGNED_OUT' || event === 'USER_DELETED') {
+              if (mounted) {
+                clearAuthState();
+                setLoading(false);
+              }
+              return;
+            }
+            
+            if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+              if (mounted && currentSession) {
+                await handleSessionChange(currentSession);
+              }
+            }
+          }
+        );
+        
+        return () => {
+          subscription.unsubscribe();
+        };
+      } catch (error) {
+        console.error('Error in auth initialization:', error);
+        if (mounted) {
+          clearAuthState();
+          setLoading(false);
+        }
+      }
+    };
+    
+    initializeAuth();
+    
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const signIn = async (email: string, password: string) => {
     setLoading(true);
@@ -112,6 +178,13 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     try {
       console.log("Signing in with email:", email);
       
+      // Clear any existing auth state first
+      clearAuthState();
+      
+      // First, sign out to ensure a clean state (fixes many token issues)
+      await supabase.auth.signOut();
+      
+      // Attempt sign in
       const { data, error: authError } = await supabase.auth.signInWithPassword({ 
         email, 
         password 
@@ -128,28 +201,21 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       console.log("Auth successful for user ID:", data.user.id);
       
       // Check if user is admin
-      const { data: adminData, error: adminError } = await supabase
-        .from('admin_users')
-        .select('*')
-        .eq('id', data.user.id)
-        .maybeSingle();
-      
-      console.log("Admin lookup result:", adminData);
-      
-      if (adminError) {
-        console.error("Admin lookup error:", adminError);
-        await supabase.auth.signOut();
-        throw new Error(`שגיאת מסד נתונים: ${adminError.message}`);
-      }
+      const adminData = await fetchAdminUser(data.user.id);
       
       if (!adminData) {
         console.log("User is not an admin, signing out");
         await supabase.auth.signOut();
+        clearAuthState();
         throw new Error('משתמש זה אינו מנהל. אנא ודא את סטטוס המנהל שלך.');
       }
       
+      // Update state with authenticated user
+      setSession(data.session);
+      setUser(data.user);
+      setAdminUser(adminData);
+      
       console.log("Admin authentication successful");
-      setAdminUser(adminData as AdminUser);
       
       toast({
         title: 'ברוך שובך!',
@@ -158,14 +224,17 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       
     } catch (error: any) {
       console.error("Login error:", error);
+      
+      // Ensure we're in a clean state
       await supabase.auth.signOut();
-      setAdminUser(null);
+      clearAuthState();
       
       toast({
         variant: 'destructive',
         title: 'שגיאת אימות',
         description: error.message || 'ההתחברות נכשלה',
       });
+      
       throw error;
     } finally {
       setLoading(false);
@@ -175,17 +244,22 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const signOut = async () => {
     console.log("Signing out...");
     setLoading(true);
+    
     try {
+      // Clear browser storage to prevent stale token issues
       await supabase.auth.signOut();
-      setSession(null);
-      setUser(null);
-      setAdminUser(null);
+      clearAuthState();
+      
       toast({
         title: 'התנתקת',
         description: 'התנתקת בהצלחה.',
       });
     } catch (error: any) {
       console.error("Signout error:", error);
+      
+      // Force clear state even on errors
+      clearAuthState();
+      
       toast({
         variant: 'destructive',
         title: 'שגיאה',
