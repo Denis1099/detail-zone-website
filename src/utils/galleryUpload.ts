@@ -29,8 +29,7 @@ export async function uploadGalleryImage(
     
     console.log(`Uploading file: ${fileName}, size: ${file.size} bytes, type: ${file.type}`);
     
-    // Force cache busting
-    await supabase.storage.refreshBucket('admin-uploads');
+    // Remove the refreshBucket call which isn't supported in the SDK
     
     // Add cache busting to prevent stale data
     const { error: uploadError, data } = await supabase.storage
