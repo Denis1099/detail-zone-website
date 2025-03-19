@@ -53,7 +53,16 @@ export default function GalleryEditor() {
       }
 
       console.log('Fetched gallery items:', data);
-      setGalleryItems(data || []);
+      // Convert database string colors to CarColor type
+      const typedItems: BeforeAfterPairWithColor[] = data?.map(item => ({
+        id: item.id,
+        before: item.before,
+        after: item.after,
+        label: item.label,
+        color: item.color as CarColor
+      })) || [];
+      
+      setGalleryItems(typedItems);
     } catch (error: any) {
       console.error('Error fetching gallery items:', error);
       toast({
