@@ -15,7 +15,7 @@ export const maintenancePosts: BlogPost[] = [
     • שקיפות מוחלטת
     • אחריות ארוכת טווח`,
     date: "2024-03-11",
-    imageUrl: "/lovable-uploads/services/service5.webp",
+    imageUrl: "https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?q=80&w=1470&auto=format&fit=crop",
     serviceSlug: "ppf-protection",
     readTime: 4
   },
@@ -34,7 +34,7 @@ export const maintenancePosts: BlogPost[] = [
     • חידוש פנסים במידת הצורך
     • טיפול בג'אנטים`,
     date: "2024-03-09",
-    imageUrl: "/lovable-uploads/services/service7.webp",
+    imageUrl: "https://images.unsplash.com/photo-1439337153520-7082a56a81f4?q=80&w=1470&auto=format&fit=crop",
     serviceSlug: "pre-sale",
     readTime: 4
   },
@@ -52,7 +52,7 @@ export const maintenancePosts: BlogPost[] = [
     • שימוש בטכניקות מתקדמות
     • התאמת צבע מדויקת`,
     date: "2024-03-08",
-    imageUrl: "/lovable-uploads/services/service8.webp",
+    imageUrl: "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?q=80&w=1374&auto=format&fit=crop",
     serviceSlug: "paint-repair",
     readTime: 4
   }

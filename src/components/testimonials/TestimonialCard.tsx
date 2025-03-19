@@ -1,98 +1,96 @@
 
-import { Testimonial } from "@/data/testimonials";
+import React from "react";
+import { Card } from "@/components/ui/card";
 import { Star } from "lucide-react";
-import { CSSProperties } from "react";
+import { Testimonial } from "@/data/testimonials";
 
 interface TestimonialCardProps {
   testimonial: Testimonial;
+  style: React.CSSProperties;
   isActive: boolean;
-  style: CSSProperties;
   onClick: () => void;
   isDragging: boolean;
 }
 
-export const TestimonialCard = ({
-  testimonial,
-  isActive,
-  style,
-  onClick,
-  isDragging,
+export const TestimonialCard = ({ 
+  testimonial, 
+  style, 
+  isActive, 
+  onClick, 
+  isDragging 
 }: TestimonialCardProps) => {
-  const { rating, text, name, profileImage, vehicleImage, videoUrl } = testimonial;
-
   return (
     <div
-      className={`absolute inset-0 transition-all duration-300 rounded-xl shadow-xl overflow-hidden bg-background/10 backdrop-blur-md border border-accent/20 
-        ${isActive ? "z-10 opacity-100" : "opacity-60 hover:opacity-75"}`}
-      style={style}
+      className="absolute top-0 left-0 right-0 carousel-card-transition will-change-transform"
+      style={{
+        ...style,
+        transformOrigin: "center center",
+        cursor: isDragging ? "grabbing" : "grab",
+      }}
       onClick={onClick}
-      role="button"
-      aria-pressed={isActive}
-      tabIndex={isActive ? 0 : -1}
+      role="group"
+      aria-roledescription="slide"
+      aria-label={`חוות דעת של ${testimonial.name}`}
+      aria-hidden={!isActive}
     >
-      <div
-        className={`h-full w-full p-5 pt-4 flex flex-col gap-6 overflow-y-auto`}
-        onClick={(e) => isDragging && e.stopPropagation()}
-      >
-        {/* Profile information and rating */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <div className="h-12 w-12 rounded-full overflow-hidden mr-3">
-              <img
-                src={profileImage}
-                alt={name}
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div>
-              <p className="font-bold text-white text-sm">{name}</p>
-              <div className="flex mt-1">
-                {Array.from({ length: 5 }).map((_, index) => (
-                  <Star
-                    key={index}
-                    className={`h-3 w-3 ${
-                      index < rating ? "text-primary fill-primary" : "text-gray-400"
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Testimonial text */}
-        <div className="flex-grow">
-          <p className="text-white/90 text-sm md:text-base leading-relaxed">
-            {text}
-          </p>
-        </div>
-
-        {/* YouTube video if available */}
-        {videoUrl && isActive && (
-          <div className="relative aspect-video w-full rounded-lg overflow-hidden mb-2">
-            <iframe
-              src={videoUrl}
-              title={`Testimonial video by ${name}`}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="absolute top-0 left-0 w-full h-full border-0"
-            ></iframe>
-          </div>
-        )}
-
-        {/* Vehicle image */}
-        <div
-          className={`w-full h-auto rounded-lg overflow-hidden ${
-            videoUrl && isActive ? "hidden" : "block"
-          }`}
-        >
+      <Card className="glass-card w-full max-w-[20rem] mx-auto h-[580px] md:h-[620px] bg-gradient-to-br from-purple-500/20 to-orange-400/20 backdrop-blur-md border border-white/10 shadow-xl relative">
+        {/* Vehicle Image - Fixed height */}
+        <div className="w-full h-52 md:h-52 rounded-t-lg overflow-hidden">
           <img
-            src={vehicleImage}
-            alt="Vehicle after treatment"
-            className="w-full h-auto object-cover rounded-lg"
+            src={testimonial.vehicleImage || '/api/placeholder/320/250'}
+            alt={`רכב של ${testimonial.name}`}
+            className="w-full h-full object-cover"
+            style={{ objectPosition: 'center' }}
+            draggable="false"
+            loading="lazy"
           />
         </div>
-      </div>
+        <div className="p-4 md:p-6 pt-3 md:pt-4 flex flex-col h-[320px] md:h-[320px] justify-between">
+          {/* Testimonial Text */}
+          <div className="mb-8">
+            <p className="testimonial-quote text-gray-300 text-center text-sm md:text-base max-w-80 mx-auto">
+              {testimonial.text}
+            </p>
+          </div>
+
+          <div className="mt-auto pb-4">
+            {/* Rating Stars */}
+            <div className="flex items-center justify-center mb-6 max-w-80 mx-auto">
+              {[...Array(5)].map((_, i) => (
+                <Star
+                  key={i}
+                  className={`h-5 w-5 md:h-6 md:w-6 ${
+                    i < testimonial.rating 
+                      ? "text-primary fill-primary"
+                      : "text-gray-600"
+                  }`}
+                  aria-hidden="true"
+                />
+              ))}
+              <span className="sr-only">דירוג {testimonial.rating} מתוך 5</span>
+            </div>
+            
+            {/* Profile Image */}
+            <div className="flex justify-center mb-2">
+              <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden shadow-md border-2 border-white/20">
+                <img
+                  src={testimonial.profileImage || '/api/placeholder/200/200'}
+                  alt=""
+                  className="w-full h-full object-cover"
+                  draggable="false"
+                  loading="lazy"
+                  aria-hidden="true"
+                />
+              </div>
+            </div>
+            
+            {/* Profile name */}
+            <div className="font-medium text-center text-base md:text-lg">
+              {testimonial.name}
+            </div>
+          </div>
+        </div>
+      </Card>
     </div>
   );
-}
+};
