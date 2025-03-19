@@ -21,8 +21,8 @@ const Index = () => {
       <AboutUs />
       <Services />
       <Testimonials />
-      <VideoTestimonials />
       <Portfolio />
+      <VideoTestimonials />
       <CTAForm />
       <MoreDetails />
       <Footer />
