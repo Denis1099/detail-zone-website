@@ -17,13 +17,13 @@ export type CarColor =
   | "blue" 
   | "gray";
 
-// Map of color names to hex values for the UI
+// Map of color names to hex values for the UI, using our theme colors
 export const colorMap: Record<Exclude<CarColor, "all">, string> = {
-  white: "#fff1e1",
-  black: "#000000",
+  white: "#fff1e1", // text color in theme
+  black: "#000000", // background color in theme
   silver: "#c8c8c9",
   red: "#ea384c",
-  blue: "#1babbb",
+  blue: "#1babbb", // primary color in theme
   gray: "#8E9196",
 };
 

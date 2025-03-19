@@ -52,7 +52,7 @@ const GalleryItemForm: React.FC<GalleryItemFormProps> = ({
   return (
     <form onSubmit={onSubmit} className="space-y-4">
       <div>
-        <label htmlFor="label" className="block text-sm font-medium">
+        <label htmlFor="label" className="block text-sm font-medium text-text">
           שם הרכב
         </label>
         <Input
@@ -60,25 +60,25 @@ const GalleryItemForm: React.FC<GalleryItemFormProps> = ({
           value={currentItem.label}
           onChange={(e) => setCurrentItem({...currentItem, label: e.target.value})}
           placeholder="שם הרכב"
-          className="mt-1"
+          className="mt-1 border-secondary/20 bg-background focus-visible:ring-primary"
           required
         />
       </div>
       
       <div>
-        <label htmlFor="color" className="block text-sm font-medium">
+        <label htmlFor="color" className="block text-sm font-medium text-text">
           צבע הרכב
         </label>
         <Select
           value={currentItem.color}
           onValueChange={(value) => setCurrentItem({...currentItem, color: value as Exclude<CarColor, "all">})}
         >
-          <SelectTrigger className="mt-1">
+          <SelectTrigger className="mt-1 border-secondary/20 bg-background focus-visible:ring-primary">
             <SelectValue placeholder="בחר צבע" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-background border-secondary/20">
             {Object.entries(colorMap).map(([key, value]) => (
-              <SelectItem key={key} value={key}>
+              <SelectItem key={key} value={key} className="focus:bg-primary/20">
                 <div className="flex items-center">
                   <div 
                     className="w-4 h-4 rounded-full mr-2" 
@@ -99,11 +99,11 @@ const GalleryItemForm: React.FC<GalleryItemFormProps> = ({
       
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <label htmlFor="before" className="block text-sm font-medium">
+          <label htmlFor="before" className="block text-sm font-medium text-text">
             תמונת לפני
           </label>
           <div className="mt-1 flex items-center">
-            <label className="flex cursor-pointer items-center rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm hover:bg-accent">
+            <label className="flex cursor-pointer items-center rounded-md border border-secondary/20 bg-background px-3 py-2 text-sm shadow-sm hover:bg-secondary/10">
               <Upload className="ml-2 h-4 w-4" />
               <span>{currentItem.beforeFile || currentItem.before ? 'שנה תמונה' : 'העלה תמונה'}</span>
               <Input
@@ -117,7 +117,7 @@ const GalleryItemForm: React.FC<GalleryItemFormProps> = ({
           </div>
           {beforePreview && (
             <div className="mt-4">
-              <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-input">
+              <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-secondary/20">
                 <img
                   src={beforePreview}
                   alt="תצוגה מקדימה לפני"
@@ -129,11 +129,11 @@ const GalleryItemForm: React.FC<GalleryItemFormProps> = ({
         </div>
         
         <div>
-          <label htmlFor="after" className="block text-sm font-medium">
+          <label htmlFor="after" className="block text-sm font-medium text-text">
             תמונת אחרי
           </label>
           <div className="mt-1 flex items-center">
-            <label className="flex cursor-pointer items-center rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm hover:bg-accent">
+            <label className="flex cursor-pointer items-center rounded-md border border-secondary/20 bg-background px-3 py-2 text-sm shadow-sm hover:bg-secondary/10">
               <Upload className="ml-2 h-4 w-4" />
               <span>{currentItem.afterFile || currentItem.after ? 'שנה תמונה' : 'העלה תמונה'}</span>
               <Input
@@ -147,7 +147,7 @@ const GalleryItemForm: React.FC<GalleryItemFormProps> = ({
           </div>
           {afterPreview && (
             <div className="mt-4">
-              <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-input">
+              <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-secondary/20">
                 <img
                   src={afterPreview}
                   alt="תצוגה מקדימה אחרי"
@@ -165,12 +165,14 @@ const GalleryItemForm: React.FC<GalleryItemFormProps> = ({
           variant="outline"
           onClick={onCancel}
           disabled={isLoading}
+          className="border-secondary/20 hover:bg-secondary/10 text-text"
         >
           ביטול
         </Button>
         <Button
           type="submit"
           disabled={isLoading}
+          className="bg-primary hover:bg-primary/90 text-text"
         >
           {isLoading ? (
             <>

@@ -53,13 +53,13 @@ export default function GalleryEditor() {
       }
 
       console.log('Fetched gallery items:', data);
-      // Convert database string colors to CarColor type
+      // Convert database string colors to CarColor type with explicit type casting
       const typedItems: BeforeAfterPairWithColor[] = data?.map(item => ({
         id: item.id,
         before: item.before,
         after: item.after,
         label: item.label,
-        color: item.color as CarColor
+        color: item.color as CarColor // Explicit type cast to CarColor
       })) || [];
       
       setGalleryItems(typedItems);
@@ -248,11 +248,11 @@ export default function GalleryEditor() {
       </div>
       
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>{isEditing ? 'עריכת פריט גלריה' : 'הוספת פריט גלריה חדש'}</CardTitle>
+        <Card className="border-secondary/20 bg-background/95">
+          <CardHeader className="border-b border-secondary/10">
+            <CardTitle className="text-accent">{isEditing ? 'עריכת פריט גלריה' : 'הוספת פריט גלריה חדש'}</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-6">
             <GalleryItemForm
               currentItem={currentItem}
               setCurrentItem={setCurrentItem}
@@ -269,11 +269,11 @@ export default function GalleryEditor() {
           </CardContent>
         </Card>
         
-        <Card>
-          <CardHeader>
-            <CardTitle>רשימת פריטי גלריה</CardTitle>
+        <Card className="border-secondary/20 bg-background/95">
+          <CardHeader className="border-b border-secondary/10">
+            <CardTitle className="text-accent">רשימת פריטי גלריה</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-6">
             {isLoadingItems ? (
               <div className="flex justify-center py-10">
                 <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>

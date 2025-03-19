@@ -118,7 +118,7 @@ export const BeforeAfterSlider = ({ before, after, label }: BeforeAfterSliderPro
         >
           {/* Label */}
           {label && (
-            <div className="absolute top-3 right-3 z-30 bg-black/70 px-3 py-1 rounded-full text-white text-sm font-medium">
+            <div className="absolute top-3 right-3 z-30 bg-background/80 px-3 py-1 rounded-full text-text text-sm font-medium border border-secondary/20">
               {label}
             </div>
           )}
@@ -131,7 +131,7 @@ export const BeforeAfterSlider = ({ before, after, label }: BeforeAfterSliderPro
             }}
           >
             {/* "Before" Label */}
-            <div className="absolute bottom-3 right-3 bg-red-500/80 px-2 py-0.5 rounded text-white text-xs font-medium">
+            <div className="absolute bottom-3 right-3 bg-secondary/80 px-2 py-0.5 rounded text-text text-xs font-medium">
               לפני
             </div>
           </div>
@@ -145,19 +145,19 @@ export const BeforeAfterSlider = ({ before, after, label }: BeforeAfterSliderPro
             }}
           >
             {/* "After" Label */}
-            <div className="absolute bottom-3 left-3 bg-green-500/80 px-2 py-0.5 rounded text-white text-xs font-medium">
+            <div className="absolute bottom-3 left-3 bg-accent/80 px-2 py-0.5 rounded text-background text-xs font-medium">
               אחרי
             </div>
           </div>
           
           {/* Divider line */}
           <div 
-            className="absolute top-0 bottom-0 w-1 bg-white z-10"
+            className="absolute top-0 bottom-0 w-0.5 bg-text z-10"
             style={{ right: `${position}%` }}
           >
             {/* Handle with bidirectional arrow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-primary rounded-full flex items-center justify-center shadow-md">
-              <span className="text-white font-bold text-sm">&lt;&gt;</span>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-primary rounded-full flex items-center justify-center shadow-md border-2 border-text">
+              <span className="text-text font-bold text-sm">&lt;&gt;</span>
             </div>
           </div>
         </div>

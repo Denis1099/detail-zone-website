@@ -1,6 +1,6 @@
 
 import { motion } from "framer-motion";
-import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
+import { BeforeAfterSlider } from "@/components/gallery/BeforeAfterSlider";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { BeforeAfterPairWithColor } from "@/data/gallery";
 
@@ -24,10 +24,9 @@ export const GalleryGrid = ({ items }: GalleryGridProps) => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="hover:scale-[1.02] transition-transform duration-300"
               >
-                <AspectRatio ratio={1} className="w-full">
-                  <BeforeAfterSlider {...pair} />
-                </AspectRatio>
+                <BeforeAfterSlider {...pair} />
               </motion.div>
             ))}
           </div>
