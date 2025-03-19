@@ -6,6 +6,7 @@ export type Testimonial = {
   name: string;
   profileImage: string;
   vehicleImage: string;
+  videoUrl?: string; // Optional YouTube video URL
 };
 
 export const testimonials: Testimonial[] = [
@@ -15,6 +16,7 @@ export const testimonials: Testimonial[] = [
     name: "מתן ניסטור",
     profileImage: "/testimonial-profiles/matan-pfp.webp",
     vehicleImage: "/testimonial-cars/matan-motorcycle.webp",
+    videoUrl: "https://www.youtube.com/embed/xJ0IBzCjEPk",
   },
   {
     rating: 5,
@@ -22,6 +24,7 @@ export const testimonials: Testimonial[] = [
     name: "פז פליישר",
     profileImage: "/testimonial-profiles/paz-pfp.webp",
     vehicleImage: "/testimonial-cars/paz-car.webp",
+    videoUrl: "https://www.youtube.com/embed/RbSlW8jZFe8",
   },
   {
     rating: 5,
@@ -29,6 +32,7 @@ export const testimonials: Testimonial[] = [
     name: "יקיר אבעדי",
     profileImage: "/testimonial-profiles/yakir-pfp.webp",
     vehicleImage: "/testimonial-cars/yakir-car.webp",
+    videoUrl: "https://www.youtube.com/embed/VIowoSW6qlA",
   },
   {
     rating: 5,
@@ -43,6 +47,7 @@ export const testimonials: Testimonial[] = [
     name: "אור רם",
     profileImage: "/testimonial-profiles/or-ram-pfp.webp",
     vehicleImage: "/testimonial-cars/or-car.webp",
+    videoUrl: "https://www.youtube.com/embed/DxQpKQHaRBw",
   },
   {
     rating: 5,
@@ -57,5 +62,6 @@ export const testimonials: Testimonial[] = [
     name: "יוחאי מנדבי",
     profileImage: "/testimonial-profiles/yohai-pfp.webp",
     vehicleImage: "/testimonial-cars/yohai-car.webp",
+    videoUrl: "https://www.youtube.com/embed/ZDXw12lUrXM",
   },
 ];

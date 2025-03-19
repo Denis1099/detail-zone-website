@@ -29,13 +29,24 @@ export const Navbar = () => {
     };
   }, []);
 
+  const scrollToSection = (sectionId: string) => {
+    setIsMenuOpen(false);
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   const NavLinks = () => (
     <>
       <Button variant="ghost" asChild>
         <Link to="/">בית</Link>
       </Button>
-      <Button variant="ghost" asChild>
-        <Link to="/about">אודות</Link>
+      <Button 
+        variant="ghost" 
+        onClick={() => scrollToSection('about')}
+      >
+        אודות
       </Button>
       <Button variant="ghost" asChild>
         <Link to="/blog">בלוג</Link>
