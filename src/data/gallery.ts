@@ -3,6 +3,7 @@ import { BeforeAfterPair } from "./portfolio";
 
 // Add color information to each before/after pair
 export interface BeforeAfterPairWithColor extends BeforeAfterPair {
+  id?: number; // Add optional id property
   color: CarColor;
 }
 
@@ -29,36 +30,42 @@ export const colorMap: Record<Exclude<CarColor, "all">, string> = {
 // Use the same data from portfolio but add color information
 export const beforeAfterPairs: BeforeAfterPairWithColor[] = [
   {
+    id: 1,
     before: "/lovable-uploads/before-after/mercedes-jeep-before.webp",
     after: "/lovable-uploads/before-after/mercedes-jeep-after.webp",
     label: "מרצדס AMG GLE",
     color: "black"
   },
   {
+    id: 2,
     before: "/lovable-uploads/before-after/seat-before.webp",
     after: "/lovable-uploads/before-after/seat-after.webp",
     label: "סיאט",
     color: "white"
   },
   {
+    id: 3,
     before: "/lovable-uploads/before-after/rover-before.webp",
     after: "/lovable-uploads/before-after/rover-after.webp",
     label: "ריינג׳ רובר ספורט",
     color: "gray"
   },
   {
+    id: 4,
     before: "/lovable-uploads/before-after/kia-before.webp",
     after: "/lovable-uploads/before-after/kia-after.webp",
     label: "קיה",
     color: "silver"
   },
   {
+    id: 5,
     before: "/lovable-uploads/before-after/infinity-back-before.webp",
     after: "/lovable-uploads/before-after/infinity-back-after.webp",
     label: "אינפיניטי",
     color: "blue"
   },
   {
+    id: 6,
     before: "/lovable-uploads/before-after/byd-before.webp",
     after: "/lovable-uploads/before-after/byd-after.webp",
     label: "BYD",

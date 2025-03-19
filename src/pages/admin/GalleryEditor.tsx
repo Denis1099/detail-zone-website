@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -6,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
 import { Save, Trash2, Edit, Upload, Plus } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
-import { beforeAfterPairs, colorMap, CarColor } from '@/data/gallery';
+import { beforeAfterPairs, colorMap, CarColor, BeforeAfterPairWithColor } from '@/data/gallery';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface GalleryItem {
@@ -20,7 +19,7 @@ interface GalleryItem {
 }
 
 export default function GalleryEditor() {
-  const [galleryItems, setGalleryItems] = useState(beforeAfterPairs);
+  const [galleryItems, setGalleryItems] = useState<BeforeAfterPairWithColor[]>(beforeAfterPairs);
   const [isEditing, setIsEditing] = useState(false);
   const [currentItem, setCurrentItem] = useState<GalleryItem>({
     before: '',
@@ -81,12 +80,12 @@ export default function GalleryEditor() {
     }
   };
 
-  const handleEditItem = (item: any) => {
+  const handleEditItem = (item: BeforeAfterPairWithColor) => {
     setCurrentItem({
       id: item.id,
       before: item.before,
       after: item.after,
-      label: item.label,
+      label: item.label || '',
       color: item.color,
       beforeFile: null,
       afterFile: null
@@ -104,7 +103,6 @@ export default function GalleryEditor() {
       let beforeUrl = currentItem.before;
       let afterUrl = currentItem.after;
       
-      // Upload before image if selected
       if (currentItem.beforeFile) {
         const fileExt = currentItem.beforeFile.name.split('.').pop();
         const fileName = `before-after/${currentItem.label}-before-${Date.now()}.${fileExt}`;
@@ -124,7 +122,6 @@ export default function GalleryEditor() {
         beforeUrl = data.publicUrl;
       }
       
-      // Upload after image if selected
       if (currentItem.afterFile) {
         const fileExt = currentItem.afterFile.name.split('.').pop();
         const fileName = `before-after/${currentItem.label}-after-${Date.now()}.${fileExt}`;
@@ -144,8 +141,8 @@ export default function GalleryEditor() {
         afterUrl = data.publicUrl;
       }
       
-      const updatedItem = {
-        id: currentItem.id || galleryItems.length + 1,
+      const updatedItem: BeforeAfterPairWithColor = {
+        id: currentItem.id || Math.max(0, ...galleryItems.map(item => item.id || 0)) + 1,
         before: beforeUrl,
         after: afterUrl,
         label: currentItem.label,
@@ -153,7 +150,6 @@ export default function GalleryEditor() {
       };
       
       if (isEditing) {
-        // Update existing item
         const updatedItems = galleryItems.map(item => 
           item.id === updatedItem.id ? updatedItem : item
         );
@@ -163,7 +159,6 @@ export default function GalleryEditor() {
           description: 'פריט הגלריה עודכן בהצלחה',
         });
       } else {
-        // Add new item
         setGalleryItems([...galleryItems, updatedItem]);
         toast({
           title: 'פריט נוסף',
