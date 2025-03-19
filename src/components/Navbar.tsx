@@ -46,6 +46,9 @@ export const Navbar = () => {
         אודות
       </Button>
       <Button variant="ghost" asChild>
+        <Link to="/gallery">עבודות</Link>
+      </Button>
+      <Button variant="ghost" asChild>
         <Link to="/blog">בלוג</Link>
       </Button>
       <Button variant="ghost" asChild>
