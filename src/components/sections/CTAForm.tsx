@@ -41,8 +41,8 @@ export const CTAForm = ({ formId = "main-page" }: CTAFormProps) => {
               dir="rtl"
             />
             <Button className="w-full" size="lg">
-              <ChevronLeft className="ml-2 h-4 w-4" />
               שלח פרטים
+              <ChevronLeft className="mr-2 h-4 w-4" />
             </Button>
           </form>
         </Card>

@@ -54,7 +54,7 @@ export const MoreDetails = () => {
               {/* Social Links */}
               <div>
                 <p className="font-medium mb-4">עקבו אחרינו</p>
-                <div className="flex flex-col items-start gap-3">
+                <div className="flex items-center gap-3">
                   <Button size="icon" variant="ghost" className="hover:text-[#000000]" asChild>
                     <a href="https://www.tiktok.com/@danieldetailzone" target="_blank" rel="noopener noreferrer">
                       <TikTokIcon className="h-5 w-5" />

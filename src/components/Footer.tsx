@@ -27,9 +27,9 @@ export const Footer = () => {
             </ul>
           </div>
 
-          <div className="text-right">
+          <div className="flex flex-col items-end">
             <h3 className="font-bold mb-4">עקבו אחרינו</h3>
-            <div className="flex flex-col items-end gap-4">
+            <div className="flex flex-col items-center gap-4">
               <a href="https://www.tiktok.com/@danieldetailzone" target="_blank" rel="noopener noreferrer" className="hover:text-primary p-2 rounded-full hover:bg-white/5 transition-colors">
                 <TikTokIcon className="h-6 w-6" />
               </a>
