@@ -2,9 +2,21 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAdminAuth } from '@/contexts/AdminAuthContext';
 import AdminLayout from '@/components/admin/AdminLayout';
+import { useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
 
 export default function ProtectedRoute() {
   const { isAuthenticated, loading } = useAdminAuth();
+
+  useEffect(() => {
+    // Check current session on component mount
+    const checkSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      console.log("Current session in ProtectedRoute:", data.session);
+    };
+    
+    checkSession();
+  }, []);
 
   if (loading) {
     return (
@@ -15,6 +27,7 @@ export default function ProtectedRoute() {
   }
 
   if (!isAuthenticated) {
+    console.log("User not authenticated, redirecting to login");
     return <Navigate to="/admin/login" replace />;
   }
 

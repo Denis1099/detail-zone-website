@@ -22,18 +22,33 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [user, setUser] = useState<User | null>(null);
   const [adminUser, setAdminUser] = useState<AdminUser | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
+    // Set up auth state listener FIRST to catch all auth events
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, currentSession) => {
+      console.log("Auth state changed:", event, currentSession?.user?.id);
+      setSession(currentSession);
+      setUser(currentSession?.user ?? null);
+
+      if (currentSession?.user) {
+        await fetchAdminUser(currentSession.user.id);
+      } else {
+        setAdminUser(null);
+        setLoading(false);
+      }
+    });
+
+    // THEN check for existing session
     const getSession = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
-        setSession(session);
-        setUser(session?.user ?? null);
+        setLoading(true);
+        const { data: { session: currentSession } } = await supabase.auth.getSession();
+        setSession(currentSession);
+        setUser(currentSession?.user ?? null);
         
-        if (session?.user) {
-          await fetchAdminUser(session.user.id);
+        if (currentSession?.user) {
+          await fetchAdminUser(currentSession.user.id);
         } else {
           setLoading(false);
         }
@@ -44,19 +59,6 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     };
 
     getSession();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log("Auth state changed:", event, session?.user?.id);
-      setSession(session);
-      setUser(session?.user ?? null);
-
-      if (session?.user) {
-        await fetchAdminUser(session.user.id);
-      } else {
-        setAdminUser(null);
-        setLoading(false);
-      }
-    });
 
     return () => {
       subscription.unsubscribe();
@@ -72,7 +74,7 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         .from('admin_users')
         .select('*')
         .eq('id', userId)
-        .single();
+        .maybeSingle(); // Using maybeSingle instead of single to avoid errors if no match
       
       if (error) {
         console.error('Error fetching admin user:', error);
@@ -94,7 +96,6 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
   const signIn = async (email: string, password: string) => {
     setLoading(true);
-    setError(null);
     
     try {
       console.log("Signing in with email:", email);
@@ -118,7 +119,7 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         .from('admin_users')
         .select('*')
         .eq('id', data.user.id)
-        .single();
+        .maybeSingle(); // Using maybeSingle instead of single
       
       console.log("Admin lookup result:", adminData, adminError);
       
