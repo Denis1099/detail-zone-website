@@ -29,6 +29,9 @@ export async function uploadGalleryImage(
     
     console.log(`Uploading file: ${fileName}, size: ${file.size} bytes, type: ${file.type}`);
     
+    // Force cache busting
+    await supabase.storage.refreshBucket('admin-uploads');
+    
     // Add cache busting to prevent stale data
     const { error: uploadError, data } = await supabase.storage
       .from('admin-uploads')
@@ -45,7 +48,7 @@ export async function uploadGalleryImage(
     
     console.log('Upload successful, getting public URL for', fileName);
     
-    // Add a timestamp parameter to prevent caching of the URL
+    // Make sure to refresh the CDN cache
     const { data: urlData } = supabase.storage
       .from('admin-uploads')
       .getPublicUrl(fileName, {

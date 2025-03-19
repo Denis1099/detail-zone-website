@@ -24,10 +24,34 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
+  // Clear site storage for development purpose
+  // Remove this for production build
   useEffect(() => {
-    // Set up auth state listener FIRST to catch all auth events
+    const clearStorageOnce = () => {
+      try {
+        if (!localStorage.getItem('admin-auth-cleared')) {
+          console.log("⚠️ Development: Clearing auth state on initial load");
+          supabase.auth.signOut();
+          localStorage.setItem('admin-auth-cleared', 'true');
+        }
+      } catch (e) {
+        console.error("Storage error:", e);
+      }
+    };
+    
+    // Only run this in development mode
+    if (import.meta.env.DEV) {
+      clearStorageOnce();
+    }
+  }, []);
+
+  useEffect(() => {
+    // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, currentSession) => {
       console.log("Auth state changed:", event, currentSession?.user?.id);
+      
+      setSession(currentSession);
+      setUser(currentSession?.user ?? null);
       
       if (event === 'SIGNED_OUT') {
         console.log("User signed out, clearing state");
@@ -37,9 +61,6 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         setLoading(false);
         return;
       }
-      
-      setSession(currentSession);
-      setUser(currentSession?.user ?? null);
 
       if (currentSession?.user) {
         await fetchAdminUser(currentSession.user.id);
@@ -89,7 +110,7 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         .from('admin_users')
         .select('*')
         .eq('id', userId)
-        .maybeSingle(); // Using maybeSingle instead of single to avoid errors if no match
+        .maybeSingle();
       
       if (error) {
         console.error('Error fetching admin user:', error);
@@ -114,6 +135,10 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     
     try {
       console.log("Signing in with email:", email);
+      
+      // Clear any existing session first to prevent conflicts
+      await supabase.auth.signOut();
+      
       const { data, error: authError } = await supabase.auth.signInWithPassword({ 
         email, 
         password 
@@ -134,7 +159,7 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         .from('admin_users')
         .select('*')
         .eq('id', data.user.id)
-        .maybeSingle(); // Using maybeSingle instead of single
+        .maybeSingle();
       
       console.log("Admin lookup result:", adminData);
       
@@ -152,6 +177,7 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       
       console.log("Admin authentication successful");
       setAdminUser(adminData as AdminUser);
+      
       toast({
         title: 'ברוך שובך!',
         description: 'התחברת בהצלחה.',

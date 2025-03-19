@@ -2,29 +2,9 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAdminAuth } from '@/contexts/AdminAuthContext';
 import AdminLayout from '@/components/admin/AdminLayout';
-import { useEffect } from 'react';
-import { supabase } from '@/lib/supabase';
 
 export default function ProtectedRoute() {
   const { isAuthenticated, loading } = useAdminAuth();
-
-  useEffect(() => {
-    // Check current session on component mount
-    const checkSession = async () => {
-      try {
-        const { data, error } = await supabase.auth.getSession();
-        if (error) {
-          console.error("Error checking session:", error);
-          return;
-        }
-        console.log("Current session in ProtectedRoute:", data.session);
-      } catch (error) {
-        console.error("Exception checking session:", error);
-      }
-    };
-    
-    checkSession();
-  }, []);
 
   if (loading) {
     return (
