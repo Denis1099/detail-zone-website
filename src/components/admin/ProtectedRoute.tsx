@@ -1,6 +1,6 @@
 
 import { Navigate, Outlet } from 'react-router-dom';
-import { useAdminAuth } from '@/contexts/AdminAuthContext';
+import { useAdminAuth } from '@/hooks/useAdminAuth';
 import AdminLayout from '@/components/admin/AdminLayout';
 
 export default function ProtectedRoute() {

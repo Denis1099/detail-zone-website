@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileEdit, ShoppingBag, Image, Clock } from 'lucide-react';
-import { useAdminAuth } from '@/contexts/AdminAuthContext';
+import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { Link } from 'react-router-dom';
 
 export default function AdminDashboard() {

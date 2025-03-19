@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useAdminAuth } from '@/contexts/AdminAuthContext';
+import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -17,13 +17,10 @@ export default function AdminLogin() {
   const { toast } = useToast();
   const navigate = useNavigate();
   
-  // Clear any lingering sessions on component mount
   useEffect(() => {
     const clearSession = async () => {
-      // Only clear if not already authenticated
       if (!isAuthenticated && !authLoading) {
         try {
-          // This helps with stale token issues
           await supabase.auth.signOut();
         } catch (error) {
           console.error("Error clearing session:", error);
@@ -34,7 +31,6 @@ export default function AdminLogin() {
     clearSession();
   }, [isAuthenticated, authLoading]);
 
-  // Only redirect if authentication is complete and successful
   if (isAuthenticated && !authLoading) {
     return <Navigate to="/admin/dashboard" replace />;
   }
@@ -55,7 +51,6 @@ export default function AdminLogin() {
     } catch (error: any) {
       console.error("Login error:", error);
       
-      // Handle specific error types with clear messages
       if (error.message?.includes('Invalid login credentials')) {
         setError('פרטי התחברות שגויים. אנא בדוק את האימייל והסיסמה שלך.');
       } else if (error.message?.includes('אינו מנהל')) {
@@ -71,9 +66,7 @@ export default function AdminLogin() {
   const handleClearAndRetry = async () => {
     try {
       setIsLoading(true);
-      // Force sign out to clear any stale tokens
       await signOut();
-      // Clear the form
       setEmail('');
       setPassword('');
       setError(null);

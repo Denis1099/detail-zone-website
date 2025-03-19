@@ -1,21 +1,12 @@
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase, AdminUser } from '@/lib/supabase';
 import { useToast } from '@/components/ui/use-toast';
+import { AdminAuthContextType } from '@/types/admin';
+import { clearAuthState, fetchAdminUser } from '@/utils/adminAuth';
 
-type AdminAuthContextType = {
-  session: Session | null;
-  user: User | null;
-  adminUser: AdminUser | null;
-  loading: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
-  signOut: () => Promise<void>;
-  isAuthenticated: boolean;
-  isSuperAdmin: boolean;
-};
-
-const AdminAuthContext = createContext<AdminAuthContextType | undefined>(undefined);
+export const AdminAuthContext = createContext<AdminAuthContextType | undefined>(undefined);
 
 export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [session, setSession] = useState<Session | null>(null);
@@ -23,49 +14,6 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [adminUser, setAdminUser] = useState<AdminUser | null>(null);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
-
-  // Function to clear all auth state
-  const clearAuthState = () => {
-    setSession(null);
-    setUser(null);
-    setAdminUser(null);
-  };
-
-  // Improved function to fetch admin user with retry logic
-  const fetchAdminUser = async (userId: string, retryCount = 0): Promise<AdminUser | null> => {
-    try {
-      console.log("Fetching admin user for ID:", userId);
-      
-      const { data, error } = await supabase
-        .from('admin_users')
-        .select('*')
-        .eq('id', userId)
-        .maybeSingle();
-      
-      if (error) {
-        console.error('Error fetching admin user:', error);
-        
-        // Retry logic for network errors (max 2 retries)
-        if (retryCount < 2 && (error.code === 'NETWORK_ERROR' || error.code?.includes('timeout'))) {
-          console.log(`Retrying admin user fetch (attempt ${retryCount + 1})...`);
-          return await fetchAdminUser(userId, retryCount + 1);
-        }
-        
-        return null;
-      } 
-      
-      if (!data) {
-        console.log("No admin user found for ID:", userId);
-        return null;
-      }
-      
-      console.log("Admin user data found:", data);
-      return data as AdminUser;
-    } catch (error) {
-      console.error('Error in fetchAdminUser:', error);
-      return null;
-    }
-  };
 
   // Handle session changes systematically
   const handleSessionChange = async (newSession: Session | null) => {
@@ -85,7 +33,7 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           // Only sign out if this wasn't triggered by a sign-out operation
           if (newSession) {
             await supabase.auth.signOut();
-            clearAuthState();
+            clearAuthState(setSession, setUser, setAdminUser);
             toast({
               variant: 'destructive',
               title: 'גישה נדחתה',
@@ -119,7 +67,7 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         if (sessionError) {
           console.error("Error getting session:", sessionError);
           if (mounted) {
-            clearAuthState();
+            clearAuthState(setSession, setUser, setAdminUser);
             setLoading(false);
           }
           return;
@@ -129,7 +77,7 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         if (mounted && sessionData.session) {
           await handleSessionChange(sessionData.session);
         } else if (mounted) {
-          clearAuthState();
+          clearAuthState(setSession, setUser, setAdminUser);
           setLoading(false);
         }
         
@@ -141,7 +89,7 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
             // Fix for TypeScript error - use type assertion for the event comparison
             if (event === 'SIGNED_OUT' || event === ('USER_DELETED' as any)) {
               if (mounted) {
-                clearAuthState();
+                clearAuthState(setSession, setUser, setAdminUser);
                 setLoading(false);
               }
               return;
@@ -161,7 +109,7 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       } catch (error) {
         console.error('Error in auth initialization:', error);
         if (mounted) {
-          clearAuthState();
+          clearAuthState(setSession, setUser, setAdminUser);
           setLoading(false);
         }
       }
@@ -181,7 +129,7 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       console.log("Signing in with email:", email);
       
       // Clear any existing auth state first
-      clearAuthState();
+      clearAuthState(setSession, setUser, setAdminUser);
       
       // First, sign out to ensure a clean state (fixes many token issues)
       await supabase.auth.signOut();
@@ -208,7 +156,7 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       if (!adminData) {
         console.log("User is not an admin, signing out");
         await supabase.auth.signOut();
-        clearAuthState();
+        clearAuthState(setSession, setUser, setAdminUser);
         throw new Error('משתמש זה אינו מנהל. אנא ודא את סטטוס המנהל שלך.');
       }
       
@@ -229,7 +177,7 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       
       // Ensure we're in a clean state
       await supabase.auth.signOut();
-      clearAuthState();
+      clearAuthState(setSession, setUser, setAdminUser);
       
       toast({
         variant: 'destructive',
@@ -250,7 +198,7 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     try {
       // Clear browser storage to prevent stale token issues
       await supabase.auth.signOut();
-      clearAuthState();
+      clearAuthState(setSession, setUser, setAdminUser);
       
       toast({
         title: 'התנתקת',
@@ -260,7 +208,7 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       console.error("Signout error:", error);
       
       // Force clear state even on errors
-      clearAuthState();
+      clearAuthState(setSession, setUser, setAdminUser);
       
       toast({
         variant: 'destructive',
@@ -284,12 +232,4 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   };
 
   return <AdminAuthContext.Provider value={value}>{children}</AdminAuthContext.Provider>;
-};
-
-export const useAdminAuth = () => {
-  const context = useContext(AdminAuthContext);
-  if (context === undefined) {
-    throw new Error('useAdminAuth must be used within an AdminAuthProvider');
-  }
-  return context;
 };
