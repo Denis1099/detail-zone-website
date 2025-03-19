@@ -48,10 +48,10 @@ const Counter = ({
 };
 
 export const AboutUs = () => {
-  return <section className="min-h-screen flex flex-col justify-between bg-gradient-to-b from-black to-card relative overflow-hidden py-6" id="about" dir="rtl">
+  return <section className=" flex flex-col justify-between bg-gradient-to-b from-black to-card  relative overflow-hidden" id="about" dir="rtl">
       {/* Subtle background pattern */}
-      <div className="absolute inset-0 opacity-5 pointer-events-none">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0iI2ZmZiIgZmlsbC1ydWxlPSJldmVub2RkIj48Y2lyY2xlIGN4PSIxIiBjeT0iMSIgcj0iMSIvPjwvZz48L3N2Zz4=')]" />
+      <div className="absolute inset-0 opacity-5 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0iI2ZmZiIgZmlsbC1ydWxlPSJldmVub2RkIj48Y2lyY2xlIGN4PSIxIiBjeT0iMSIgcj0iMSIvPjwvZz48L3N2Zz4=')] pointer-events-none">
+        <div className="absolute inset-0 " />
       </div>
 
       <div className="container mx-auto px-4 flex flex-col h-full">
@@ -66,7 +66,7 @@ export const AboutUs = () => {
           duration: 0.6
         }} viewport={{
           once: true
-        }} className="text-3xl md:text-4xl font-bold text-text mb-2">
+        }} className="text-3xl md:text-4xl font-bold text-text mb-4">
             מי אנחנו?
           </motion.h2>
           <motion.p initial={{
@@ -78,12 +78,12 @@ export const AboutUs = () => {
           delay: 0.2
         }} viewport={{
           once: true
-        }} className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">
+        }} className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto mb-4 md:mb-8">
             צוות מקצועי וניסיון עשיר בתחום הדיטיילינג והטיפוח לרכב
           </motion.p>
         </div>
 
-        <div className="flex-grow grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-8">
+        <div className="flex-grow grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-8 items-center mb-8 md:mb-20">
           {/* Left column - Text content */}
           <motion.div initial={{
           opacity: 0,

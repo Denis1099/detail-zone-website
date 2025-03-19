@@ -57,8 +57,8 @@ export const CounterSection = () => {
         viewport={{ once: true }}
       >
         <p className="text-xl md:text-2xl text-text mb-8 leading-relaxed">
-          טיפלנו במעל ל-<AnimatedCounter end={15000} /> רכבים 
-          ב-<AnimatedCounter end={4} /> שנות עבודה 
+          טיפלנו במעל ל-<AnimatedCounter end={2000} /> רכבים 
+          ב-<AnimatedCounter end={6} /> שנות עבודה 
           עם <AnimatedCounter end={98} suffix="%" /> אחוזי שביעות רצון.
         </p>
 
