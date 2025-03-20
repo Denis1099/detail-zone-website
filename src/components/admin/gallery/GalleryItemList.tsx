@@ -23,17 +23,17 @@ const GalleryItemList: React.FC<GalleryItemListProps> = ({
         </div>
       ) : (
         galleryItems.map((item) => (
-          <div key={item.id} className="flex items-center justify-between rounded-lg border border-secondary/20 p-3 hover:bg-secondary/5 transition-colors">
+          <div key={item.id} className="flex items-center justify-between rounded-lg border p-3 hover:bg-muted/50 transition-colors">
             <div className="flex items-center gap-4">
               <div className="flex space-x-2 rtl:space-x-reverse">
-                <div className="h-12 w-12 overflow-hidden rounded-md border border-secondary/20">
+                <div className="h-12 w-12 overflow-hidden rounded-md border">
                   <img
                     src={item.before}
                     alt={`לפני - ${item.label}`}
                     className="h-full w-full object-cover"
                   />
                 </div>
-                <div className="h-12 w-12 overflow-hidden rounded-md border border-secondary/20">
+                <div className="h-12 w-12 overflow-hidden rounded-md border">
                   <img
                     src={item.after}
                     alt={`אחרי - ${item.label}`}
@@ -42,7 +42,7 @@ const GalleryItemList: React.FC<GalleryItemListProps> = ({
                 </div>
               </div>
               <div className="mr-4">
-                <div className="font-medium text-text">{item.label}</div>
+                <div className="font-medium">{item.label}</div>
                 <div className="text-xs text-muted-foreground flex items-center">
                   <div 
                     className="w-2 h-2 rounded-full mr-1" 
@@ -62,15 +62,14 @@ const GalleryItemList: React.FC<GalleryItemListProps> = ({
                 variant="ghost"
                 size="icon"
                 onClick={() => onEdit(item)}
-                className="hover:bg-primary/20 text-accent"
               >
                 <Edit className="h-4 w-4" />
               </Button>
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-destructive hover:bg-destructive/10 hover:text-destructive"
                 onClick={() => onDelete(item.id!)}
+                className="text-destructive hover:bg-destructive/10 hover:text-destructive"
               >
                 <Trash2 className="h-4 w-4" />
               </Button>

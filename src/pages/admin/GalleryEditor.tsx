@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
-import { colorMap, CarColor, BeforeAfterPairWithColor } from '@/data/gallery';
+import { colorMap, CarColor, BeforeAfterPairWithColor, beforeAfterPairs } from '@/data/gallery';
 import GalleryItemForm from '@/components/admin/gallery/GalleryItemForm';
 import GalleryItemList from '@/components/admin/gallery/GalleryItemList';
 import { uploadGalleryImage } from '@/utils/galleryUpload';
@@ -43,28 +43,39 @@ export default function GalleryEditor() {
   const fetchGalleryItems = async () => {
     setIsLoadingItems(true);
     try {
+      // First try to get items from Supabase
       const { data, error } = await supabase
         .from('gallery_items')
         .select('*')
         .order('id', { ascending: false });
 
       if (error) {
-        throw error;
+        console.error('Error fetching from Supabase:', error);
+        // If there's an error with Supabase, fall back to the local data
+        setGalleryItems(beforeAfterPairs);
+      } else {
+        console.log('Fetched gallery items from Supabase:', data);
+        if (data && data.length > 0) {
+          // Convert database string colors to CarColor type with explicit type casting
+          const typedItems: BeforeAfterPairWithColor[] = data.map(item => ({
+            id: item.id,
+            before: item.before,
+            after: item.after,
+            label: item.label,
+            color: item.color as CarColor
+          }));
+          
+          setGalleryItems(typedItems);
+        } else {
+          // If no items in Supabase, use the local data
+          console.log('No items in Supabase, using local data');
+          setGalleryItems(beforeAfterPairs);
+        }
       }
-
-      console.log('Fetched gallery items:', data);
-      // Convert database string colors to CarColor type with explicit type casting
-      const typedItems: BeforeAfterPairWithColor[] = data?.map(item => ({
-        id: item.id,
-        before: item.before,
-        after: item.after,
-        label: item.label,
-        color: item.color as CarColor // Explicit type cast to CarColor
-      })) || [];
-      
-      setGalleryItems(typedItems);
     } catch (error: any) {
-      console.error('Error fetching gallery items:', error);
+      console.error('Error in fetchGalleryItems:', error);
+      // Fall back to local data in case of any errors
+      setGalleryItems(beforeAfterPairs);
       toast({
         variant: 'destructive',
         title: 'שגיאה',
@@ -248,9 +259,9 @@ export default function GalleryEditor() {
       </div>
       
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <Card className="border-secondary/20 bg-background/95">
-          <CardHeader className="border-b border-secondary/10">
-            <CardTitle className="text-accent">{isEditing ? 'עריכת פריט גלריה' : 'הוספת פריט גלריה חדש'}</CardTitle>
+        <Card>
+          <CardHeader>
+            <CardTitle>{isEditing ? 'עריכת פריט גלריה' : 'הוספת פריט גלריה חדש'}</CardTitle>
           </CardHeader>
           <CardContent className="pt-6">
             <GalleryItemForm
@@ -269,9 +280,9 @@ export default function GalleryEditor() {
           </CardContent>
         </Card>
         
-        <Card className="border-secondary/20 bg-background/95">
-          <CardHeader className="border-b border-secondary/10">
-            <CardTitle className="text-accent">רשימת פריטי גלריה</CardTitle>
+        <Card>
+          <CardHeader>
+            <CardTitle>רשימת פריטי גלריה</CardTitle>
           </CardHeader>
           <CardContent className="pt-6">
             {isLoadingItems ? (
