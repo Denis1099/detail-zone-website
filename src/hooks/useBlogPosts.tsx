@@ -16,6 +16,8 @@ export function useBlogPosts() {
 
   const fetchBlogPosts = async () => {
     try {
+      console.log('Fetching blog posts from Supabase...');
+      
       const { data, error } = await supabase
         .from('blog_posts')
         .select('*')
@@ -46,6 +48,15 @@ export function useBlogPosts() {
         title: 'שגיאה בטעינת הפוסטים',
         description: error.message || 'אירעה שגיאה בטעינת הפוסטים מהמסד נתונים',
       });
+      
+      // Try to load from local data if available
+      try {
+        const { default: localPosts } = await import('@/data/blog/index');
+        console.log('Loading blog posts from local data:', localPosts);
+        setBlogPosts(localPosts);
+      } catch (localError) {
+        console.error('Could not load local blog data:', localError);
+      }
     } finally {
       setIsInitialLoading(false);
     }
@@ -210,3 +221,4 @@ export function useBlogPosts() {
     deleteBlogPost
   };
 }
+

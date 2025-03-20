@@ -16,6 +16,8 @@ export function useProducts() {
 
   const fetchProducts = async () => {
     try {
+      console.log('Fetching products from Supabase...');
+      
       const { data, error } = await supabase
         .from('products')
         .select('*')
@@ -28,6 +30,8 @@ export function useProducts() {
       if (data) {
         console.log('Fetched products:', data);
         setProductsList(data);
+      } else {
+        console.log('No products data returned');
       }
     } catch (error: any) {
       console.error('Error fetching products:', error);
@@ -38,9 +42,13 @@ export function useProducts() {
       });
       
       // Fallback to local data
-      import('@/data/products').then(module => {
-        setProductsList(module.products);
-      });
+      try {
+        const { products } = await import('@/data/products');
+        console.log('Loading products from local data:', products);
+        setProductsList(products);
+      } catch (localError) {
+        console.error('Could not load local product data:', localError);
+      }
     } finally {
       setIsInitialLoading(false);
     }
