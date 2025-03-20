@@ -1,6 +1,6 @@
 
 export interface BlogPost {
-  id: number;
+  id: number | string;
   title: string;
   excerpt: string;
   content: string;

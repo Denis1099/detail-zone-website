@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -54,7 +53,6 @@ export function ProductForm({
   });
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-  // Initialize form with current product data when editing
   useEffect(() => {
     if (currentProduct && isEditing) {
       setFormData({
@@ -72,7 +70,6 @@ export function ProductForm({
       });
       setImagePreview(currentProduct.image);
     } else {
-      // Reset form when not editing
       setFormData({
         id: 0,
         name: '',

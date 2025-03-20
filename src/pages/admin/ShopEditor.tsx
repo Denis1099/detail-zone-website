@@ -45,12 +45,14 @@ export default function ShopEditor() {
       recommended?: boolean;
     },
     isEditing: boolean
-  ) => {
+  ): Promise<boolean> => {
     const success = await saveProduct(productData, isEditing);
     
     if (success) {
       handleResetForm();
     }
+    
+    return success;
   };
 
   return (
