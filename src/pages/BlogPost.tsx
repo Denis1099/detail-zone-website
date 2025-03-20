@@ -13,7 +13,7 @@ import { CTAForm } from "@/components/sections/CTAForm";
 export default function BlogPost() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const post = blogPosts.find(post => post.id === id);
+  const post = blogPosts.find(post => post.id.toString() === id);
   const relatedService = post?.serviceSlug 
     ? services.find(service => service.slug === post.serviceSlug)
     : null;

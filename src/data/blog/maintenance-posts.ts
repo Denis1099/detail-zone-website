@@ -3,7 +3,7 @@ import { BlogPost } from "@/types/blog";
 
 export const maintenancePosts: BlogPost[] = [
   {
-    id: "ppf-protection-guide",
+    id: 3,
     title: "הגנה מקסימלית עם ציפוי PPF",
     excerpt: "כל מה שצריך לדעת על ציפוי PPF להגנה משריטות",
     content: `ציפוי PPF (Paint Protection Film) הוא פתרון ההגנה המתקדם ביותר לצבע הרכב. השכבה השקופה מספקת הגנה מקסימלית מפני שריטות, אבנים מתעופפות ופגעי מזג האוויר.
@@ -20,7 +20,7 @@ export const maintenancePosts: BlogPost[] = [
     readTime: 4
   },
   {
-    id: "pre-sale-preparation",
+    id: 4,
     title: "הכנת רכב למכירה",
     excerpt: "איך להעלות את ערך הרכב לפני מכירה",
     content: `הכנת רכב למכירה היא תהליך קריטי שיכול להשפיע משמעותית על מחיר המכירה הסופי. תהליך הכנה מקצועי מאפשר להציג את הרכב במיטבו ולמקסם את ערך המכירה.
@@ -39,7 +39,7 @@ export const maintenancePosts: BlogPost[] = [
     readTime: 4
   },
   {
-    id: "paint-repair-guide",
+    id: 5,
     title: "תיקוני צבע מקצועיים",
     excerpt: "מדריך לתיקון פגמים בצבע הרכב",
     content: `תיקוני צבע מקצועיים הם תחום מומחיות המצריך ידע, ניסיון וציוד מתקדם. תיקון נכון יכול להעלים לחלוטין פגמים בצבע ולשמור על ערך הרכב.
