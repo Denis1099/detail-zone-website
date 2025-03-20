@@ -99,12 +99,12 @@ export function useBlogPosts() {
       
       if (isEditing && postId) {
         // Update existing post - handle both string and number types for postId
-        const query = supabase
+        const postIdNum = typeof postId === 'string' ? parseInt(postId, 10) : postId;
+        
+        const { error } = await supabase
           .from('blog_posts')
-          .update(blogData);
-          
-        // Filter by ID using type-safe approach
-        const { error } = await query.eq('id', postId.toString());
+          .update(blogData)
+          .eq('id', postIdNum);
           
         if (error) throw error;
         
@@ -175,10 +175,12 @@ export function useBlogPosts() {
   const deleteBlogPost = async (id: number | string) => {
     try {
       // Handle both string and number types for id
+      const idNum = typeof id === 'string' ? parseInt(id, 10) : id;
+      
       const { error } = await supabase
         .from('blog_posts')
         .delete()
-        .eq('id', id.toString());
+        .eq('id', idNum);
         
       if (error) throw error;
       
