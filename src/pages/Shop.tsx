@@ -1,23 +1,25 @@
 
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ShoppingCart } from "lucide-react";
-import { Link } from "react-router-dom";
-import { Navbar } from "@/components/Navbar";
-import { useCart } from "@/hooks/useCart";
-import { Badge } from "@/components/ui/badge";
 import { useState, useEffect } from "react";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
+import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { supabase } from "@/lib/supabase";
 import { Product } from "@/types/products";
 import { useToast } from "@/components/ui/use-toast";
-import { Footer } from "@/components/Footer";
-import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { ProductList } from "@/components/products/ProductList";
+import { ProductFilters, FilterOptions } from "@/components/products/ProductFilters";
+import { ShopPagination } from "@/components/products/ShopPagination";
 
 export default function Shop() {
-  const { addToCart } = useCart();
   const [products, setProducts] = useState<Product[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 9;
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -34,6 +36,13 @@ export default function Shop() {
         if (data) {
           console.log('Fetched products:', data);
           setProducts(data);
+          setFilteredProducts(data);
+          
+          // Extract unique categories
+          const uniqueCategories = Array.from(
+            new Set(data.map(product => product.category).filter(Boolean))
+          ) as string[];
+          setCategories(uniqueCategories);
         }
       } catch (error: any) {
         console.error('Error fetching products:', error);
@@ -46,6 +55,13 @@ export default function Shop() {
         // Fallback to local data
         import('@/data/products').then(module => {
           setProducts(module.products);
+          setFilteredProducts(module.products);
+          
+          // Extract unique categories from local data
+          const uniqueCategories = Array.from(
+            new Set(module.products.map(product => product.category).filter(Boolean))
+          ) as string[];
+          setCategories(uniqueCategories);
         });
       } finally {
         setIsLoading(false);
@@ -54,6 +70,43 @@ export default function Shop() {
 
     fetchProducts();
   }, [toast]);
+
+  const handleFilter = (filterOptions: FilterOptions) => {
+    setCurrentPage(1); // Reset to first page when filtering
+    
+    const filtered = products.filter(product => {
+      // Apply search filter
+      const matchesSearch = filterOptions.search 
+        ? product.name.toLowerCase().includes(filterOptions.search.toLowerCase()) ||
+          product.description.toLowerCase().includes(filterOptions.search.toLowerCase())
+        : true;
+      
+      // Apply category filter
+      const matchesCategory = filterOptions.category 
+        ? product.category === filterOptions.category
+        : true;
+      
+      // Apply discount filter
+      const matchesDiscount = filterOptions.onlyDiscount 
+        ? (product.discount_percent || 0) > 0
+        : true;
+      
+      // Apply recommended filter
+      const matchesRecommended = filterOptions.onlyRecommended 
+        ? product.recommended
+        : true;
+      
+      return matchesSearch && matchesCategory && matchesDiscount && matchesRecommended;
+    });
+    
+    setFilteredProducts(filtered);
+  };
+
+  // Get current products for pagination
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -64,74 +117,27 @@ export default function Shop() {
           <p className="text-muted-foreground">מוצרי טיפול מקצועיים לרכב שלך</p>
         </div>
         
-        {isLoading ? (
-          <div className="flex justify-center py-10">
-            <div className="h-12 w-12 rounded-full border-4 border-primary border-t-transparent animate-spin"></div>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="md:col-span-1">
+            <ProductFilters 
+              onFilter={handleFilter} 
+              categories={categories} 
+            />
           </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {products.map((product) => (
-              <Card key={product.id} className="flex flex-col">
-                <div className="relative">
-                  <Link to={`/shop/${product.id}`}>
-                    <div className="aspect-square relative rounded-lg overflow-hidden m-4">
-                      <img 
-                        src={product.image}
-                        alt={product.name}
-                        className="object-cover w-full h-full"
-                      />
-                    </div>
-                  </Link>
-                  {product.recommended && (
-                    <Badge className="absolute top-6 right-6 bg-yellow-500 text-black px-3 py-1 text-sm font-bold">מומלץ</Badge>
-                  )}
-                  {product.discount_percent > 0 && (
-                    <Badge className="absolute top-6 left-6 bg-primary text-white px-3 py-1 text-sm font-bold">
-                      {product.discount_percent}% הנחה
-                    </Badge>
-                  )}
-                </div>
-                
-                <CardHeader>
-                  <CardTitle>
-                    <div className="select-text">{product.name}</div>
-                  </CardTitle>
-                </CardHeader>
-                
-                <CardContent className="flex-grow">
-                  <div className="text-muted-foreground select-text">{product.description}</div>
-                </CardContent>
-                
-                <CardFooter className="flex justify-between items-center">
-                  <div>
-                    {product.discount_percent > 0 ? (
-                      <div className="flex flex-col">
-                        <span className="text-muted-foreground line-through text-sm">₪{product.price}</span>
-                        <span className="text-lg font-bold text-primary">
-                          ₪{(product.price * (1 - (product.discount_percent / 100))).toFixed(2)}
-                        </span>
-                      </div>
-                    ) : (
-                      <span className="text-lg font-bold">₪{product.price}</span>
-                    )}
-                  </div>
-                  <div className="flex gap-2">
-                    <Button 
-                      className="flex items-center gap-2"
-                      onClick={() => addToCart(product)}
-                    >
-                      <ShoppingCart className="w-4 h-4" />
-                      הוסף לסל
-                    </Button>
-                    <Link to={`/shop/${product.id}`}>
-                      <Button variant="outline">פרטים</Button>
-                    </Link>
-                  </div>
-                </CardFooter>
-              </Card>
-            ))}
+          
+          <div className="md:col-span-3">
+            <ProductList 
+              products={currentProducts} 
+              isLoading={isLoading} 
+            />
+            
+            <ShopPagination 
+              currentPage={currentPage} 
+              totalPages={totalPages} 
+              onPageChange={setCurrentPage} 
+            />
           </div>
-        )}
+        </div>
       </div>
       <Footer />
       <WhatsAppButton />
