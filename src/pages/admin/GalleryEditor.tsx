@@ -53,6 +53,11 @@ export default function GalleryEditor() {
         console.error('Error fetching from Supabase:', error);
         // If there's an error with Supabase, fall back to the local data
         setGalleryItems(beforeAfterPairs);
+        toast({
+          variant: 'destructive',
+          title: 'שגיאה',
+          description: `שגיאה בטעינת פריטי הגלריה: ${error.message}`,
+        });
       } else {
         console.log('Fetched gallery items from Supabase:', data);
         if (data && data.length > 0) {
@@ -67,9 +72,52 @@ export default function GalleryEditor() {
           
           setGalleryItems(typedItems);
         } else {
-          // If no items in Supabase, use the local data
+          // If no items in Supabase, initialize with the local data
           console.log('No items in Supabase, using local data');
-          setGalleryItems(beforeAfterPairs);
+          
+          // Initialize database with local data if it's empty
+          try {
+            for (const item of beforeAfterPairs) {
+              const { error: insertError } = await supabase
+                .from('gallery_items')
+                .insert({
+                  before: item.before,
+                  after: item.after,
+                  label: item.label,
+                  color: item.color,
+                });
+                
+              if (insertError) {
+                console.error('Error inserting initial item:', insertError);
+              }
+            }
+            
+            // After initializing, fetch the items again
+            const { data: freshData, error: freshError } = await supabase
+              .from('gallery_items')
+              .select('*')
+              .order('id', { ascending: false });
+              
+            if (freshError) {
+              console.error('Error fetching fresh data:', freshError);
+              setGalleryItems(beforeAfterPairs);
+            } else if (freshData && freshData.length > 0) {
+              const typedItems: BeforeAfterPairWithColor[] = freshData.map(item => ({
+                id: item.id,
+                before: item.before,
+                after: item.after,
+                label: item.label,
+                color: item.color as CarColor
+              }));
+              
+              setGalleryItems(typedItems);
+            } else {
+              setGalleryItems(beforeAfterPairs);
+            }
+          } catch (initError: any) {
+            console.error('Error initializing gallery data:', initError);
+            setGalleryItems(beforeAfterPairs);
+          }
         }
       }
     } catch (error: any) {
@@ -181,8 +229,10 @@ export default function GalleryEditor() {
         before: beforeUrl,
         after: afterUrl,
         label: currentItem.label,
-        color: currentItem.color as Exclude<CarColor, "all">
+        color: currentItem.color
       };
+      
+      console.log('Saving item:', itemToSave);
       
       if (isEditing && currentItem.id) {
         // Update existing item
@@ -192,6 +242,17 @@ export default function GalleryEditor() {
           .eq('id', currentItem.id);
           
         if (error) throw error;
+        
+        console.log('Item updated successfully');
+        
+        // Update local state for immediate UI update
+        setGalleryItems(prev => 
+          prev.map(item => 
+            item.id === currentItem.id 
+              ? { ...itemToSave, id: currentItem.id } as BeforeAfterPairWithColor
+              : item
+          )
+        );
         
         toast({
           title: 'פריט עודכן',
@@ -206,16 +267,28 @@ export default function GalleryEditor() {
           
         if (error) throw error;
         
+        console.log('Item created successfully:', data);
+        
+        if (data && data.length > 0) {
+          // Add the new item to local state for immediate UI update
+          const newItem = {
+            ...itemToSave,
+            id: data[0].id,
+            color: data[0].color as CarColor
+          };
+          
+          setGalleryItems(prev => [newItem, ...prev]);
+        }
+        
         toast({
           title: 'פריט נוסף',
           description: 'פריט הגלריה נוסף בהצלחה',
         });
       }
       
-      // Refresh the gallery items
-      await fetchGalleryItems();
       resetForm();
     } catch (error: any) {
+      console.error('Error saving gallery item:', error);
       toast({
         variant: 'destructive',
         title: 'שגיאה',

@@ -15,6 +15,19 @@ const GalleryItemList: React.FC<GalleryItemListProps> = ({
   onEdit,
   onDelete,
 }) => {
+  // Helper function to translate color names to Hebrew
+  const getHebrewColorName = (colorName: string): string => {
+    switch (colorName) {
+      case 'white': return 'לבן';
+      case 'black': return 'שחור';
+      case 'silver': return 'כסף';
+      case 'red': return 'אדום';
+      case 'blue': return 'כחול';
+      case 'gray': return 'אפור';
+      default: return colorName;
+    }
+  };
+
   return (
     <div className="space-y-4">
       {galleryItems.length === 0 ? (
@@ -48,12 +61,7 @@ const GalleryItemList: React.FC<GalleryItemListProps> = ({
                     className="w-2 h-2 rounded-full mr-1" 
                     style={{ backgroundColor: colorMap[item.color] }}
                   />
-                  {item.color === 'white' ? 'לבן' : 
-                  item.color === 'black' ? 'שחור' : 
-                  item.color === 'silver' ? 'כסף' : 
-                  item.color === 'red' ? 'אדום' : 
-                  item.color === 'blue' ? 'כחול' : 
-                  item.color === 'gray' ? 'אפור' : item.color}
+                  {getHebrewColorName(item.color)}
                 </div>
               </div>
             </div>

@@ -29,6 +29,16 @@ export async function uploadGalleryImage(
     
     console.log(`Uploading file: ${fileName}, size: ${file.size} bytes, type: ${file.type}`);
     
+    // Check if storage bucket exists, create if it doesn't
+    const { data: buckets } = await supabase.storage.listBuckets();
+    const adminUploadsBucket = buckets?.find(bucket => bucket.name === 'admin-uploads');
+    
+    if (!adminUploadsBucket) {
+      console.log('Creating admin-uploads bucket');
+      // User will need to create the bucket via Supabase dashboard
+      throw new Error('יש ליצור מאגר "admin-uploads" במערכת אחסון הקבצים');
+    }
+    
     // Add cache busting to prevent stale data
     const { error: uploadError, data } = await supabase.storage
       .from('admin-uploads')
