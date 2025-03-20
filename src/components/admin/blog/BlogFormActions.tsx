@@ -27,6 +27,7 @@ export function BlogFormActions({
       <Button
         type="submit"
         disabled={isLoading}
+        variant="default"
       >
         {isLoading ? (
           <>
