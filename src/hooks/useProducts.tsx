@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Product } from '@/types/products';
@@ -27,11 +26,12 @@ export function useProducts() {
         throw error;
       }
 
-      if (data) {
-        console.log('Fetched products:', data);
+      if (data && data.length > 0) {
+        console.log('Fetched products from Supabase:', data);
         setProductsList(data);
       } else {
-        console.log('No products data returned');
+        console.log('No products found in Supabase, loading from local data...');
+        await loadLocalProducts();
       }
     } catch (error: any) {
       console.error('Error fetching products:', error);
@@ -41,16 +41,24 @@ export function useProducts() {
         description: error.message || 'אירעה שגיאה בטעינת המוצרים מהמסד נתונים',
       });
       
-      // Fallback to local data
-      try {
-        const { products } = await import('@/data/products');
-        console.log('Loading products from local data:', products);
-        setProductsList(products);
-      } catch (localError) {
-        console.error('Could not load local product data:', localError);
-      }
+      await loadLocalProducts();
     } finally {
       setIsInitialLoading(false);
+    }
+  };
+
+  const loadLocalProducts = async () => {
+    try {
+      const { products } = await import('@/data/products');
+      console.log('Loading products from local data:', products);
+      
+      if (products && products.length > 0) {
+        setProductsList(products);
+      } else {
+        console.warn('No local products found either');
+      }
+    } catch (localError) {
+      console.error('Could not load local product data:', localError);
     }
   };
 

@@ -26,13 +26,15 @@ export function BlogPostsList({
     );
   }
 
-  if (blogPosts.length === 0) {
+  if (!blogPosts || blogPosts.length === 0) {
     return (
       <div className="text-center py-10 text-muted-foreground">
         אין פוסטים עדיין
       </div>
     );
   }
+
+  console.log('Rendering blog posts in list:', blogPosts);
 
   return (
     <Table>

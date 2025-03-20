@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Edit, Trash2 } from 'lucide-react';
 import { Product } from '@/types/products';
 
@@ -26,13 +25,15 @@ export function ProductsList({
     );
   }
 
-  if (products.length === 0) {
+  if (!products || products.length === 0) {
     return (
       <div className="text-center py-10 text-muted-foreground">
         אין מוצרים עדיין
       </div>
     );
   }
+
+  console.log('Rendering products in list:', products);
 
   return (
     <div className="space-y-4">
