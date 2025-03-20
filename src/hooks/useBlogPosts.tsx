@@ -1,7 +1,23 @@
+
 import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase';
 import { BlogPost } from '@/types/blog';
 import { useToast } from '@/components/ui/use-toast';
+import { 
+  fetchBlogPostsFromSupabase,
+  saveBlogPostToSupabase,
+  deleteBlogPostFromSupabase,
+  uploadBlogImage
+} from '@/services/blog/blogService';
+import { loadLocalBlogPosts } from '@/utils/blogUtils';
+
+export interface BlogFormData {
+  title: string;
+  excerpt: string;
+  content: string;
+  readTime: number;
+  imageFile: File | null;
+  imagePreview: string | null;
+}
 
 export function useBlogPosts() {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
@@ -15,33 +31,14 @@ export function useBlogPosts() {
 
   const fetchBlogPosts = async () => {
     try {
-      console.log('Fetching blog posts from Supabase...');
+      const posts = await fetchBlogPostsFromSupabase();
       
-      const { data, error } = await supabase
-        .from('blog_posts')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        throw error;
-      }
-
-      if (data && data.length > 0) {
-        console.log('Fetched blog posts from Supabase:', data);
-        const formattedPosts = data.map(post => ({
-          id: post.id,
-          title: post.title,
-          excerpt: post.excerpt,
-          content: post.content,
-          date: post.date,
-          imageUrl: post.image_url,
-          readTime: post.read_time,
-          serviceSlug: post.service_slug || undefined
-        }));
-        setBlogPosts(formattedPosts);
+      if (posts && posts.length > 0) {
+        setBlogPosts(posts);
       } else {
-        console.log('No blog posts found in Supabase, loading from local data...');
-        await loadLocalBlogPosts();
+        // If no posts from Supabase, try loading from local data
+        const localPosts = await loadLocalBlogPosts();
+        setBlogPosts(localPosts);
       }
     } catch (error: any) {
       console.error('Error fetching blog posts:', error);
@@ -51,36 +48,16 @@ export function useBlogPosts() {
         description: error.message || 'אירעה שגיאה בטעינת הפוסטים מהמסד נתונים',
       });
       
-      await loadLocalBlogPosts();
+      // Fallback to local data on error
+      const localPosts = await loadLocalBlogPosts();
+      setBlogPosts(localPosts);
     } finally {
       setIsInitialLoading(false);
     }
   };
 
-  const loadLocalBlogPosts = async () => {
-    try {
-      const { blogPosts: localPosts } = await import('@/data/blog/index');
-      console.log('Loading blog posts from local data:', localPosts);
-      
-      if (localPosts && localPosts.length > 0) {
-        setBlogPosts(localPosts);
-      } else {
-        console.warn('No local blog posts found either');
-      }
-    } catch (localError) {
-      console.error('Could not load local blog data:', localError);
-    }
-  };
-
   const saveBlogPost = async (
-    formData: {
-      title: string;
-      excerpt: string;
-      content: string;
-      readTime: number;
-      imageFile: File | null;
-      imagePreview: string | null;
-    },
+    formData: BlogFormData,
     isEditing: boolean,
     postId: number | string | null
   ) => {
@@ -89,23 +66,9 @@ export function useBlogPosts() {
     try {
       let imageUrl = formData.imagePreview || '';
       
+      // Upload image if a new one is provided
       if (formData.imageFile) {
-        const fileExt = formData.imageFile.name.split('.').pop();
-        const fileName = `blog/${crypto.randomUUID()}.${fileExt}`;
-        
-        const { error: uploadError } = await supabase.storage
-          .from('admin-uploads')
-          .upload(fileName, formData.imageFile);
-          
-        if (uploadError) {
-          throw new Error('שגיאה בהעלאת התמונה');
-        }
-        
-        const { data } = supabase.storage
-          .from('admin-uploads')
-          .getPublicUrl(fileName);
-          
-        imageUrl = data.publicUrl;
+        imageUrl = await uploadBlogImage(formData.imageFile);
       }
       
       const blogData = {
@@ -117,21 +80,15 @@ export function useBlogPosts() {
         date: new Date().toISOString()
       };
       
+      const result = await saveBlogPostToSupabase(blogData, isEditing, postId);
+      
+      toast({
+        title: 'הצלחה!',
+        description: result.message,
+      });
+      
       if (isEditing && postId) {
-        const postIdNum = typeof postId === 'string' ? parseInt(postId, 10) : postId;
-        
-        const { error } = await supabase
-          .from('blog_posts')
-          .update(blogData)
-          .eq('id', postIdNum);
-          
-        if (error) throw error;
-        
-        toast({
-          title: 'הצלחה!',
-          description: 'פוסט בלוג עודכן בהצלחה',
-        });
-        
+        // Update local state for edited post
         setBlogPosts(prevPosts => 
           prevPosts.map(post => 
             post.id === postId
@@ -147,32 +104,19 @@ export function useBlogPosts() {
               : post
           )
         );
-      } else {
-        const { data, error } = await supabase
-          .from('blog_posts')
-          .insert(blogData)
-          .select();
-          
-        if (error) throw error;
+      } else if (result.data) {
+        // Add new post to local state
+        const newPost: BlogPost = {
+          id: result.data.id,
+          title: formData.title,
+          excerpt: formData.excerpt,
+          content: formData.content,
+          date: result.data.date,
+          imageUrl,
+          readTime: formData.readTime
+        };
         
-        if (data && data[0]) {
-          toast({
-            title: 'הצלחה!',
-            description: 'פוסט בלוג נשמר בהצלחה',
-          });
-          
-          const newPost: BlogPost = {
-            id: data[0].id,
-            title: formData.title,
-            excerpt: formData.excerpt,
-            content: formData.content,
-            date: data[0].date,
-            imageUrl,
-            readTime: formData.readTime
-          };
-          
-          setBlogPosts(prevPosts => [newPost, ...prevPosts]);
-        }
+        setBlogPosts(prevPosts => [newPost, ...prevPosts]);
       }
       
       return true;
@@ -190,18 +134,11 @@ export function useBlogPosts() {
 
   const deleteBlogPost = async (id: number | string) => {
     try {
-      const idNum = typeof id === 'string' ? parseInt(id, 10) : id;
-      
-      const { error } = await supabase
-        .from('blog_posts')
-        .delete()
-        .eq('id', idNum);
-        
-      if (error) throw error;
+      const result = await deleteBlogPostFromSupabase(id);
       
       toast({
         title: 'הצלחה!',
-        description: 'פוסט בלוג נמחק בהצלחה',
+        description: result.message,
       });
       
       setBlogPosts(prevPosts => prevPosts.filter(post => post.id !== id));
