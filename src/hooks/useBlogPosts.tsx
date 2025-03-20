@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { BlogPost } from '@/types/blog';
@@ -51,7 +50,7 @@ export function useBlogPosts() {
       
       // Try to load from local data if available
       try {
-        const { default: localPosts } = await import('@/data/blog/index');
+        const { blogPosts: localPosts } = await import('@/data/blog/index');
         console.log('Loading blog posts from local data:', localPosts);
         setBlogPosts(localPosts);
       } catch (localError) {
@@ -221,4 +220,3 @@ export function useBlogPosts() {
     deleteBlogPost
   };
 }
-
