@@ -1,12 +1,14 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
-import { Upload, Save, Trash2 } from 'lucide-react';
+import { Upload, Save, Trash2, Edit, ArrowLeft } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
+import { BlogPost } from '@/types/blog';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 export default function BlogEditor() {
   const [title, setTitle] = useState('');
@@ -16,7 +18,52 @@ export default function BlogEditor() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [readTime, setReadTime] = useState(3);
   const [isLoading, setIsLoading] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentPostId, setCurrentPostId] = useState<string | null>(null);
   const { toast } = useToast();
+
+  useEffect(() => {
+    fetchBlogPosts();
+  }, []);
+
+  const fetchBlogPosts = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        throw error;
+      }
+
+      if (data) {
+        console.log('Fetched blog posts:', data);
+        const formattedPosts = data.map(post => ({
+          id: post.id.toString(),
+          title: post.title,
+          excerpt: post.excerpt,
+          content: post.content,
+          date: post.date,
+          imageUrl: post.image_url,
+          readTime: post.read_time,
+          serviceSlug: post.service_slug || undefined
+        }));
+        setBlogPosts(formattedPosts);
+      }
+    } catch (error: any) {
+      console.error('Error fetching blog posts:', error);
+      toast({
+        variant: 'destructive',
+        title: 'שגיאה בטעינת הפוסטים',
+        description: error.message || 'אירעה שגיאה בטעינת הפוסטים מהמסד נתונים',
+      });
+    } finally {
+      setIsInitialLoading(false);
+    }
+  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -31,22 +78,42 @@ export default function BlogEditor() {
     }
   };
 
+  const resetForm = () => {
+    setTitle('');
+    setExcerpt('');
+    setContent('');
+    setImageFile(null);
+    setImagePreview(null);
+    setReadTime(3);
+    setCurrentPostId(null);
+    setIsEditing(false);
+  };
+
+  const handleEditPost = (post: BlogPost) => {
+    setTitle(post.title);
+    setExcerpt(post.excerpt);
+    setContent(post.content);
+    setReadTime(post.readTime);
+    setImagePreview(post.imageUrl);
+    setCurrentPostId(post.id);
+    setIsEditing(true);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      let imageUrl = '';
+      let imageUrl = imagePreview || '';
       
       // Upload image if selected
       if (imageFile) {
         const fileExt = imageFile.name.split('.').pop();
-        const fileName = `${crypto.randomUUID()}.${fileExt}`;
-        const filePath = `blog/${fileName}`;
+        const fileName = `blog/${crypto.randomUUID()}.${fileExt}`;
         
         const { error: uploadError } = await supabase.storage
           .from('admin-uploads')
-          .upload(filePath, imageFile);
+          .upload(fileName, imageFile);
           
         if (uploadError) {
           throw new Error('שגיאה בהעלאת התמונה');
@@ -54,26 +121,82 @@ export default function BlogEditor() {
         
         const { data } = supabase.storage
           .from('admin-uploads')
-          .getPublicUrl(filePath);
+          .getPublicUrl(fileName);
           
         imageUrl = data.publicUrl;
       }
       
-      // Here you would save to your posts table in Supabase
-      // This is a placeholder for now
+      const blogData = {
+        title,
+        excerpt,
+        content,
+        read_time: readTime,
+        image_url: imageUrl,
+        date: new Date().toISOString()
+      };
       
-      toast({
-        title: 'הצלחה!',
-        description: 'פוסט בלוג נשמר בהצלחה',
-      });
+      if (isEditing && currentPostId) {
+        // Update existing post
+        const { error } = await supabase
+          .from('blog_posts')
+          .update(blogData)
+          .eq('id', currentPostId);
+          
+        if (error) throw error;
+        
+        toast({
+          title: 'הצלחה!',
+          description: 'פוסט בלוג עודכן בהצלחה',
+        });
+        
+        // Update local state
+        setBlogPosts(prevPosts => 
+          prevPosts.map(post => 
+            post.id === currentPostId
+              ? { 
+                  ...post, 
+                  title, 
+                  excerpt, 
+                  content, 
+                  readTime, 
+                  imageUrl,
+                  date: new Date().toISOString() 
+                } 
+              : post
+          )
+        );
+      } else {
+        // Create new post
+        const { data, error } = await supabase
+          .from('blog_posts')
+          .insert(blogData)
+          .select();
+          
+        if (error) throw error;
+        
+        if (data && data[0]) {
+          toast({
+            title: 'הצלחה!',
+            description: 'פוסט בלוג נשמר בהצלחה',
+          });
+          
+          // Add to local state
+          const newPost: BlogPost = {
+            id: data[0].id.toString(),
+            title,
+            excerpt,
+            content,
+            date: data[0].date,
+            imageUrl,
+            readTime
+          };
+          
+          setBlogPosts(prevPosts => [newPost, ...prevPosts]);
+        }
+      }
       
       // Reset form
-      setTitle('');
-      setExcerpt('');
-      setContent('');
-      setImageFile(null);
-      setImagePreview(null);
-      setReadTime(3);
+      resetForm();
       
     } catch (error: any) {
       toast({
@@ -85,6 +208,32 @@ export default function BlogEditor() {
       setIsLoading(false);
     }
   };
+
+  const handleDeletePost = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('blog_posts')
+        .delete()
+        .eq('id', id);
+        
+      if (error) throw error;
+      
+      toast({
+        title: 'הצלחה!',
+        description: 'פוסט בלוג נמחק בהצלחה',
+      });
+      
+      // Update local state
+      setBlogPosts(prevPosts => prevPosts.filter(post => post.id !== id));
+      
+    } catch (error: any) {
+      toast({
+        variant: 'destructive',
+        title: 'שגיאה',
+        description: error.message || 'מחיקת הפוסט נכשלה',
+      });
+    }
+  };
   
   return (
     <div className="space-y-6">
@@ -93,8 +242,22 @@ export default function BlogEditor() {
         <p className="text-muted-foreground">יצירה ועריכה של פוסטים בבלוג</p>
       </div>
       
+      {isEditing && (
+        <Button 
+          variant="outline" 
+          onClick={resetForm}
+          className="flex items-center"
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          חזרה לפוסט חדש
+        </Button>
+      )}
+      
       <form onSubmit={handleSubmit} className="space-y-6">
         <Card>
+          <CardHeader>
+            <CardTitle>{isEditing ? 'עריכת פוסט' : 'יצירת פוסט חדש'}</CardTitle>
+          </CardHeader>
           <CardContent className="pt-6">
             <div className="space-y-4">
               <div>
@@ -163,8 +326,8 @@ export default function BlogEditor() {
                 </label>
                 <div className="mt-1 flex items-center">
                   <label className="flex cursor-pointer items-center rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm hover:bg-accent">
-                    <Upload className="mr-2 h-4 w-4" />
-                    <span>{imageFile ? 'שנה תמונה' : 'העלה תמונה'}</span>
+                    <Upload className="ml-2 h-4 w-4" />
+                    <span>{imageFile || imagePreview ? 'שנה תמונה' : 'העלה תמונה'}</span>
                     <Input
                       id="image"
                       type="file"
@@ -173,7 +336,7 @@ export default function BlogEditor() {
                       onChange={handleImageChange}
                     />
                   </label>
-                  {imageFile && (
+                  {(imageFile || imagePreview) && (
                     <Button
                       type="button"
                       variant="outline"
@@ -208,6 +371,7 @@ export default function BlogEditor() {
           <Button
             type="button"
             variant="outline"
+            onClick={resetForm}
             disabled={isLoading}
           >
             ביטול
@@ -219,17 +383,85 @@ export default function BlogEditor() {
             {isLoading ? (
               <>
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-background border-t-transparent ml-2" />
-                שומר...
+                {isEditing ? 'מעדכן...' : 'שומר...'}
               </>
             ) : (
               <>
                 <Save className="ml-2 h-4 w-4" />
-                שמור פוסט
+                {isEditing ? 'עדכן פוסט' : 'שמור פוסט'}
               </>
             )}
           </Button>
         </div>
       </form>
+
+      {/* Blog Posts List */}
+      <Card>
+        <CardHeader>
+          <CardTitle>פוסטים קיימים</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {isInitialLoading ? (
+            <div className="flex justify-center py-10">
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
+            </div>
+          ) : blogPosts.length === 0 ? (
+            <div className="text-center py-10 text-muted-foreground">
+              אין פוסטים עדיין
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>תמונה</TableHead>
+                  <TableHead>כותרת</TableHead>
+                  <TableHead>תקציר</TableHead>
+                  <TableHead>תאריך</TableHead>
+                  <TableHead>פעולות</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {blogPosts.map((post) => (
+                  <TableRow key={post.id}>
+                    <TableCell>
+                      <div className="h-12 w-16 overflow-hidden rounded-md">
+                        <img 
+                          src={post.imageUrl || 'https://placehold.co/100x100?text=No+Image'} 
+                          alt={post.title}
+                          className="h-full w-full object-cover" 
+                        />
+                      </div>
+                    </TableCell>
+                    <TableCell className="font-medium">{post.title}</TableCell>
+                    <TableCell className="max-w-xs truncate">{post.excerpt}</TableCell>
+                    <TableCell>{new Date(post.date).toLocaleDateString('he-IL')}</TableCell>
+                    <TableCell>
+                      <div className="flex items-center space-x-2">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleEditPost(post)}
+                          className="mr-2"
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-destructive hover:text-destructive"
+                          onClick={() => handleDeletePost(post.id)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

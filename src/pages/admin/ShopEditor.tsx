@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -125,7 +124,6 @@ export default function ShopEditor() {
     try {
       let imageUrl = currentProduct.image;
       
-      // Upload new image if selected
       if (currentProduct.imageFile) {
         const fileExt = currentProduct.imageFile.name.split('.').pop();
         const fileName = `products/${Date.now()}.${fileExt}`;
@@ -159,7 +157,6 @@ export default function ShopEditor() {
       };
       
       if (isEditing && currentProduct.id) {
-        // Update existing product
         const { error } = await supabase
           .from('products')
           .update(productData)
@@ -172,7 +169,6 @@ export default function ShopEditor() {
           description: 'המוצר עודכן בהצלחה',
         });
         
-        // Update local state
         setProductsList(prevList => 
           prevList.map(product => 
             product.id === currentProduct.id 
@@ -181,7 +177,6 @@ export default function ShopEditor() {
           )
         );
       } else {
-        // Add new product
         const { data, error } = await supabase
           .from('products')
           .insert(productData)
@@ -195,7 +190,6 @@ export default function ShopEditor() {
             description: 'המוצר נוסף בהצלחה',
           });
           
-          // Add to local state
           setProductsList(prevList => [data[0], ...prevList]);
         }
       }
@@ -222,7 +216,6 @@ export default function ShopEditor() {
         
       if (error) throw error;
       
-      // Update local state
       setProductsList(prevList => prevList.filter(product => product.id !== id));
       
       toast({
