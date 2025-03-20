@@ -9,6 +9,7 @@ export interface Product {
   description: string;
   price: number;
   image: string;
+  discount_percent?: number;
   category?: string;
   featured?: boolean;
   stock?: number;

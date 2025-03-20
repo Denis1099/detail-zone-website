@@ -30,6 +30,45 @@ export type Database = {
         }
         Relationships: []
       }
+      blog_posts: {
+        Row: {
+          content: string
+          created_at: string
+          date: string
+          excerpt: string
+          id: number
+          image_url: string
+          read_time: number
+          service_slug: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          date?: string
+          excerpt: string
+          id?: number
+          image_url: string
+          read_time?: number
+          service_slug?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          date?: string
+          excerpt?: string
+          id?: number
+          image_url?: string
+          read_time?: number
+          service_slug?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       gallery_items: {
         Row: {
           after: string
@@ -54,6 +93,51 @@ export type Database = {
           created_at?: string
           id?: number
           label?: string
+        }
+        Relationships: []
+      }
+      products: {
+        Row: {
+          category: string | null
+          created_at: string
+          description: string
+          discount_percent: number | null
+          featured: boolean | null
+          id: number
+          image: string
+          name: string
+          price: number
+          recommended: boolean | null
+          stock: number | null
+          updated_at: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          description: string
+          discount_percent?: number | null
+          featured?: boolean | null
+          id?: number
+          image: string
+          name: string
+          price: number
+          recommended?: boolean | null
+          stock?: number | null
+          updated_at?: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          description?: string
+          discount_percent?: number | null
+          featured?: boolean | null
+          id?: number
+          image?: string
+          name?: string
+          price?: number
+          recommended?: boolean | null
+          stock?: number | null
+          updated_at?: string
         }
         Relationships: []
       }
