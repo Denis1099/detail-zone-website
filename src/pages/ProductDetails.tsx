@@ -1,4 +1,3 @@
-
 import { useParams, Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -33,11 +32,13 @@ export default function ProductDetails() {
       setIsLoading(true);
       try {
         if (!id) return;
+        
+        const numericId = parseInt(id, 10);
 
         const { data, error } = await supabase
           .from('products')
           .select('*')
-          .eq('id', id)
+          .eq('id', numericId)
           .single();
 
         if (error) {
@@ -56,7 +57,6 @@ export default function ProductDetails() {
           description: error.message || 'אירעה שגיאה בטעינת פרטי המוצר',
         });
         
-        // Fallback to local data
         import('@/data/products').then(module => {
           const localProduct = module.products.find(p => p.id === Number(id));
           if (localProduct) {
@@ -74,10 +74,12 @@ export default function ProductDetails() {
 
     const fetchSimilarProducts = async (category?: string) => {
       try {
+        const numericId = parseInt(id!, 10);
+        
         let query = supabase
           .from('products')
           .select('*')
-          .neq('id', id)
+          .neq('id', numericId)
           .limit(3);
           
         if (category) {
