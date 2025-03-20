@@ -40,7 +40,7 @@ export default function BlogEditor() {
       imagePreview: string | null;
     },
     isEditing: boolean,
-    postId: number | null
+    postId: number | string | null
   ) => {
     const success = await saveBlogPost(formData, isEditing, postId);
     
@@ -49,7 +49,7 @@ export default function BlogEditor() {
     }
   };
 
-  const handleDeletePost = async (id: number) => {
+  const handleDeletePost = async (id: number | string) => {
     await deleteBlogPost(id);
   };
   

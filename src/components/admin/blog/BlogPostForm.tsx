@@ -21,7 +21,7 @@ interface BlogPostFormProps {
       imagePreview: string | null;
     },
     isEditing: boolean,
-    postId: number | null
+    postId: number | string | null
   ) => Promise<void>;
   onCancel: () => void;
   isLoading: boolean;

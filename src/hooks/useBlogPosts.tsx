@@ -61,7 +61,7 @@ export function useBlogPosts() {
       imagePreview: string | null;
     },
     isEditing: boolean,
-    postId: number | null
+    postId: number | string | null
   ) => {
     setIsLoading(true);
 
@@ -170,7 +170,7 @@ export function useBlogPosts() {
     }
   };
 
-  const deleteBlogPost = async (id: number) => {
+  const deleteBlogPost = async (id: number | string) => {
     try {
       const { error } = await supabase
         .from('blog_posts')

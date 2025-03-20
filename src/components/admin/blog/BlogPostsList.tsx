@@ -9,7 +9,7 @@ interface BlogPostsListProps {
   blogPosts: BlogPost[];
   isLoading: boolean;
   onEdit: (post: BlogPost) => void;
-  onDelete: (id: number) => void;
+  onDelete: (id: number | string) => void;
 }
 
 export function BlogPostsList({ 
