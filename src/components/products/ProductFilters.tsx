@@ -69,7 +69,7 @@ export function ProductFilters({ onFilter, categories }: ProductFiltersProps) {
               <SelectValue placeholder="כל הקטגוריות" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">כל הקטגוריות</SelectItem>
+              <SelectItem value="all">כל הקטגוריות</SelectItem>
               {categories.map((category) => (
                 <SelectItem key={category} value={category}>{category}</SelectItem>
               ))}

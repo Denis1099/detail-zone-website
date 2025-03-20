@@ -82,7 +82,7 @@ export default function Shop() {
         : true;
       
       // Apply category filter
-      const matchesCategory = filterOptions.category 
+      const matchesCategory = filterOptions.category && filterOptions.category !== "all"
         ? product.category === filterOptions.category
         : true;
       
