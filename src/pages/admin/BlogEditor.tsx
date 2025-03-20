@@ -21,7 +21,7 @@ export default function BlogEditor() {
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [isEditing, setIsEditing] = useState(false);
-  const [currentPostId, setCurrentPostId] = useState<string | null>(null);
+  const [currentPostId, setCurrentPostId] = useState<number | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -42,7 +42,7 @@ export default function BlogEditor() {
       if (data) {
         console.log('Fetched blog posts:', data);
         const formattedPosts = data.map(post => ({
-          id: post.id.toString(),
+          id: post.id,
           title: post.title,
           excerpt: post.excerpt,
           content: post.content,
@@ -182,7 +182,7 @@ export default function BlogEditor() {
           
           // Add to local state
           const newPost: BlogPost = {
-            id: data[0].id.toString(),
+            id: data[0].id,
             title,
             excerpt,
             content,
@@ -209,7 +209,7 @@ export default function BlogEditor() {
     }
   };
 
-  const handleDeletePost = async (id: string) => {
+  const handleDeletePost = async (id: number) => {
     try {
       const { error } = await supabase
         .from('blog_posts')
