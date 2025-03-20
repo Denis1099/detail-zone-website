@@ -14,4 +14,5 @@ export interface Product {
   featured?: boolean;
   stock?: number;
   recommended?: boolean;
+  rating?: number;
 }
