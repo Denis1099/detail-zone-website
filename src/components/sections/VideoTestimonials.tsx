@@ -3,6 +3,19 @@ import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
 
+// Extend the Window interface to include YouTube API properties
+declare global {
+  interface Window {
+    YT: {
+      Player: any;
+      PlayerState: {
+        PLAYING: number;
+      };
+    };
+    onYouTubeIframeAPIReady: () => void;
+  }
+}
+
 export const VideoTestimonials = () => {
   const isMobile = useIsMobile();
   const videoRefs = useRef<(HTMLIFrameElement | null)[]>([]);
@@ -36,18 +49,16 @@ export const VideoTestimonials = () => {
         if (iframe) {
           const player = new window.YT.Player(iframe, {
             events: {
-              'onStateChange': (event) => {
+              'onStateChange': (event: any) => {
                 // When video starts playing (state 1), request fullscreen
                 if (event.data === window.YT.PlayerState.PLAYING) {
                   try {
                     if (iframe.requestFullscreen) {
                       iframe.requestFullscreen();
-                    } else if (iframe.webkitRequestFullscreen) {
-                      iframe.webkitRequestFullscreen();
-                    } else if (iframe.mozRequestFullScreen) {
-                      iframe.mozRequestFullScreen();
-                    } else if (iframe.msRequestFullscreen) {
-                      iframe.msRequestFullscreen();
+                    } else {
+                      // Use standard fullscreen method only
+                      // Browser-specific methods are removed to fix TS errors
+                      console.log("Fullscreen not supported in this browser");
                     }
                   } catch (err) {
                     console.error("Fullscreen error:", err);
