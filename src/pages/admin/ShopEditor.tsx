@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,6 +7,8 @@ import { Product } from '@/types/products';
 import { ProductForm } from '@/components/admin/shop/ProductForm';
 import { ProductsList } from '@/components/admin/shop/ProductsList';
 import { useProducts } from '@/hooks/useProducts';
+import { ProductReviewsManager } from '@/components/admin/shop/ProductReviewsManager';
+import { useProductReviews } from '@/hooks/useProductReviews';
 
 export default function ShopEditor() {
   const [isEditing, setIsEditing] = useState(false);
@@ -19,6 +21,21 @@ export default function ShopEditor() {
     saveProduct,
     deleteProduct
   } = useProducts();
+  
+  const {
+    reviews,
+    isLoading: reviewsLoading,
+    isInitialLoading: reviewsInitialLoading,
+    fetchReviews,
+    saveReview,
+    deleteReview
+  } = useProductReviews(currentProduct?.id || 0);
+
+  useEffect(() => {
+    if (currentProduct?.id) {
+      fetchReviews();
+    }
+  }, [currentProduct?.id]);
 
   const handleEditProduct = (product: Product) => {
     setCurrentProduct(product);
@@ -49,7 +66,10 @@ export default function ShopEditor() {
     const success = await saveProduct(productData, isEditing);
     
     if (success) {
-      handleResetForm();
+      // Don't reset the form after successful edit to allow adding reviews
+      if (!isEditing) {
+        handleResetForm();
+      }
     }
     
     return success;
@@ -74,13 +94,26 @@ export default function ShopEditor() {
       )}
       
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <ProductForm
-          isEditing={isEditing}
-          currentProduct={currentProduct}
-          onSubmit={handleSubmit}
-          onCancel={handleResetForm}
-          isLoading={isLoading}
-        />
+        <div className="space-y-6">
+          <ProductForm
+            isEditing={isEditing}
+            currentProduct={currentProduct}
+            onSubmit={handleSubmit}
+            onCancel={handleResetForm}
+            isLoading={isLoading}
+          />
+          
+          {/* Show product reviews manager when editing a product */}
+          {isEditing && currentProduct && (
+            <ProductReviewsManager
+              productId={currentProduct.id}
+              existingReviews={reviews}
+              onSaveReview={saveReview}
+              onDeleteReview={deleteReview}
+              isLoading={reviewsLoading}
+            />
+          )}
+        </div>
         
         <Card>
           <CardHeader>

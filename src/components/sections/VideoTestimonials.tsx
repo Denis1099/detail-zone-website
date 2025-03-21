@@ -68,8 +68,8 @@ export const VideoTestimonials = () => {
           </motion.h2>
         </div>
 
-        {/* Grid layout - one video per line on mobile, 2x2 grid on desktop */}
-        <div className={`grid ${isMobile ? 'grid-cols-1 gap-6' : 'grid-cols-2 gap-8'} md:max-w-5xl mx-auto`}>
+        {/* Responsive grid layout - 1 column on mobile, 2 columns on medium, 4 columns on large screens */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 md:max-w-6xl mx-auto">
           {videoLinks.map((videoUrl, index) => (
             <motion.div
               key={index}

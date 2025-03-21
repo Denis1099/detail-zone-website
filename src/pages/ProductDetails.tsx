@@ -126,7 +126,7 @@ export default function ProductDetails() {
           <ProductInfo product={product} />
         </div>
 
-        <ReviewsSection />
+        <ReviewsSection productId={product.id} />
         <SimilarProducts products={similarProducts} />
       </div>
       <Footer />
