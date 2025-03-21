@@ -1,99 +1,109 @@
 
-import { useState, useRef, useEffect } from "react";
-import { motion } from "framer-motion";
-import { useIsMobile } from "@/hooks/use-mobile";
+import React, { useEffect, useRef, useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
 
-// Extend the Window interface to include YouTube API properties
+// Extend Window interface to include YouTube API
 declare global {
   interface Window {
-    YT: {
-      Player: any;
-      PlayerState: {
-        PLAYING: number;
-      };
-    };
-    onYouTubeIframeAPIReady: () => void;
+    YT?: any;
+    onYouTubeIframeAPIReady?: () => void;
   }
 }
 
-export const VideoTestimonials = () => {
-  const isMobile = useIsMobile();
-  const videoRefs = useRef<(HTMLIFrameElement | null)[]>([]);
-  
-  // YouTube short links converted to embed format
-  const videoLinks = [
-    "https://www.youtube.com/embed/d9yHOep_dcY",
-    "https://www.youtube.com/embed/-JaYsFr35ok",
-    "https://www.youtube.com/embed/vMyqMDwLSP4",
-    "https://www.youtube.com/embed/yCuDjwdbXcU"
-  ];
+// Define the video testimonials data
+const videoTestimonials = [
+  { id: "a5BTGA3dPa0", title: "דויד - מרצדס A45 AMG" },
+  { id: "Gq0Mwjs2YSM", title: "נהוראי - שברולט אימפלה" },
+  { id: "qkOWWR0YUz8", title: "יובל - ב.מ.וו מיני קופר" },
+  { id: "WN0wO41fmPo", title: "דורון - דודג׳ צ׳לנג׳ר" },
+];
 
-  // Update all YouTube embed URLs to include autoplay and enable fullscreen on load
-  useEffect(() => {
-    const updatedVideoLinks = videoLinks.map(url => {
-      // Add parameters for better fullscreen support
-      return `${url}?enablejsapi=1&rel=0`;
-    });
+export function VideoTestimonials() {
+  const [apiLoaded, setApiLoaded] = useState(false);
+  const playerRefs = useRef<{ [key: string]: any }>({});
+  const iframeRefs = useRef<{ [key: string]: HTMLIFrameElement | null }>({});
+  const { toast } = useToast();
 
-    // Initialize YouTube API if it's not already loaded
+  const loadYouTubeAPI = () => {
     if (!window.YT) {
-      const tag = document.createElement('script');
-      tag.src = 'https://www.youtube.com/iframe_api';
-      const firstScriptTag = document.getElementsByTagName('script')[0];
+      const tag = document.createElement("script");
+      tag.src = "https://www.youtube.com/iframe_api";
+      const firstScriptTag = document.getElementsByTagName("script")[0];
       firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
+    } else {
+      setApiLoaded(true);
     }
-  }, [videoLinks]);
+  };
+
+  const onStateChange = (event: { data: number; target: any }) => {
+    if (event.data === window.YT?.PlayerState?.PLAYING) {
+      // Pause all other videos when one starts playing
+      Object.entries(playerRefs.current).forEach(([id, player]) => {
+        if (player && player !== event.target) {
+          player.pauseVideo();
+        }
+      });
+    }
+  };
+
+  const initializePlayer = (videoId: string) => {
+    if (!window.YT?.Player) return;
+
+    playerRefs.current[videoId] = new window.YT.Player(`player-${videoId}`, {
+      videoId: videoId,
+      playerVars: {
+        playsinline: 1,
+        controls: 1,
+        rel: 0,
+        modestbranding: 1,
+      },
+      events: {
+        onStateChange: onStateChange,
+      },
+    });
+  };
+
+  useEffect(() => {
+    loadYouTubeAPI();
+
+    window.onYouTubeIframeAPIReady = () => {
+      setApiLoaded(true);
+      videoTestimonials.forEach((video) => {
+        initializePlayer(video.id);
+      });
+    };
+
+    return () => {
+      window.onYouTubeIframeAPIReady = undefined;
+    };
+  }, []);
 
   return (
-    <section className="py-16 md:py-20 bg-gradient-to-b from-background/95 to-background">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-10 md:mb-16">
-          <motion.span 
-            initial={{ opacity: 0, y: -10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-            className="text-primary text-sm font-medium mb-3 md:mb-4 inline-block px-4 py-1.5 rounded-full bg-primary/10 backdrop-blur-md border border-primary/20"
-          >
-            צפו בנו בפעולה
-          </motion.span>
-          <motion.h2 
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="text-3xl md:text-5xl font-bold text-text"
-          >
-            סרטוני העבודה שלנו
-          </motion.h2>
+    <div className="py-16 bg-background">
+      <div className="container mx-auto">
+        <div className="text-center mb-10">
+          <h2 className="text-3xl font-bold">הלקוחות שלנו מספרים</h2>
+          <p className="text-muted-foreground mt-2">
+            תשמעו מהלקוחות שלנו על החוויה שלהם איתנו
+          </p>
         </div>
 
-        {/* Responsive grid layout - 1 column on mobile, 2 columns on medium, 4 columns on large screens */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 md:max-w-6xl mx-auto">
-          {videoLinks.map((videoUrl, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              className="rounded-2xl overflow-hidden shadow-xl bg-gradient-to-b from-secondary/20 to-primary/10 backdrop-blur-md border border-accent/10 relative"
-            >
-              <div className="aspect-[9/16] w-full relative">
-                <iframe
-                  ref={el => videoRefs.current[index] = el}
-                  src={`${videoUrl}?enablejsapi=1&rel=0`}
-                  title={`Video testimonial ${index + 1}`}
+        {/* Updated grid layout to show 4 videos on large screens and 2 on medium screens */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {videoTestimonials.map((video) => (
+            <div key={video.id} className="w-full">
+              <div className="relative aspect-video bg-muted rounded-lg overflow-hidden">
+                <div
+                  id={`player-${video.id}`}
+                  ref={(el) => (iframeRefs.current[video.id] = el)}
                   className="w-full h-full"
-                  allowFullScreen
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-                  id={`youtube-player-${index}`}
-                ></iframe>
+                ></div>
               </div>
-            </motion.div>
+              <h3 className="mt-3 text-center font-semibold">{video.title}</h3>
+            </div>
           ))}
         </div>
       </div>
-    </section>
+    </div>
   );
-};
+}

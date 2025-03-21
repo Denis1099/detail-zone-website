@@ -3,7 +3,21 @@ import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useToast } from '@/components/ui/use-toast';
 import { uploadGalleryImage } from '@/utils/galleryUpload';
-import { ProductReview } from '@/components/admin/shop/ProductReviewsManager';
+
+export interface ProductReview {
+  id: number;
+  product_id: number;
+  author: string;
+  rating: number;
+  content: string;
+  image?: string;
+  created_at?: string;
+}
+
+// Custom type for review data with optional image file
+export interface ReviewFormData extends Omit<ProductReview, 'id' | 'created_at'> {
+  imageFile?: File | null;
+}
 
 export function useProductReviews(productId: number) {
   const [reviews, setReviews] = useState<ProductReview[]>([]);
@@ -16,6 +30,7 @@ export function useProductReviews(productId: number) {
     
     setIsInitialLoading(true);
     try {
+      // Using from('product_reviews') is now valid since the table exists in the database
       const { data, error } = await supabase
         .from('product_reviews')
         .select('*')
@@ -25,7 +40,7 @@ export function useProductReviews(productId: number) {
       if (error) throw error;
       
       if (data) {
-        setReviews(data);
+        setReviews(data as ProductReview[]);
       }
     } catch (error: any) {
       console.error('Error fetching reviews:', error);
@@ -39,7 +54,7 @@ export function useProductReviews(productId: number) {
     }
   };
 
-  const saveReview = async (reviewData: Omit<ProductReview, 'id'>) => {
+  const saveReview = async (reviewData: ReviewFormData) => {
     setIsLoading(true);
     
     try {
@@ -49,7 +64,7 @@ export function useProductReviews(productId: number) {
         imageUrl = reviewData.image;
       }
       
-      if ('imageFile' in reviewData && reviewData.imageFile) {
+      if (reviewData.imageFile) {
         const result = await uploadGalleryImage(
           reviewData.imageFile, 
           'reviews', 
@@ -81,7 +96,7 @@ export function useProductReviews(productId: number) {
           description: 'הביקורת נוספה בהצלחה',
         });
         
-        setReviews(prevReviews => [data[0], ...prevReviews]);
+        setReviews(prevReviews => [data[0] as ProductReview, ...prevReviews]);
       }
       
       return true;

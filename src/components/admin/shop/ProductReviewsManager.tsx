@@ -1,26 +1,18 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Star, Plus, Trash2, Image } from "lucide-react";
+import { Star, Plus, Trash2 } from "lucide-react";
 import { ProductImageUpload } from './ProductImageUpload';
-
-export interface ProductReview {
-  id: number;
-  author: string;
-  rating: number;
-  content: string;
-  image?: string;
-  product_id: number;
-}
+import { ProductReview, ReviewFormData } from '@/hooks/useProductReviews';
 
 interface ProductReviewsManagerProps {
   productId: number;
   existingReviews: ProductReview[];
-  onSaveReview: (review: Omit<ProductReview, 'id'>) => Promise<boolean>;
+  onSaveReview: (review: ReviewFormData) => Promise<boolean>;
   onDeleteReview: (reviewId: number) => Promise<boolean>;
   isLoading: boolean;
 }
@@ -32,16 +24,21 @@ export function ProductReviewsManager({
   onDeleteReview,
   isLoading
 }: ProductReviewsManagerProps) {
-  const [reviews, setReviews] = useState<ProductReview[]>(existingReviews);
   const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<ReviewFormData>({
     author: '',
     rating: 5,
     content: '',
     image: '',
-    imageFile: null as File | null
+    product_id: productId,
+    imageFile: null
   });
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Update the reviews list when props change
+    setFormData(prev => ({...prev, product_id: productId}));
+  }, [productId, existingReviews]);
 
   const handleImageChange = (file: File | null) => {
     if (file) {
@@ -78,13 +75,7 @@ export function ProductReviewsManager({
       return;
     }
     
-    const success = await onSaveReview({
-      author: formData.author,
-      rating: formData.rating,
-      content: formData.content,
-      image: formData.image,
-      product_id: productId
-    });
+    const success = await onSaveReview(formData);
     
     if (success) {
       setShowForm(false);
@@ -93,6 +84,7 @@ export function ProductReviewsManager({
         rating: 5,
         content: '',
         image: '',
+        product_id: productId,
         imageFile: null
       });
       setImagePreview(null);
@@ -192,12 +184,12 @@ export function ProductReviewsManager({
 
         {/* List of existing reviews */}
         <div className="space-y-4">
-          {reviews.length === 0 ? (
+          {existingReviews.length === 0 ? (
             <div className="text-center text-muted-foreground py-4">
               אין ביקורות למוצר זה
             </div>
           ) : (
-            reviews.map((review) => (
+            existingReviews.map((review) => (
               <div key={review.id} className="p-4 border border-border rounded-lg">
                 <div className="flex justify-between items-start mb-2">
                   <div>

@@ -3,22 +3,14 @@ import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Star } from "lucide-react";
 import { supabase } from "@/lib/supabase";
-
-interface Review {
-  id: number;
-  author: string;
-  rating: number;
-  content: string;
-  image?: string;
-  product_id: number;
-}
+import { ProductReview } from "@/hooks/useProductReviews";
 
 interface ReviewsSectionProps {
   productId?: number;
 }
 
 export function ReviewsSection({ productId }: ReviewsSectionProps) {
-  const [reviews, setReviews] = useState<Review[]>([]);
+  const [reviews, setReviews] = useState<ProductReview[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -26,9 +18,27 @@ export function ReviewsSection({ productId }: ReviewsSectionProps) {
       if (!productId) {
         // If no product ID, use default reviews
         setReviews([
-          { id: 1, author: "דני כהן", rating: 5, content: "מוצר מעולה, ממליץ בחום!", product_id: 0 },
-          { id: 2, author: "רונית לוי", rating: 4, content: "איכות טובה מאוד, משתלם.", product_id: 0 },
-          { id: 3, author: "משה דוד", rating: 5, content: "התוצאות מדהימות, בדיוק מה שחיפשתי.", product_id: 0 },
+          { 
+            id: 1, 
+            author: "דני כהן", 
+            rating: 5, 
+            content: "מוצר מעולה, ממליץ בחום!", 
+            product_id: 0 
+          },
+          { 
+            id: 2, 
+            author: "רונית לוי", 
+            rating: 4, 
+            content: "איכות טובה מאוד, משתלם.", 
+            product_id: 0 
+          },
+          { 
+            id: 3, 
+            author: "משה דוד", 
+            rating: 5, 
+            content: "התוצאות מדהימות, בדיוק מה שחיפשתי.", 
+            product_id: 0 
+          },
         ]);
         setIsLoading(false);
         return;
@@ -47,12 +57,24 @@ export function ReviewsSection({ productId }: ReviewsSectionProps) {
         }
         
         if (data && data.length > 0) {
-          setReviews(data);
+          setReviews(data as ProductReview[]);
         } else {
           // Fallback to default reviews if none exist for this product
           setReviews([
-            { id: 1, author: "דני כהן", rating: 5, content: "מוצר מעולה, ממליץ בחום!", product_id: productId },
-            { id: 2, author: "רונית לוי", rating: 4, content: "איכות טובה מאוד, משתלם.", product_id: productId },
+            { 
+              id: 1, 
+              author: "דני כהן", 
+              rating: 5, 
+              content: "מוצר מעולה, ממליץ בחום!", 
+              product_id: productId 
+            },
+            { 
+              id: 2, 
+              author: "רונית לוי", 
+              rating: 4, 
+              content: "איכות טובה מאוד, משתלם.", 
+              product_id: productId 
+            },
           ]);
         }
       } catch (error) {
