@@ -1,17 +1,40 @@
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Expand } from "lucide-react";
 
 export const VideoTestimonials = () => {
   const isMobile = useIsMobile();
+  const [activeVideo, setActiveVideo] = useState<string | null>(null);
   
-  // YouTube short links converted to embed format, with the specified video removed
+  // YouTube short links converted to embed format
   const videoLinks = [
     "https://www.youtube.com/embed/d9yHOep_dcY",
     "https://www.youtube.com/embed/-JaYsFr35ok",
     "https://www.youtube.com/embed/vMyqMDwLSP4",
     "https://www.youtube.com/embed/yCuDjwdbXcU"
   ];
+
+  // Handle fullscreen toggling for iframe
+  const toggleFullscreen = (videoUrl: string) => {
+    setActiveVideo(videoUrl);
+    
+    // Find the iframe element by its src attribute
+    const iframe = document.querySelector(`iframe[src="${videoUrl}"]`) as HTMLIFrameElement;
+    
+    if (iframe) {
+      try {
+        if (document.fullscreenElement) {
+          document.exitFullscreen();
+        } else {
+          iframe.requestFullscreen();
+        }
+      } catch (err) {
+        console.error("Fullscreen error:", err);
+      }
+    }
+  };
 
   return (
     <section className="py-16 md:py-20 bg-gradient-to-b from-background/95 to-background">
@@ -37,7 +60,8 @@ export const VideoTestimonials = () => {
           </motion.h2>
         </div>
 
-        <div className={`grid grid-cols-2 ${isMobile ? 'gap-4' : 'gap-8'} md:gap-8 max-w-[39.6%] mx-auto`}>
+        {/* Grid layout - full width on mobile, 2x2 grid on desktop */}
+        <div className={`grid ${isMobile ? 'grid-cols-1 gap-6' : 'grid-cols-2 gap-8'} md:max-w-[39.6%] mx-auto`}>
           {videoLinks.map((videoUrl, index) => (
             <motion.div
               key={index}
@@ -45,9 +69,9 @@ export const VideoTestimonials = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
-              className="rounded-2xl overflow-hidden shadow-xl bg-gradient-to-b from-secondary/20 to-primary/10 backdrop-blur-md border border-accent/10"
+              className="rounded-2xl overflow-hidden shadow-xl bg-gradient-to-b from-secondary/20 to-primary/10 backdrop-blur-md border border-accent/10 relative"
             >
-              <div className="aspect-[9/16] w-full">
+              <div className="aspect-[9/16] w-full relative">
                 <iframe
                   src={videoUrl}
                   title={`Video testimonial ${index + 1}`}
@@ -55,6 +79,15 @@ export const VideoTestimonials = () => {
                   allowFullScreen
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 ></iframe>
+                
+                {/* Expand button overlay */}
+                <button
+                  onClick={() => toggleFullscreen(videoUrl)}
+                  className="absolute top-2 right-2 bg-black/50 p-2 rounded-full hover:bg-black/70 transition-colors z-10"
+                  aria-label="הפעל במסך מלא"
+                >
+                  <Expand className="h-4 w-4 text-white" />
+                </button>
               </div>
             </motion.div>
           ))}
