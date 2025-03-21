@@ -1,6 +1,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Extend Window interface to include YouTube API
 declare global {
@@ -20,63 +21,96 @@ const videoTestimonials = [
 
 export function VideoTestimonials() {
   const [apiLoaded, setApiLoaded] = useState(false);
+  const [playersInitialized, setPlayersInitialized] = useState(false);
   const playerRefs = useRef<{ [key: string]: any }>({});
-  const iframeRefs = useRef<{ [key: string]: HTMLDivElement | HTMLIFrameElement | null }>({});
+  const containerRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const { toast } = useToast();
 
-  const loadYouTubeAPI = () => {
-    if (!window.YT) {
-      const tag = document.createElement("script");
-      tag.src = "https://www.youtube.com/iframe_api";
-      const firstScriptTag = document.getElementsByTagName("script")[0];
-      firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
-    } else {
-      setApiLoaded(true);
-    }
-  };
-
-  const onStateChange = (event: { data: number; target: any }) => {
-    if (event.data === window.YT?.PlayerState?.PLAYING) {
-      // Pause all other videos when one starts playing
-      Object.entries(playerRefs.current).forEach(([id, player]) => {
-        if (player && player !== event.target) {
-          player.pauseVideo();
-        }
-      });
-    }
-  };
-
-  const initializePlayer = (videoId: string) => {
-    if (!window.YT?.Player) return;
-
-    playerRefs.current[videoId] = new window.YT.Player(`player-${videoId}`, {
-      videoId: videoId,
-      playerVars: {
-        playsinline: 1,
-        controls: 1,
-        rel: 0,
-        modestbranding: 1,
-      },
-      events: {
-        onStateChange: onStateChange,
-      },
-    });
-  };
-
+  // Function to load YouTube API
   useEffect(() => {
-    loadYouTubeAPI();
-
-    window.onYouTubeIframeAPIReady = () => {
+    // Check if API is already loaded
+    if (window.YT && window.YT.Player) {
       setApiLoaded(true);
-      videoTestimonials.forEach((video) => {
-        initializePlayer(video.id);
-      });
+      return;
+    }
+
+    // Function that will be called when API is ready
+    window.onYouTubeIframeAPIReady = () => {
+      console.log("YouTube API ready");
+      setApiLoaded(true);
     };
 
+    // Load the API
+    const tag = document.createElement("script");
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName("script")[0];
+    firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
+
+    // Cleanup
     return () => {
       window.onYouTubeIframeAPIReady = undefined;
     };
   }, []);
+
+  // Initialize players when API is loaded
+  useEffect(() => {
+    if (!apiLoaded || playersInitialized) return;
+
+    const initializePlayers = () => {
+      videoTestimonials.forEach(video => {
+        if (!containerRefs.current[video.id]) return;
+
+        try {
+          console.log(`Initializing player for video ID: ${video.id}`);
+          playerRefs.current[video.id] = new window.YT.Player(containerRefs.current[video.id], {
+            videoId: video.id,
+            playerVars: {
+              playsinline: 1,
+              controls: 1,
+              rel: 0,
+              modestbranding: 1,
+            },
+            events: {
+              onStateChange: (event: any) => {
+                // Pause other videos when one starts playing
+                if (event.data === window.YT.PlayerState.PLAYING) {
+                  Object.entries(playerRefs.current).forEach(([id, player]) => {
+                    if (id !== video.id && player && typeof player.pauseVideo === 'function') {
+                      player.pauseVideo();
+                    }
+                  });
+                }
+              },
+              onReady: (event: any) => {
+                console.log(`Player ready for video ID: ${video.id}`);
+              },
+              onError: (event: any) => {
+                console.error(`Player error for video ID: ${video.id}`, event);
+                toast({
+                  variant: "destructive",
+                  title: "שגיאה בטעינת הסרטון",
+                  description: "לא ניתן לטעון את הסרטון כרגע. נסה שוב מאוחר יותר.",
+                });
+              }
+            }
+          });
+        } catch (error) {
+          console.error(`Error initializing player for ${video.id}:`, error);
+        }
+      });
+
+      setPlayersInitialized(true);
+    };
+
+    // Small delay to ensure DOM is ready
+    const timeoutId = setTimeout(() => {
+      if (window.YT && window.YT.Player) {
+        initializePlayers();
+      }
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
+  }, [apiLoaded, toast]);
 
   return (
     <div className="py-16 bg-background">
@@ -88,16 +122,18 @@ export function VideoTestimonials() {
           </p>
         </div>
 
-        {/* Updated grid layout to show 4 videos on large screens and 2 on medium screens */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {videoTestimonials.map((video) => (
             <div key={video.id} className="w-full">
               <div className="relative aspect-video bg-muted rounded-lg overflow-hidden">
+                {!apiLoaded && (
+                  <Skeleton className="w-full h-full absolute inset-0" />
+                )}
                 <div
-                  id={`player-${video.id}`}
-                  ref={(el) => (iframeRefs.current[video.id] = el)}
+                  ref={(el) => (containerRefs.current[video.id] = el)}
                   className="w-full h-full"
-                ></div>
+                  id={`youtube-player-${video.id}`}
+                />
               </div>
               <h3 className="mt-3 text-center font-semibold">{video.title}</h3>
             </div>
