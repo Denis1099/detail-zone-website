@@ -69,21 +69,9 @@ export const Navbar = () => {
             </Link>
           </div>
           
-          {/* Menu and Cart together on the right */}
+          {/* Menu and Cart together on the right - with swapped order */}
           <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-2">
-            {/* Cart icon next to menu button */}
-            {cartItems > 0 && (
-              <Button variant="ghost" size="icon" className="relative" asChild>
-                <Link to="/cart">
-                  <ShoppingCart className="h-5 w-5" />
-                  <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground w-5 h-5 rounded-full text-xs flex items-center justify-center">
-                    {cartItems}
-                  </span>
-                </Link>
-              </Button>
-            )}
-            
-            {/* Menu button */}
+            {/* Menu button first (rightmost) */}
             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="p-2">
@@ -108,6 +96,18 @@ export const Navbar = () => {
                 </div>
               </SheetContent>
             </Sheet>
+            
+            {/* Cart icon after menu button (to its left) */}
+            {cartItems > 0 && (
+              <Button variant="ghost" size="icon" className="relative" asChild>
+                <Link to="/cart">
+                  <ShoppingCart className="h-5 w-5" />
+                  <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground w-5 h-5 rounded-full text-xs flex items-center justify-center">
+                    {cartItems}
+                  </span>
+                </Link>
+              </Button>
+            )}
           </div>
         </div>
 

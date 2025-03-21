@@ -1,12 +1,11 @@
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Expand } from "lucide-react";
 
 export const VideoTestimonials = () => {
   const isMobile = useIsMobile();
-  const [activeVideo, setActiveVideo] = useState<string | null>(null);
+  const videoRefs = useRef<(HTMLIFrameElement | null)[]>([]);
   
   // YouTube short links converted to embed format
   const videoLinks = [
@@ -16,25 +15,59 @@ export const VideoTestimonials = () => {
     "https://www.youtube.com/embed/yCuDjwdbXcU"
   ];
 
-  // Handle fullscreen toggling for iframe
-  const toggleFullscreen = (videoUrl: string) => {
-    setActiveVideo(videoUrl);
-    
-    // Find the iframe element by its src attribute
-    const iframe = document.querySelector(`iframe[src="${videoUrl}"]`) as HTMLIFrameElement;
-    
-    if (iframe) {
-      try {
-        if (document.fullscreenElement) {
-          document.exitFullscreen();
-        } else {
-          iframe.requestFullscreen();
-        }
-      } catch (err) {
-        console.error("Fullscreen error:", err);
-      }
+  // Update all YouTube embed URLs to include autoplay and enable fullscreen on load
+  useEffect(() => {
+    const updatedVideoLinks = videoLinks.map(url => {
+      // Add parameters for better fullscreen support
+      return `${url}?enablejsapi=1&rel=0`;
+    });
+
+    // Initialize YouTube API if it's not already loaded
+    if (!window.YT) {
+      const tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      const firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
     }
-  };
+
+    // Initialize players when API is ready
+    const onYouTubeIframeAPIReady = () => {
+      videoRefs.current.forEach((iframe, index) => {
+        if (iframe) {
+          const player = new window.YT.Player(iframe, {
+            events: {
+              'onStateChange': (event) => {
+                // When video starts playing (state 1), request fullscreen
+                if (event.data === window.YT.PlayerState.PLAYING) {
+                  try {
+                    if (iframe.requestFullscreen) {
+                      iframe.requestFullscreen();
+                    } else if (iframe.webkitRequestFullscreen) {
+                      iframe.webkitRequestFullscreen();
+                    } else if (iframe.mozRequestFullScreen) {
+                      iframe.mozRequestFullScreen();
+                    } else if (iframe.msRequestFullscreen) {
+                      iframe.msRequestFullscreen();
+                    }
+                  } catch (err) {
+                    console.error("Fullscreen error:", err);
+                  }
+                }
+              }
+            }
+          });
+        }
+      });
+    };
+
+    // Set the global callback for YouTube API
+    window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
+
+    // If YouTube API is already loaded, initialize players directly
+    if (window.YT && window.YT.Player) {
+      onYouTubeIframeAPIReady();
+    }
+  }, [videoLinks]);
 
   return (
     <section className="py-16 md:py-20 bg-gradient-to-b from-background/95 to-background">
@@ -60,8 +93,8 @@ export const VideoTestimonials = () => {
           </motion.h2>
         </div>
 
-        {/* Grid layout - full width on mobile, 2x2 grid on desktop */}
-        <div className={`grid ${isMobile ? 'grid-cols-1 gap-6' : 'grid-cols-2 gap-8'} md:max-w-[39.6%] mx-auto`}>
+        {/* Grid layout - one video per line on mobile, 2x2 grid on desktop */}
+        <div className={`grid ${isMobile ? 'grid-cols-1 gap-6' : 'grid-cols-2 gap-8'} md:max-w-5xl mx-auto`}>
           {videoLinks.map((videoUrl, index) => (
             <motion.div
               key={index}
@@ -73,21 +106,14 @@ export const VideoTestimonials = () => {
             >
               <div className="aspect-[9/16] w-full relative">
                 <iframe
-                  src={videoUrl}
+                  ref={el => videoRefs.current[index] = el}
+                  src={`${videoUrl}?enablejsapi=1&rel=0`}
                   title={`Video testimonial ${index + 1}`}
                   className="w-full h-full"
                   allowFullScreen
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                  id={`youtube-player-${index}`}
                 ></iframe>
-                
-                {/* Expand button overlay */}
-                <button
-                  onClick={() => toggleFullscreen(videoUrl)}
-                  className="absolute top-2 right-2 bg-black/50 p-2 rounded-full hover:bg-black/70 transition-colors z-10"
-                  aria-label="הפעל במסך מלא"
-                >
-                  <Expand className="h-4 w-4 text-white" />
-                </button>
               </div>
             </motion.div>
           ))}
