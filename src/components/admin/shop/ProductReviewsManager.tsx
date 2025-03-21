@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Star, Plus, Trash2 } from "lucide-react";
+import { Star, Plus, Trash2, User } from "lucide-react";
 import { ProductImageUpload } from './ProductImageUpload';
 import { ProductReview, ReviewFormData } from '@/hooks/useProductReviews';
 
@@ -30,10 +30,13 @@ export function ProductReviewsManager({
     rating: 5,
     content: '',
     image: '',
+    profile_image: '',
     product_id: productId,
-    imageFile: null
+    imageFile: null,
+    profileImageFile: null
   });
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [profileImagePreview, setProfileImagePreview] = useState<string | null>(null);
 
   useEffect(() => {
     // Update the reviews list when props change
@@ -52,9 +55,26 @@ export function ProductReviewsManager({
     }
   };
 
+  const handleProfileImageChange = (file: File | null) => {
+    if (file) {
+      setFormData({ ...formData, profileImageFile: file });
+      
+      const reader = new FileReader();
+      reader.onload = (loadEvent) => {
+        setProfileImagePreview(loadEvent.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleImageRemove = () => {
     setFormData({ ...formData, imageFile: null, image: '' });
     setImagePreview(null);
+  };
+
+  const handleProfileImageRemove = () => {
+    setFormData({ ...formData, profileImageFile: null, profile_image: '' });
+    setProfileImagePreview(null);
   };
 
   const handleChange = (
@@ -84,10 +104,13 @@ export function ProductReviewsManager({
         rating: 5,
         content: '',
         image: '',
+        profile_image: '',
         product_id: productId,
-        imageFile: null
+        imageFile: null,
+        profileImageFile: null
       });
       setImagePreview(null);
+      setProfileImagePreview(null);
     }
   };
 
@@ -154,13 +177,24 @@ export function ProductReviewsManager({
               />
             </div>
             
-            <div>
-              <Label>תמונה (אופציונלי)</Label>
-              <ProductImageUpload 
-                imagePreview={imagePreview}
-                onImageChange={handleImageChange}
-                onImageRemove={handleImageRemove}
-              />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label>תמונת מוצר (אופציונלי)</Label>
+                <ProductImageUpload 
+                  imagePreview={imagePreview}
+                  onImageChange={handleImageChange}
+                  onImageRemove={handleImageRemove}
+                />
+              </div>
+              
+              <div>
+                <Label>תמונת פרופיל (אופציונלי)</Label>
+                <ProductImageUpload 
+                  imagePreview={profileImagePreview}
+                  onImageChange={handleProfileImageChange}
+                  onImageRemove={handleProfileImageRemove}
+                />
+              </div>
             </div>
 
             <div className="flex justify-end gap-2">
@@ -192,17 +226,32 @@ export function ProductReviewsManager({
             existingReviews.map((review) => (
               <div key={review.id} className="p-4 border border-border rounded-lg">
                 <div className="flex justify-between items-start mb-2">
-                  <div>
-                    <div className="font-medium">{review.author}</div>
-                    <div className="flex mb-2">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <Star 
-                          key={star}
-                          className={`w-4 h-4 ${review.rating >= star 
-                            ? 'fill-primary text-primary' 
-                            : 'text-muted-foreground'}`} 
+                  <div className="flex items-center gap-3">
+                    {review.profile_image ? (
+                      <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+                        <img 
+                          src={review.profile_image}
+                          alt={`תמונת פרופיל של ${review.author}`}
+                          className="w-full h-full object-cover"
                         />
-                      ))}
+                      </div>
+                    ) : (
+                      <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
+                        <User className="w-6 h-6 text-muted-foreground" />
+                      </div>
+                    )}
+                    <div>
+                      <div className="font-medium">{review.author}</div>
+                      <div className="flex">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star 
+                            key={star}
+                            className={`w-4 h-4 ${review.rating >= star 
+                              ? 'fill-primary text-primary' 
+                              : 'text-muted-foreground'}`} 
+                          />
+                        ))}
+                      </div>
                     </div>
                   </div>
                   <Button 
@@ -214,7 +263,7 @@ export function ProductReviewsManager({
                     <Trash2 className="w-4 h-4 text-destructive" />
                   </Button>
                 </div>
-                <p className="text-muted-foreground mb-2">{review.content}</p>
+                <p className="text-muted-foreground mt-2 mb-2">{review.content}</p>
                 {review.image && (
                   <div className="mt-2">
                     <img 

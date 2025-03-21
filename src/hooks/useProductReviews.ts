@@ -11,12 +11,14 @@ export interface ProductReview {
   rating: number;
   content: string;
   image?: string;
+  profile_image?: string;
   created_at?: string;
 }
 
 // Custom type for review data with optional image file
 export interface ReviewFormData extends Omit<ProductReview, 'id' | 'created_at'> {
   imageFile?: File | null;
+  profileImageFile?: File | null;
 }
 
 export function useProductReviews(productId: number) {
@@ -30,7 +32,6 @@ export function useProductReviews(productId: number) {
     
     setIsInitialLoading(true);
     try {
-      // Using from('product_reviews') is now valid since the table exists in the database
       const { data, error } = await supabase
         .from('product_reviews')
         .select('*')
@@ -59,9 +60,14 @@ export function useProductReviews(productId: number) {
     
     try {
       let imageUrl = '';
+      let profileImageUrl = '';
       
       if (reviewData.image) {
         imageUrl = reviewData.image;
+      }
+      
+      if (reviewData.profile_image) {
+        profileImageUrl = reviewData.profile_image;
       }
       
       if (reviewData.imageFile) {
@@ -75,12 +81,24 @@ export function useProductReviews(productId: number) {
         imageUrl = result.url;
       }
       
+      if (reviewData.profileImageFile) {
+        const result = await uploadGalleryImage(
+          reviewData.profileImageFile, 
+          'reviews', 
+          `product-${productId}-review-profile`
+        );
+        
+        if (result.error) throw result.error;
+        profileImageUrl = result.url;
+      }
+      
       const dataToSave = {
         product_id: productId,
         author: reviewData.author,
         rating: reviewData.rating,
         content: reviewData.content,
         image: imageUrl,
+        profile_image: profileImageUrl,
       };
       
       const { data, error } = await supabase

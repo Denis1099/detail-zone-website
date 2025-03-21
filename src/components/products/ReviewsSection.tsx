@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Star } from "lucide-react";
+import { Star, User } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { ProductReview } from "@/hooks/useProductReviews";
 
@@ -112,18 +112,33 @@ export function ReviewsSection({ productId }: ReviewsSectionProps) {
         {reviews.map((review) => (
           <Card key={review.id}>
             <CardContent className="pt-6">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="flex">
-                  {[...Array(5)].map((_, i) => (
-                    <Star 
-                      key={i} 
-                      className={`w-4 h-4 ${i < review.rating ? 'fill-primary text-primary' : 'text-muted-foreground'}`} 
+              <div className="flex items-center gap-3 mb-2">
+                {review.profile_image ? (
+                  <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+                    <img 
+                      src={review.profile_image}
+                      alt=""
+                      className="w-full h-full object-cover"
                     />
-                  ))}
+                  </div>
+                ) : (
+                  <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
+                    <User className="w-5 h-5 text-muted-foreground" />
+                  </div>
+                )}
+                <div>
+                  <div className="font-bold">{review.author}</div>
+                  <div className="flex">
+                    {[...Array(5)].map((_, i) => (
+                      <Star 
+                        key={i} 
+                        className={`w-4 h-4 ${i < review.rating ? 'fill-primary text-primary' : 'text-muted-foreground'}`} 
+                      />
+                    ))}
+                  </div>
                 </div>
-                <span className="font-bold">{review.author}</span>
               </div>
-              <p className="text-muted-foreground">{review.content}</p>
+              <p className="text-muted-foreground mt-2">{review.content}</p>
               
               {review.image && (
                 <div className="mt-4">

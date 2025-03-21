@@ -21,7 +21,6 @@ const videoTestimonials = [
 export function VideoTestimonials() {
   const [apiLoaded, setApiLoaded] = useState(false);
   const playerRefs = useRef<{ [key: string]: any }>({});
-  // Change the ref type to use a union type to allow for both HTMLDivElement and HTMLIFrameElement
   const iframeRefs = useRef<{ [key: string]: HTMLDivElement | HTMLIFrameElement | null }>({});
   const { toast } = useToast();
 
