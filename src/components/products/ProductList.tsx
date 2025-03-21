@@ -35,17 +35,19 @@ export function ProductList({ products, isLoading }: ProductListProps) {
     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
       {products.map((product) => (
         <Card key={product.id} className="flex flex-col">
-          <ProductImage product={product} />
-          
-          <CardHeader>
-            <CardTitle>
-              <div className="select-text">{product.name}</div>
-            </CardTitle>
-          </CardHeader>
-          
-          <CardContent className="flex-grow">
-            <div className="text-muted-foreground select-text">{product.description}</div>
-          </CardContent>
+          <Link to={`/shop/${product.id}`} className="flex-grow">
+            <ProductImage product={product} />
+            
+            <CardHeader>
+              <CardTitle>
+                <div className="select-text">{product.name}</div>
+              </CardTitle>
+            </CardHeader>
+            
+            <CardContent className="flex-grow">
+              <div className="text-muted-foreground select-text">{product.description}</div>
+            </CardContent>
+          </Link>
           
           <CardFooter className="flex justify-between items-center">
             <div>
@@ -60,18 +62,13 @@ export function ProductList({ products, isLoading }: ProductListProps) {
                 <span className="text-lg font-bold">₪{product.price}</span>
               )}
             </div>
-            <div className="flex gap-2">
-              <Button 
-                className="flex items-center gap-2"
-                onClick={() => addToCart(product)}
-              >
-                <ShoppingCart className="w-4 h-4" />
-                הוסף לסל
-              </Button>
-              <Link to={`/shop/${product.id}`}>
-                <Button variant="outline">פרטים</Button>
-              </Link>
-            </div>
+            <Button 
+              className="flex items-center gap-2"
+              onClick={() => addToCart(product)}
+            >
+              <ShoppingCart className="w-4 h-4" />
+              הוסף לסל
+            </Button>
           </CardFooter>
         </Card>
       ))}

@@ -28,11 +28,12 @@ export default function ProductDetails() {
         
         const numericId = parseInt(id, 10);
 
+        // Use maybeSingle instead of single to avoid errors when no rows are returned
         const { data, error } = await supabase
           .from('products')
           .select('*')
           .eq('id', numericId)
-          .single();
+          .maybeSingle();
 
         if (error) {
           throw error;
@@ -41,6 +42,18 @@ export default function ProductDetails() {
         if (data) {
           setProduct(data);
           fetchSimilarProducts(data.category);
+        } else {
+          // No product found, try local fallback
+          import('@/data/products').then(module => {
+            const localProduct = module.products.find(p => p.id === Number(id));
+            if (localProduct) {
+              setProduct(localProduct);
+              const similar = module.products
+                .filter(p => p.id !== Number(id))
+                .slice(0, 3);
+              setSimilarProducts(similar);
+            }
+          });
         }
       } catch (error: any) {
         console.error('Error fetching product:', error);

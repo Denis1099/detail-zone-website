@@ -42,42 +42,6 @@ export const VideoTestimonials = () => {
       const firstScriptTag = document.getElementsByTagName('script')[0];
       firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
     }
-
-    // Initialize players when API is ready
-    const onYouTubeIframeAPIReady = () => {
-      videoRefs.current.forEach((iframe, index) => {
-        if (iframe) {
-          const player = new window.YT.Player(iframe, {
-            events: {
-              'onStateChange': (event: any) => {
-                // When video starts playing (state 1), request fullscreen
-                if (event.data === window.YT.PlayerState.PLAYING) {
-                  try {
-                    if (iframe.requestFullscreen) {
-                      iframe.requestFullscreen();
-                    } else {
-                      // Use standard fullscreen method only
-                      // Browser-specific methods are removed to fix TS errors
-                      console.log("Fullscreen not supported in this browser");
-                    }
-                  } catch (err) {
-                    console.error("Fullscreen error:", err);
-                  }
-                }
-              }
-            }
-          });
-        }
-      });
-    };
-
-    // Set the global callback for YouTube API
-    window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
-
-    // If YouTube API is already loaded, initialize players directly
-    if (window.YT && window.YT.Player) {
-      onYouTubeIframeAPIReady();
-    }
   }, [videoLinks]);
 
   return (
