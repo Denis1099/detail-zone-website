@@ -104,6 +104,7 @@ export type Database = {
           id: number
           image: string | null
           product_id: number
+          profile_image: string | null
           rating: number
         }
         Insert: {
@@ -113,6 +114,7 @@ export type Database = {
           id?: number
           image?: string | null
           product_id: number
+          profile_image?: string | null
           rating: number
         }
         Update: {
@@ -122,6 +124,7 @@ export type Database = {
           id?: number
           image?: string | null
           product_id?: number
+          profile_image?: string | null
           rating?: number
         }
         Relationships: [
